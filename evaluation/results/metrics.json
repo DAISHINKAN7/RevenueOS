@@ -1,0 +1,15 @@
+{
+  "test_metrics": {
+    "roc_auc": 0.5948784428094294,
+    "pr_auc": 0.4600456059404337,
+    "brier": 0.22847425015779396,
+    "log_loss": 0.660424286914686,
+    "ece": 0.022054861316062675
+  },
+  "divergence_conversion_vs_economics": 0.3161764705882353,
+  "do_nothing_rate": 0.28161764705882353,
+  "do_nothing_precision": 0.5483028720626631,
+  "do_nothing_recall": 0.6051873198847262,
+  "mean_regret": 76.30794794216912,
+  "warnings": []
+}

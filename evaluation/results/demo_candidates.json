@@ -1,0 +1,1267 @@
+{
+  "A_excellent_decisions": [
+    {
+      "opportunity_id": "OPP0030827",
+      "opportunity_type": "PAYMENT_FAILURE",
+      "failure_reason": "UPI_TIMEOUT",
+      "segment": "NEW_CUSTOMER",
+      "cart_value": 2939.0,
+      "base_contribution_margin": 730.88,
+      "candidates": [
+        {
+          "action": "DELAYED_RETRY",
+          "p": 0.5181,
+          "delta_ev": 93.72
+        },
+        {
+          "action": "FREE_SHIPPING",
+          "p": 0.5181,
+          "delta_ev": 61.79
+        },
+        {
+          "action": "IMMEDIATE_RETRY",
+          "p": 0.3885,
+          "delta_ev": -1.0
+        },
+        {
+          "action": "PAYMENT_METHOD_SWITCH",
+          "p": 0.3885,
+          "delta_ev": -2.0
+        },
+        {
+          "action": "PAYMENT_LINK",
+          "p": 0.3885,
+          "delta_ev": -3.0
+        },
+        {
+          "action": "SMALL_DISCOUNT",
+          "p": 0.3343,
+          "delta_ev": -90.78
+        },
+        {
+          "action": "MEDIUM_DISCOUNT",
+          "p": 0.3885,
+          "delta_ev": -116.19
+        },
+        {
+          "action": "HUMAN_ESCALATION",
+          "p": 0.3885,
+          "delta_ev": -130.0
+        },
+        {
+          "action": "DO_NOTHING",
+          "p": 0.3885,
+          "delta_ev": 0.0
+        }
+      ],
+      "selected": "DELAYED_RETRY",
+      "oracle_action": "DELAYED_RETRY",
+      "regret": 0.0
+    },
+    {
+      "opportunity_id": "OPP0034399",
+      "opportunity_type": "PAYMENT_FAILURE",
+      "failure_reason": "AUTHENTICATION_FAILURE",
+      "segment": "DEAL_SEEKER",
+      "cart_value": 3718.0,
+      "base_contribution_margin": 1213.56,
+      "candidates": [
+        {
+          "action": "FREE_SHIPPING",
+          "p": 0.428,
+          "delta_ev": 54.06
+        },
+        {
+          "action": "DELAYED_RETRY",
+          "p": 0.3389,
+          "delta_ev": 4.61
+        },
+        {
+          "action": "IMMEDIATE_RETRY",
+          "p": 0.3343,
+          "delta_ev": -1.0
+        },
+        {
+          "action": "PAYMENT_METHOD_SWITCH",
+          "p": 0.3343,
+          "delta_ev": -2.0
+        },
+        {
+          "action": "PAYMENT_LINK",
+          "p": 0.3343,
+          "delta_ev": -3.0
+        },
+        {
+          "action": "SMALL_DISCOUNT",
+          "p": 0.3343,
+          "delta_ev": -64.14
+        },
+        {
+          "action": "MEDIUM_DISCOUNT",
+          "p": 0.3389,
+          "delta_ev": -122.39
+        },
+        {
+          "action": "HUMAN_ESCALATION",
+          "p": 0.3343,
+          "delta_ev": -130.0
+        },
+        {
+          "action": "DO_NOTHING",
+          "p": 0.3343,
+          "delta_ev": 0.0
+        }
+      ],
+      "selected": "FREE_SHIPPING",
+      "oracle_action": "FREE_SHIPPING",
+      "regret": 0.0
+    },
+    {
+      "opportunity_id": "OPP0034400",
+      "opportunity_type": "PAYMENT_FAILURE",
+      "failure_reason": "INSUFFICIENT_FUNDS",
+      "segment": "PRICE_SENSITIVE",
+      "cart_value": 1859.0,
+      "base_contribution_margin": 609.16,
+      "candidates": [
+        {
+          "action": "DELAYED_RETRY",
+          "p": 0.5181,
+          "delta_ev": 108.18
+        },
+        {
+          "action": "FREE_SHIPPING",
+          "p": 0.5181,
+          "delta_ev": 79.23
+        },
+        {
+          "action": "IMMEDIATE_RETRY",
+          "p": 0.3832,
+          "delta_ev": 26.01
+        },
+        {
+          "action": "PAYMENT_METHOD_SWITCH",
+          "p": 0.3389,
+          "delta_ev": -2.0
+        },
+        {
+          "action": "PAYMENT_LINK",
+          "p": 0.3389,
+          "delta_ev": -3.0
+        },
+        {
+          "action": "SMALL_DISCOUNT",
+          "p": 0.3885,
+          "delta_ev": -7.87
+        },
+        {
+          "action": "MEDIUM_DISCOUNT",
+          "p": 0.3885,
+          "delta_ev": -43.99
+        },
+        {
+          "action": "HUMAN_ESCALATION",
+          "p": 0.3389,
+          "delta_ev": -130.0
+        },
+        {
+          "action": "DO_NOTHING",
+          "p": 0.3389,
+          "delta_ev": 0.0
+        }
+      ],
+      "selected": "DELAYED_RETRY",
+      "oracle_action": "DELAYED_RETRY",
+      "regret": 0.0
+    },
+    {
+      "opportunity_id": "OPP0034401",
+      "opportunity_type": "PAYMENT_FAILURE",
+      "failure_reason": "UPI_TIMEOUT",
+      "segment": "DEAL_SEEKER",
+      "cart_value": 5989.0,
+      "base_contribution_margin": 2242.72,
+      "candidates": [
+        {
+          "action": "DELAYED_RETRY",
+          "p": 0.3885,
+          "delta_ev": 120.7
+        },
+        {
+          "action": "IMMEDIATE_RETRY",
+          "p": 0.3832,
+          "delta_ev": 108.82
+        },
+        {
+          "action": "PAYMENT_METHOD_SWITCH",
+          "p": 0.3343,
+          "delta_ev": -2.0
+        },
+        {
+          "action": "PAYMENT_LINK",
+          "p": 0.3343,
+          "delta_ev": -3.0
+        },
+        {
+          "action": "SMALL_DISCOUNT",
+          "p": 0.3343,
+          "delta_ev": -102.1
+        },
+        {
+          "action": "HUMAN_ESCALATION",
+          "p": 0.3343,
+          "delta_ev": -130.0
+        },
+        {
+          "action": "MEDIUM_DISCOUNT",
+          "p": 0.3343,
+          "delta_ev": -202.19
+        },
+        {
+          "action": "DO_NOTHING",
+          "p": 0.3343,
+          "delta_ev": 0.0
+        }
+      ],
+      "selected": "DELAYED_RETRY",
+      "oracle_action": "DELAYED_RETRY",
+      "regret": 0.0
+    },
+    {
+      "opportunity_id": "OPP0034407",
+      "opportunity_type": "CHECKOUT_ABANDONMENT",
+      "failure_reason": "NO_PAYMENT_FAILURE",
+      "segment": "AT_RISK",
+      "cart_value": 23247.0,
+      "base_contribution_margin": 9085.48,
+      "candidates": [
+        {
+          "action": "SMALL_DISCOUNT",
+          "p": 0.2383,
+          "delta_ev": 562.22
+        },
+        {
+          "action": "MEDIUM_DISCOUNT",
+          "p": 0.2383,
+          "delta_ev": 285.25
+        },
+        {
+          "action": "PAYMENT_LINK",
+          "p": 0.1457,
+          "delta_ev": -3.0
+        },
+        {
+          "action": "HUMAN_ESCALATION",
+          "p": 0.1457,
+          "delta_ev": -130.0
+        },
+        {
+          "action": "DO_NOTHING",
+          "p": 0.1457,
+          "delta_ev": 0.0
+        }
+      ],
+      "selected": "SMALL_DISCOUNT",
+      "oracle_action": "SMALL_DISCOUNT",
+      "regret": 0.0
+    }
+  ],
+  "B_restraint_do_nothing": [
+    {
+      "opportunity_id": "OPP0030836",
+      "opportunity_type": "CHECKOUT_ABANDONMENT",
+      "failure_reason": "NO_PAYMENT_FAILURE",
+      "segment": "LOYAL",
+      "cart_value": 469.0,
+      "base_contribution_margin": 194.49,
+      "candidates": [
+        {
+          "action": "PAYMENT_LINK",
+          "p": 0.5427,
+          "delta_ev": -3.0
+        },
+        {
+          "action": "FREE_SHIPPING",
+          "p": 0.6947,
+          "delta_ev": -11.78
+        },
+        {
+          "action": "MEDIUM_DISCOUNT",
+          "p": 0.6336,
+          "delta_ev": -14.04
+        },
+        {
+          "action": "SMALL_DISCOUNT",
+          "p": 0.5427,
+          "delta_ev": -14.73
+        },
+        {
+          "action": "HUMAN_ESCALATION",
+          "p": 0.5427,
+          "delta_ev": -130.0
+        },
+        {
+          "action": "DO_NOTHING",
+          "p": 0.5427,
+          "delta_ev": 0.0
+        }
+      ],
+      "selected": "DO_NOTHING",
+      "oracle_action": "DO_NOTHING",
+      "regret": 0.0
+    },
+    {
+      "opportunity_id": "OPP0034347",
+      "opportunity_type": "CHECKOUT_ABANDONMENT",
+      "failure_reason": "NO_PAYMENT_FAILURE",
+      "segment": "CONVENIENCE_SENSITIVE",
+      "cart_value": 11469.0,
+      "base_contribution_margin": 3004.1,
+      "candidates": [
+        {
+          "action": "PAYMENT_LINK",
+          "p": 0.3343,
+          "delta_ev": -3.0
+        },
+        {
+          "action": "HUMAN_ESCALATION",
+          "p": 0.3343,
+          "delta_ev": -130.0
+        },
+        {
+          "action": "SMALL_DISCOUNT",
+          "p": 0.2903,
+          "delta_ev": -300.49
+        },
+        {
+          "action": "MEDIUM_DISCOUNT",
+          "p": 0.3072,
+          "delta_ev": -435.58
+        },
+        {
+          "action": "DO_NOTHING",
+          "p": 0.3343,
+          "delta_ev": 0.0
+        }
+      ],
+      "selected": "DO_NOTHING",
+      "oracle_action": "DO_NOTHING",
+      "regret": 0.0
+    },
+    {
+      "opportunity_id": "OPP0034348",
+      "opportunity_type": "CHECKOUT_ABANDONMENT",
+      "failure_reason": "NO_PAYMENT_FAILURE",
+      "segment": "PAYMENT_FRICTION",
+      "cart_value": 5918.0,
+      "base_contribution_margin": 579.37,
+      "candidates": [
+        {
+          "action": "PAYMENT_LINK",
+          "p": 0.3885,
+          "delta_ev": -3.0
+        },
+        {
+          "action": "SMALL_DISCOUNT",
+          "p": 0.3885,
+          "delta_ev": -116.97
+        },
+        {
+          "action": "HUMAN_ESCALATION",
+          "p": 0.3885,
+          "delta_ev": -130.0
+        },
+        {
+          "action": "MEDIUM_DISCOUNT",
+          "p": 0.3389,
+          "delta_ev": -231.31
+        },
+        {
+          "action": "DO_NOTHING",
+          "p": 0.3885,
+          "delta_ev": 0.0
+        }
+      ],
+      "selected": "DO_NOTHING",
+      "oracle_action": "DO_NOTHING",
+      "regret": 0.0
+    },
+    {
+      "opportunity_id": "OPP0034358",
+      "opportunity_type": "CHECKOUT_ABANDONMENT",
+      "failure_reason": "NO_PAYMENT_FAILURE",
+      "segment": "AT_RISK",
+      "cart_value": 9709.0,
+      "base_contribution_margin": 3302.51,
+      "candidates": [
+        {
+          "action": "PAYMENT_LINK",
+          "p": 0.3885,
+          "delta_ev": -3.0
+        },
+        {
+          "action": "HUMAN_ESCALATION",
+          "p": 0.3885,
+          "delta_ev": -130.0
+        },
+        {
+          "action": "SMALL_DISCOUNT",
+          "p": 0.3832,
+          "delta_ev": -205.53
+        },
+        {
+          "action": "MEDIUM_DISCOUNT",
+          "p": 0.3885,
+          "delta_ev": -379.22
+        },
+        {
+          "action": "DO_NOTHING",
+          "p": 0.3885,
+          "delta_ev": 0.0
+        }
+      ],
+      "selected": "DO_NOTHING",
+      "oracle_action": "DO_NOTHING",
+      "regret": 0.0
+    },
+    {
+      "opportunity_id": "OPP0034364",
+      "opportunity_type": "CHECKOUT_ABANDONMENT",
+      "failure_reason": "NO_PAYMENT_FAILURE",
+      "segment": "AT_RISK",
+      "cart_value": 6716.0,
+      "base_contribution_margin": 2279.37,
+      "candidates": [
+        {
+          "action": "PAYMENT_LINK",
+          "p": 0.2893,
+          "delta_ev": -3.0
+        },
+        {
+          "action": "SMALL_DISCOUNT",
+          "p": 0.3343,
+          "delta_ev": -11.71
+        },
+        {
+          "action": "MEDIUM_DISCOUNT",
+          "p": 0.3343,
+          "delta_ev": -123.96
+        },
+        {
+          "action": "HUMAN_ESCALATION",
+          "p": 0.2893,
+          "delta_ev": -130.0
+        },
+        {
+          "action": "DO_NOTHING",
+          "p": 0.2893,
+          "delta_ev": 0.0
+        }
+      ],
+      "selected": "DO_NOTHING",
+      "oracle_action": "DO_NOTHING",
+      "regret": 0.0
+    }
+  ],
+  "C_payment_failure": [
+    {
+      "opportunity_id": "OPP0030827",
+      "opportunity_type": "PAYMENT_FAILURE",
+      "failure_reason": "UPI_TIMEOUT",
+      "segment": "NEW_CUSTOMER",
+      "cart_value": 2939.0,
+      "base_contribution_margin": 730.88,
+      "candidates": [
+        {
+          "action": "DELAYED_RETRY",
+          "p": 0.5181,
+          "delta_ev": 93.72
+        },
+        {
+          "action": "FREE_SHIPPING",
+          "p": 0.5181,
+          "delta_ev": 61.79
+        },
+        {
+          "action": "IMMEDIATE_RETRY",
+          "p": 0.3885,
+          "delta_ev": -1.0
+        },
+        {
+          "action": "PAYMENT_METHOD_SWITCH",
+          "p": 0.3885,
+          "delta_ev": -2.0
+        },
+        {
+          "action": "PAYMENT_LINK",
+          "p": 0.3885,
+          "delta_ev": -3.0
+        },
+        {
+          "action": "SMALL_DISCOUNT",
+          "p": 0.3343,
+          "delta_ev": -90.78
+        },
+        {
+          "action": "MEDIUM_DISCOUNT",
+          "p": 0.3885,
+          "delta_ev": -116.19
+        },
+        {
+          "action": "HUMAN_ESCALATION",
+          "p": 0.3885,
+          "delta_ev": -130.0
+        },
+        {
+          "action": "DO_NOTHING",
+          "p": 0.3885,
+          "delta_ev": 0.0
+        }
+      ],
+      "selected": "DELAYED_RETRY",
+      "oracle_action": "DELAYED_RETRY",
+      "regret": 0.0
+    },
+    {
+      "opportunity_id": "OPP0034442",
+      "opportunity_type": "PAYMENT_FAILURE",
+      "failure_reason": "BANK_TIMEOUT",
+      "segment": "AT_RISK",
+      "cart_value": 2229.0,
+      "base_contribution_margin": 720.97,
+      "candidates": [
+        {
+          "action": "DELAYED_RETRY",
+          "p": 0.5181,
+          "delta_ev": 131.56
+        },
+        {
+          "action": "FREE_SHIPPING",
+          "p": 0.428,
+          "delta_ev": 48.25
+        },
+        {
+          "action": "IMMEDIATE_RETRY",
+          "p": 0.3885,
+          "delta_ev": 38.12
+        },
+        {
+          "action": "PAYMENT_METHOD_SWITCH",
+          "p": 0.3343,
+          "delta_ev": -2.0
+        },
+        {
+          "action": "PAYMENT_LINK",
+          "p": 0.3343,
+          "delta_ev": -3.0
+        },
+        {
+          "action": "SMALL_DISCOUNT",
+          "p": 0.3832,
+          "delta_ev": -9.41
+        },
+        {
+          "action": "MEDIUM_DISCOUNT",
+          "p": 0.3885,
+          "delta_ev": -49.48
+        },
+        {
+          "action": "HUMAN_ESCALATION",
+          "p": 0.3343,
+          "delta_ev": -130.0
+        },
+        {
+          "action": "DO_NOTHING",
+          "p": 0.3343,
+          "delta_ev": 0.0
+        }
+      ],
+      "selected": "DELAYED_RETRY",
+      "oracle_action": "DELAYED_RETRY",
+      "regret": 0.0
+    },
+    {
+      "opportunity_id": "OPP0034447",
+      "opportunity_type": "PAYMENT_FAILURE",
+      "failure_reason": "BANK_TIMEOUT",
+      "segment": "CONVENIENCE_SENSITIVE",
+      "cart_value": 6698.0,
+      "base_contribution_margin": 2087.82,
+      "candidates": [
+        {
+          "action": "DELAYED_RETRY",
+          "p": 0.3885,
+          "delta_ev": 206.21
+        },
+        {
+          "action": "IMMEDIATE_RETRY",
+          "p": 0.3072,
+          "delta_ev": 36.47
+        },
+        {
+          "action": "PAYMENT_METHOD_SWITCH",
+          "p": 0.2893,
+          "delta_ev": -2.0
+        },
+        {
+          "action": "PAYMENT_LINK",
+          "p": 0.2893,
+          "delta_ev": -3.0
+        },
+        {
+          "action": "SMALL_DISCOUNT",
+          "p": 0.2893,
+          "delta_ev": -98.88
+        },
+        {
+          "action": "HUMAN_ESCALATION",
+          "p": 0.2893,
+          "delta_ev": -130.0
+        },
+        {
+          "action": "MEDIUM_DISCOUNT",
+          "p": 0.3072,
+          "delta_ev": -170.31
+        },
+        {
+          "action": "DO_NOTHING",
+          "p": 0.2893,
+          "delta_ev": 0.0
+        }
+      ],
+      "selected": "DELAYED_RETRY",
+      "oracle_action": "DELAYED_RETRY",
+      "regret": 0.0
+    },
+    {
+      "opportunity_id": "OPP0034448",
+      "opportunity_type": "PAYMENT_FAILURE",
+      "failure_reason": "UNKNOWN",
+      "segment": "LOYAL",
+      "cart_value": 339.0,
+      "base_contribution_margin": 157.23,
+      "candidates": [
+        {
+          "action": "DELAYED_RETRY",
+          "p": 0.6336,
+          "delta_ev": 17.15
+        },
+        {
+          "action": "IMMEDIATE_RETRY",
+          "p": 0.5181,
+          "delta_ev": -1.0
+        },
+        {
+          "action": "FREE_SHIPPING",
+          "p": 0.6947,
+          "delta_ev": -1.81
+        },
+        {
+          "action": "PAYMENT_METHOD_SWITCH",
+          "p": 0.5181,
+          "delta_ev": -2.0
+        },
+        {
+          "action": "PAYMENT_LINK",
+          "p": 0.5181,
+          "delta_ev": -3.0
+        },
+        {
+          "action": "SMALL_DISCOUNT",
+          "p": 0.5181,
+          "delta_ev": -10.78
+        },
+        {
+          "action": "MEDIUM_DISCOUNT",
+          "p": 0.5181,
+          "delta_ev": -19.56
+        },
+        {
+          "action": "HUMAN_ESCALATION",
+          "p": 0.5181,
+          "delta_ev": -130.0
+        },
+        {
+          "action": "DO_NOTHING",
+          "p": 0.5181,
+          "delta_ev": 0.0
+        }
+      ],
+      "selected": "DELAYED_RETRY",
+      "oracle_action": "DELAYED_RETRY",
+      "regret": 0.0
+    },
+    {
+      "opportunity_id": "OPP0034452",
+      "opportunity_type": "PAYMENT_FAILURE",
+      "failure_reason": "BANK_TIMEOUT",
+      "segment": "CONVENIENCE_SENSITIVE",
+      "cart_value": 8209.0,
+      "base_contribution_margin": 1968.82,
+      "candidates": [
+        {
+          "action": "DELAYED_RETRY",
+          "p": 0.428,
+          "delta_ev": 76.77
+        },
+        {
+          "action": "IMMEDIATE_RETRY",
+          "p": 0.3885,
+          "delta_ev": -1.0
+        },
+        {
+          "action": "PAYMENT_METHOD_SWITCH",
+          "p": 0.3885,
+          "delta_ev": -2.0
+        },
+        {
+          "action": "PAYMENT_LINK",
+          "p": 0.3885,
+          "delta_ev": -3.0
+        },
+        {
+          "action": "HUMAN_ESCALATION",
+          "p": 0.3885,
+          "delta_ev": -130.0
+        },
+        {
+          "action": "SMALL_DISCOUNT",
+          "p": 0.3389,
+          "delta_ev": -238.83
+        },
+        {
+          "action": "MEDIUM_DISCOUNT",
+          "p": 0.3389,
+          "delta_ev": -377.93
+        },
+        {
+          "action": "DO_NOTHING",
+          "p": 0.3885,
+          "delta_ev": 0.0
+        }
+      ],
+      "selected": "DELAYED_RETRY",
+      "oracle_action": "DELAYED_RETRY",
+      "regret": 0.0
+    }
+  ],
+  "D_high_regret_mistakes": [
+    {
+      "opportunity_id": "OPP0035976",
+      "opportunity_type": "CHECKOUT_ABANDONMENT",
+      "failure_reason": "NO_PAYMENT_FAILURE",
+      "segment": "HIGH_LTV",
+      "cart_value": 65436.0,
+      "base_contribution_margin": 23707.08,
+      "candidates": [
+        {
+          "action": "MEDIUM_DISCOUNT",
+          "p": 0.2353,
+          "delta_ev": 582.45
+        },
+        {
+          "action": "PAYMENT_LINK",
+          "p": 0.1457,
+          "delta_ev": -3.0
+        },
+        {
+          "action": "HUMAN_ESCALATION",
+          "p": 0.1457,
+          "delta_ev": -130.0
+        },
+        {
+          "action": "SMALL_DISCOUNT",
+          "p": 0.1457,
+          "delta_ev": -478.69
+        },
+        {
+          "action": "DO_NOTHING",
+          "p": 0.1457,
+          "delta_ev": 0.0
+        }
+      ],
+      "selected": "MEDIUM_DISCOUNT",
+      "oracle_action": "DO_NOTHING",
+      "regret": 4601.19
+    },
+    {
+      "opportunity_id": "OPP0030856",
+      "opportunity_type": "PAYMENT_FAILURE",
+      "failure_reason": "CARD_DECLINED",
+      "segment": "DEAL_SEEKER",
+      "cart_value": 55116.0,
+      "base_contribution_margin": 17785.68,
+      "candidates": [
+        {
+          "action": "IMMEDIATE_RETRY",
+          "p": 0.2893,
+          "delta_ev": 603.03
+        },
+        {
+          "action": "PAYMENT_METHOD_SWITCH",
+          "p": 0.2553,
+          "delta_ev": -2.0
+        },
+        {
+          "action": "PAYMENT_LINK",
+          "p": 0.2553,
+          "delta_ev": -3.0
+        },
+        {
+          "action": "HUMAN_ESCALATION",
+          "p": 0.2553,
+          "delta_ev": -130.0
+        },
+        {
+          "action": "SMALL_DISCOUNT",
+          "p": 0.2893,
+          "delta_ev": -195.17
+        },
+        {
+          "action": "DELAYED_RETRY",
+          "p": 0.2414,
+          "delta_ev": -248.93
+        },
+        {
+          "action": "MEDIUM_DISCOUNT",
+          "p": 0.2893,
+          "delta_ev": -992.37
+        },
+        {
+          "action": "DO_NOTHING",
+          "p": 0.2553,
+          "delta_ev": 0.0
+        }
+      ],
+      "selected": "IMMEDIATE_RETRY",
+      "oracle_action": "PAYMENT_METHOD_SWITCH",
+      "regret": 4317.15
+    },
+    {
+      "opportunity_id": "OPP0032227",
+      "opportunity_type": "PAYMENT_FAILURE",
+      "failure_reason": "BANK_TIMEOUT",
+      "segment": "HIGH_LTV",
+      "cart_value": 41337.0,
+      "base_contribution_margin": 13339.26,
+      "candidates": [
+        {
+          "action": "IMMEDIATE_RETRY",
+          "p": 0.3885,
+          "delta_ev": 722.85
+        },
+        {
+          "action": "DELAYED_RETRY",
+          "p": 0.3444,
+          "delta_ev": 134.67
+        },
+        {
+          "action": "PAYMENT_METHOD_SWITCH",
+          "p": 0.3343,
+          "delta_ev": -2.0
+        },
+        {
+          "action": "PAYMENT_LINK",
+          "p": 0.3343,
+          "delta_ev": -3.0
+        },
+        {
+          "action": "HUMAN_ESCALATION",
+          "p": 0.3343,
+          "delta_ev": -130.0
+        },
+        {
+          "action": "SMALL_DISCOUNT",
+          "p": 0.2893,
+          "delta_ev": -1199.95
+        },
+        {
+          "action": "MEDIUM_DISCOUNT",
+          "p": 0.3343,
+          "delta_ev": -1383.75
+        },
+        {
+          "action": "DO_NOTHING",
+          "p": 0.3343,
+          "delta_ev": 0.0
+        }
+      ],
+      "selected": "IMMEDIATE_RETRY",
+      "oracle_action": "DELAYED_RETRY",
+      "regret": 3724.43
+    },
+    {
+      "opportunity_id": "OPP0034403",
+      "opportunity_type": "PAYMENT_FAILURE",
+      "failure_reason": "NETWORK_ERROR",
+      "segment": "PRICE_SENSITIVE",
+      "cart_value": 55116.0,
+      "base_contribution_margin": 17732.61,
+      "candidates": [
+        {
+          "action": "IMMEDIATE_RETRY",
+          "p": 0.1457,
+          "delta_ev": -1.0
+        },
+        {
+          "action": "DELAYED_RETRY",
+          "p": 0.1457,
+          "delta_ev": -1.0
+        },
+        {
+          "action": "PAYMENT_METHOD_SWITCH",
+          "p": 0.1457,
+          "delta_ev": -2.0
+        },
+        {
+          "action": "PAYMENT_LINK",
+          "p": 0.1457,
+          "delta_ev": -3.0
+        },
+        {
+          "action": "HUMAN_ESCALATION",
+          "p": 0.1457,
+          "delta_ev": -130.0
+        },
+        {
+          "action": "SMALL_DISCOUNT",
+          "p": 0.1457,
+          "delta_ev": -403.51
+        },
+        {
+          "action": "MEDIUM_DISCOUNT",
+          "p": 0.1457,
+          "delta_ev": -805.01
+        },
+        {
+          "action": "DO_NOTHING",
+          "p": 0.1457,
+          "delta_ev": 0.0
+        }
+      ],
+      "selected": "DO_NOTHING",
+      "oracle_action": "DELAYED_RETRY",
+      "regret": 3722.92
+    },
+    {
+      "opportunity_id": "OPP0034757",
+      "opportunity_type": "PAYMENT_FAILURE",
+      "failure_reason": "BANK_TIMEOUT",
+      "segment": "LOYAL",
+      "cart_value": 43618.0,
+      "base_contribution_margin": 11467.05,
+      "candidates": [
+        {
+          "action": "IMMEDIATE_RETRY",
+          "p": 0.5427,
+          "delta_ev": 280.62
+        },
+        {
+          "action": "DELAYED_RETRY",
+          "p": 0.5427,
+          "delta_ev": 280.62
+        },
+        {
+          "action": "PAYMENT_METHOD_SWITCH",
+          "p": 0.5181,
+          "delta_ev": -2.0
+        },
+        {
+          "action": "PAYMENT_LINK",
+          "p": 0.5181,
+          "delta_ev": -3.0
+        },
+        {
+          "action": "HUMAN_ESCALATION",
+          "p": 0.5181,
+          "delta_ev": -130.0
+        },
+        {
+          "action": "SMALL_DISCOUNT",
+          "p": 0.3885,
+          "delta_ev": -2335.41
+        },
+        {
+          "action": "MEDIUM_DISCOUNT",
+          "p": 0.3885,
+          "delta_ev": -3182.75
+        },
+        {
+          "action": "DO_NOTHING",
+          "p": 0.5181,
+          "delta_ev": 0.0
+        }
+      ],
+      "selected": "IMMEDIATE_RETRY",
+      "oracle_action": "DELAYED_RETRY",
+      "regret": 2985.21
+    }
+  ],
+  "E_bounded_downside_errors": [
+    {
+      "opportunity_id": "OPP0033763",
+      "opportunity_type": "PAYMENT_FAILURE",
+      "failure_reason": "INSUFFICIENT_FUNDS",
+      "segment": "DEAL_SEEKER",
+      "cart_value": 1699.0,
+      "base_contribution_margin": 451.0,
+      "candidates": [
+        {
+          "action": "DELAYED_RETRY",
+          "p": 0.5181,
+          "delta_ev": 57.45
+        },
+        {
+          "action": "FREE_SHIPPING",
+          "p": 0.5427,
+          "delta_ev": 43.55
+        },
+        {
+          "action": "IMMEDIATE_RETRY",
+          "p": 0.3885,
+          "delta_ev": -1.0
+        },
+        {
+          "action": "PAYMENT_METHOD_SWITCH",
+          "p": 0.3885,
+          "delta_ev": -2.0
+        },
+        {
+          "action": "PAYMENT_LINK",
+          "p": 0.3885,
+          "delta_ev": -3.0
+        },
+        {
+          "action": "SMALL_DISCOUNT",
+          "p": 0.428,
+          "delta_ev": -20.55
+        },
+        {
+          "action": "MEDIUM_DISCOUNT",
+          "p": 0.428,
+          "delta_ev": -56.91
+        },
+        {
+          "action": "HUMAN_ESCALATION",
+          "p": 0.3885,
+          "delta_ev": -130.0
+        },
+        {
+          "action": "DO_NOTHING",
+          "p": 0.3885,
+          "delta_ev": 0.0
+        }
+      ],
+      "selected": "DELAYED_RETRY",
+      "oracle_action": "FREE_SHIPPING",
+      "regret": 49.84
+    },
+    {
+      "opportunity_id": "OPP0031995",
+      "opportunity_type": "PAYMENT_FAILURE",
+      "failure_reason": "USER_CANCELLED",
+      "segment": "NEW_CUSTOMER",
+      "cart_value": 10038.0,
+      "base_contribution_margin": 3833.42,
+      "candidates": [
+        {
+          "action": "DELAYED_RETRY",
+          "p": 0.3885,
+          "delta_ev": 207.02
+        },
+        {
+          "action": "IMMEDIATE_RETRY",
+          "p": 0.3832,
+          "delta_ev": 186.72
+        },
+        {
+          "action": "PAYMENT_METHOD_SWITCH",
+          "p": 0.3343,
+          "delta_ev": -2.0
+        },
+        {
+          "action": "PAYMENT_LINK",
+          "p": 0.3343,
+          "delta_ev": -3.0
+        },
+        {
+          "action": "HUMAN_ESCALATION",
+          "p": 0.3343,
+          "delta_ev": -130.0
+        },
+        {
+          "action": "SMALL_DISCOUNT",
+          "p": 0.3343,
+          "delta_ev": -169.77
+        },
+        {
+          "action": "MEDIUM_DISCOUNT",
+          "p": 0.3389,
+          "delta_ev": -324.45
+        },
+        {
+          "action": "DO_NOTHING",
+          "p": 0.3343,
+          "delta_ev": 0.0
+        }
+      ],
+      "selected": "DELAYED_RETRY",
+      "oracle_action": "DO_NOTHING",
+      "regret": 49.83
+    },
+    {
+      "opportunity_id": "OPP0035819",
+      "opportunity_type": "CHECKOUT_ABANDONMENT",
+      "failure_reason": "NO_PAYMENT_FAILURE",
+      "segment": "PRICE_SENSITIVE",
+      "cart_value": 9709.0,
+      "base_contribution_margin": 3286.29,
+      "candidates": [
+        {
+          "action": "PAYMENT_LINK",
+          "p": 0.2893,
+          "delta_ev": -3.0
+        },
+        {
+          "action": "SMALL_DISCOUNT",
+          "p": 0.3343,
+          "delta_ev": -16.44
+        },
+        {
+          "action": "HUMAN_ESCALATION",
+          "p": 0.2893,
+          "delta_ev": -130.0
+        },
+        {
+          "action": "MEDIUM_DISCOUNT",
+          "p": 0.3343,
+          "delta_ev": -178.71
+        },
+        {
+          "action": "DO_NOTHING",
+          "p": 0.2893,
+          "delta_ev": 0.0
+        }
+      ],
+      "selected": "DO_NOTHING",
+      "oracle_action": "SMALL_DISCOUNT",
+      "regret": 49.77
+    },
+    {
+      "opportunity_id": "OPP0032117",
+      "opportunity_type": "PAYMENT_FAILURE",
+      "failure_reason": "UPI_TIMEOUT",
+      "segment": "CONVENIENCE_SENSITIVE",
+      "cart_value": 2169.0,
+      "base_contribution_margin": 408.55,
+      "candidates": [
+        {
+          "action": "IMMEDIATE_RETRY",
+          "p": 0.5181,
+          "delta_ev": 35.81
+        },
+        {
+          "action": "DELAYED_RETRY",
+          "p": 0.428,
+          "delta_ev": -1.0
+        },
+        {
+          "action": "PAYMENT_METHOD_SWITCH",
+          "p": 0.428,
+          "delta_ev": -2.0
+        },
+        {
+          "action": "PAYMENT_LINK",
+          "p": 0.428,
+          "delta_ev": -3.0
+        },
+        {
+          "action": "FREE_SHIPPING",
+          "p": 0.5181,
+          "delta_ev": -44.19
+        },
+        {
+          "action": "SMALL_DISCOUNT",
+          "p": 0.3885,
+          "delta_ev": -60.27
+        },
+        {
+          "action": "MEDIUM_DISCOUNT",
+          "p": 0.3885,
+          "delta_ev": -102.41
+        },
+        {
+          "action": "HUMAN_ESCALATION",
+          "p": 0.428,
+          "delta_ev": -130.0
+        },
+        {
+          "action": "DO_NOTHING",
+          "p": 0.428,
+          "delta_ev": 0.0
+        }
+      ],
+      "selected": "IMMEDIATE_RETRY",
+      "oracle_action": "DELAYED_RETRY",
+      "regret": 49.71
+    },
+    {
+      "opportunity_id": "OPP0031466",
+      "opportunity_type": "PAYMENT_FAILURE",
+      "failure_reason": "UPI_TIMEOUT",
+      "segment": "PRICE_SENSITIVE",
+      "cart_value": 1519.0,
+      "base_contribution_margin": 386.73,
+      "candidates": [
+        {
+          "action": "FREE_SHIPPING",
+          "p": 0.6336,
+          "delta_ev": 39.78
+        },
+        {
+          "action": "DELAYED_RETRY",
+          "p": 0.5181,
+          "delta_ev": 33.84
+        },
+        {
+          "action": "IMMEDIATE_RETRY",
+          "p": 0.428,
+          "delta_ev": -1.0
+        },
+        {
+          "action": "PAYMENT_METHOD_SWITCH",
+          "p": 0.428,
+          "delta_ev": -2.0
+        },
+        {
+          "action": "PAYMENT_LINK",
+          "p": 0.428,
+          "delta_ev": -3.0
+        },
+        {
+          "action": "SMALL_DISCOUNT",
+          "p": 0.428,
+          "delta_ev": -34.51
+        },
+        {
+          "action": "MEDIUM_DISCOUNT",
+          "p": 0.5181,
+          "delta_ev": -45.86
+        },
+        {
+          "action": "HUMAN_ESCALATION",
+          "p": 0.428,
+          "delta_ev": -130.0
+        },
+        {
+          "action": "DO_NOTHING",
+          "p": 0.428,
+          "delta_ev": 0.0
+        }
+      ],
+      "selected": "FREE_SHIPPING",
+      "oracle_action": "DELAYED_RETRY",
+      "regret": 49.6
+    }
+  ]
+}

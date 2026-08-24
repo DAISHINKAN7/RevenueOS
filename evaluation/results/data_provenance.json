@@ -1,0 +1,25 @@
+{
+  "simulator_version": "1.1.0",
+  "logging_policy_version": "1.1.0",
+  "seed": 42,
+  "generated_at": "2026-08-24T13:47:12.434603+00:00",
+  "train_start": "2025-06-01 00:21:00",
+  "train_end": "2025-10-04 19:35:00",
+  "validation_start": "2025-10-04 19:35:00",
+  "validation_end": "2025-10-31 21:19:00",
+  "test_start": "2025-10-31 21:20:00",
+  "test_end": "2025-11-28 00:21:00",
+  "train_rows": 25385,
+  "validation_rows": 5440,
+  "test_rows": 5440,
+  "feature_pipeline_version": "1.0.0",
+  "oracle_file": "data/generated/oracle.parquet",
+  "oracle_access_policy": "evaluation_only",
+  "hashes": {
+    "train": "9fbda2210f1b432e",
+    "validation": "4864ac694b60e31a",
+    "test": "603a48f175ace88c",
+    "oracle": "c81fa26e0f9c92a1",
+    "feature_schema": "45ba48e9ac5bc58e"
+  }
+}
