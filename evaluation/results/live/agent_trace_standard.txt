@@ -1,0 +1,32 @@
+# Agent Trace A — Standard Autonomous Recovery
+
+Detect, diagnose, score, policy-gate, execute, then wait for the external payment. Every tool call is proposed, authorized against the current state, then executed.
+
+agent_run   agn_645bf76e82014f18
+planner     mock (deterministic) source=FALLBACK
+states      DETECTED -> AWAITING_PAYMENT
+
+    1 AGENT_RUN_STARTED                                   Observing opportunity in state DETECTED.
+    2 AGENT_OBSERVED                                      Gathering structured diagnosis before acting.
+    3 AGENT_TOOL_PROPOSED     [diagnose_recovery_context] NEED_DIAGNOSIS
+    4 AGENT_TOOL_ALLOWED      [diagnose_recovery_context] diagnose_recovery_context is permitted in state DETECTED
+    5 AGENT_DIAGNOSED                                     Primary reason SHIPPING_FRICTION (confidence 0.72).
+    6 AGENT_TOOL_RESULT       [diagnose_recovery_context] Gathering structured diagnosis before acting.
+    7 AGENT_OBSERVED                                      Diagnosis complete; scoring actions and checking policy.
+    8 AGENT_TOOL_PROPOSED     [analyze_opportunity]       READY_TO_SCORE
+    9 AGENT_TOOL_ALLOWED      [analyze_opportunity]       analyze_opportunity is permitted in state DETECTED
+   10 AGENT_TOOL_RESULT       [analyze_opportunity]       Diagnosis complete; scoring actions and checking policy.
+   11 AGENT_OBSERVED                                      Policy authorized an action; requesting execution.
+   12 AGENT_TOOL_PROPOSED     [request_execution]         POLICY_AUTHORIZED
+   13 AGENT_TOOL_ALLOWED      [request_execution]         request_execution is permitted in state AUTHORIZED
+   14 AGENT_REPLANNED                                     State moved DETECTED -> AUTHORIZED; re-planning against the new eviden
+   15 AGENT_TOOL_RESULT       [request_execution]         Policy authorized an action; requesting execution.
+   16 AGENT_OBSERVED                                      State AWAITING_PAYMENT depends on an external party.
+   17 AGENT_TOOL_PROPOSED     [WAIT]                      EXTERNAL_PENDING
+   18 AGENT_WAITING                                       State AWAITING_PAYMENT depends on an external party.
+
+disposition        WAITING_AWAITING_PAYMENT
+tool calls         3
+blocked tool calls 0
+replans            1
+planner failures   0

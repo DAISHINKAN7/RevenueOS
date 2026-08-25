@@ -1,0 +1,21 @@
+planner: LLM llama3.2:3b
+
+opportunity OPP-DEMO1-3daee6  CHECKOUT_ABANDONMENT  state AWAITING_PAYMENT
+
+   1 AGENT_RUN_STARTED                                     Observing opportunity in state AWAITING_PAYMENT.
+   2 AGENT_OBSERVED                                        External payment is pending
+   3 AGENT_WAITING                                         External payment is pending
+
+disposition WAITING_AWAITING_PAYMENT  tools 0  replans 0  final state AWAITING_PAYMENT
+
+--- merchant explanation ---
+FREE_SHIPPING was selected with a predicted recovery probability of 35.5% and incremental expected value of INR 105.28. MEDIUM_DISCOUNT had the highest predicted recovery probability at 35.8%, but its incentive cost of INR 486.90 reduced incremental value to INR -48.27, so it was not chosen.
+
+why not:
+  - SMALL_DISCOUNT: positive at INR 31.63 but below the selected action
+  - PAYMENT_LINK: recovery probability 29.4% but an incentive cost of INR 0.00 makes incremental value negative at INR -3.00
+  - MEDIUM_DISCOUNT: recovery probability 35.8% but an incentive cost of INR 486.90 makes incremental value negative at INR -48.27
+
+Policy decision PASS under merchant-policy-1.0.1; 12 of 12 rules passed.
+Maximum authorized financial downside was INR 44.05.
+Current workflow state is AWAITING_PAYMENT.

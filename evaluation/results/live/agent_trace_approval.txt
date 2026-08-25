@@ -1,0 +1,30 @@
+# Agent Trace C — Human Approval Required
+
+A high-value opportunity trips the merchant approval threshold. The agent observes AWAITING_APPROVAL and waits; it has no tool that can grant approval to itself.
+
+agent_run   agn_968a1948b0784f80
+planner     mock (deterministic) source=FALLBACK
+states      DETECTED -> AWAITING_APPROVAL
+
+    1 AGENT_RUN_STARTED                                   Observing opportunity in state DETECTED.
+    2 AGENT_OBSERVED                                      Gathering structured diagnosis before acting.
+    3 AGENT_TOOL_PROPOSED     [diagnose_recovery_context] NEED_DIAGNOSIS
+    4 AGENT_TOOL_ALLOWED      [diagnose_recovery_context] diagnose_recovery_context is permitted in state DETECTED
+    5 AGENT_DIAGNOSED                                     Primary reason SHIPPING_FRICTION (confidence 0.72).
+    6 AGENT_TOOL_RESULT       [diagnose_recovery_context] Gathering structured diagnosis before acting.
+    7 AGENT_OBSERVED                                      Diagnosis complete; scoring actions and checking policy.
+    8 AGENT_TOOL_PROPOSED     [analyze_opportunity]       READY_TO_SCORE
+    9 AGENT_TOOL_ALLOWED      [analyze_opportunity]       analyze_opportunity is permitted in state DETECTED
+   10 AGENT_TOOL_RESULT       [analyze_opportunity]       Diagnosis complete; scoring actions and checking policy.
+   11 AGENT_OBSERVED                                      State AWAITING_APPROVAL depends on an external party.
+   12 AGENT_TOOL_PROPOSED     [WAIT]                      EXTERNAL_PENDING
+   13 AGENT_WAITING                                       State AWAITING_APPROVAL depends on an external party.
+
+disposition        WAITING_FOR_HUMAN_APPROVAL
+tool calls         2
+blocked tool calls 0
+replans            0
+planner failures   0
+
+final state        AWAITING_APPROVAL
+executions created 0

@@ -1,0 +1,25 @@
+python3 -m scripts.planner_compare
+Planner comparison — identical opportunity, identical safety layer.
+
+running deterministic (no LLM) ...
+  WAITING_AWAITING_PAYMENT  proposals=4  blocked=0  reached_execution=True  2.7s
+  proposed: diagnose_recovery_context -> analyze_opportunity -> request_execution -> WAIT
+
+running local: llama3.2:3b ...
+  STOPPED_NO_PROGRESS       proposals=4  blocked=1  reached_execution=False  33.7s
+  proposed: diagnose_recovery_context -> diagnose_recovery_context -> get_opportunity_state -> get_policy_summary
+
+running hosted: openai/gpt-oss-20b ...
+  WAITING_AWAITING_PAYMENT  proposals=4  blocked=0  reached_execution=True  3.3s
+  proposed: diagnose_recovery_context -> analyze_opportunity -> request_execution -> WAIT
+
+==============================================================================
+planner                         disposition                blocked  exec
+------------------------------------------------------------------------------
+deterministic (no LLM)          WAITING_AWAITING_PAYMENT         0   yes
+local: llama3.2:3b              STOPPED_NO_PROGRESS              1    no
+hosted: openai/gpt-oss-20b      WAITING_AWAITING_PAYMENT         0   yes
+==============================================================================
+
+Runs with more than one execution: 0 (must be 0)
+Every planner is bounded by the same authorization layer; the difference between them is usefulness, not safety.
