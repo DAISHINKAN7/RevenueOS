@@ -575,3 +575,48 @@ def test_failing_rules_still_explain_the_violation():
     failed = [r for r in d.triggered_rules if not r.passed]
     assert failed
     assert any("exceeds autonomous limit" in r.reason for r in failed)
+
+
+# ------------------------------------------------------- retry / second attempt
+@needs_model
+@needs_data
+def test_retry_increments_attempt_and_changes_idempotency_key(session):
+    """A second attempt must not collide with the first one's execution key."""
+    o = make_opportunity(session)
+    wf = RecoveryWorkflow(session)
+    wf.analyze(o)
+    session.commit()
+    first_attempt = o.current_attempt
+    first_action = o.selected_action
+    key1 = idempotency_key(o.id, first_action, first_attempt)
+
+    # Simulate the failure path the webhook would produce.
+    o.state = State.PAYMENT_FAILED_RECOVERABLE.value
+    session.commit()
+
+    wf.analyze(o)
+    session.commit()
+    assert o.current_attempt == first_attempt + 1
+    key2 = idempotency_key(o.id, o.selected_action, o.current_attempt)
+    assert key1 != key2
+
+
+@needs_model
+@needs_data
+def test_attempt_limit_stops_the_retry_loop(session):
+    """Retries are bounded by merchant policy, not unbounded."""
+    o = make_opportunity(session)
+    wf = RecoveryWorkflow(session)
+    limit = MerchantPolicy.load().max_recovery_attempts
+
+    wf.analyze(o)
+    session.commit()
+    for _ in range(limit + 2):
+        o.state = State.PAYMENT_FAILED_RECOVERABLE.value
+        session.commit()
+        wf.analyze(o)
+        session.commit()
+        if o.state == State.STOPPED.value:
+            break
+    assert o.state == State.STOPPED.value
+    assert o.current_attempt > limit

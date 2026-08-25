@@ -3,7 +3,7 @@ PY   ?= python3
 
 .PHONY: help install data validate test test-fast clean gate phase2 api \
         features train evaluate audit model-gate clean-models \
-        seed backend-gate razorpay-gate api-dev
+        seed backend-gate razorpay-gate live-demo retry-demo
 
 help:
 	@echo "RevenueOS"
@@ -29,6 +29,8 @@ help:
 	@echo "  make backend-gate   seed + backend tests + backend gate report"
 	@echo "  make razorpay-gate  razorpay tests + razorpay gate report"
 	@echo "  make api            run the API on :8000"
+	@echo "  make live-demo      one live Test Mode recovery (loads .env)"
+	@echo "  make retry-demo     guided failure -> retry -> recovery loop"
 	@echo "  make data-small         quick 4k-session dataset for iteration"
 
 install:
@@ -85,11 +87,16 @@ seed:
 backend-gate: seed
 	$(PY) -m scripts.gates backend
 
+razorpay-gate:
+	$(PY) -m scripts.gates razorpay
+
+# Both load .env explicitly: a fresh shell does not inherit RAZORPAY_CLIENT,
+# and the smoke test correctly refuses to run against the mock without it.
 live-demo:
 	@set -a && . ./.env && set +a && $(PY) -m scripts.razorpay_smoke_test
 
-razorpay-gate:
-	$(PY) -m scripts.gates razorpay
+retry-demo:
+	@set -a && . ./.env && set +a && $(PY) -m scripts.retry_demo
 
 api:
 	$(PY) -m uvicorn backend.app.api:app --reload --port 8000

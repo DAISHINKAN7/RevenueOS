@@ -1,0 +1,807 @@
+{
+  "opportunity_id": "OPP-DEMO1-a0d28d",
+  "final_state": "RECOVERED",
+  "attempts": 2,
+  "executions": [
+    {
+      "attempt": 1,
+      "action": "FREE_SHIPPING",
+      "status": "FAILED",
+      "order_id": "order_TTrUIh3l6PIT5G",
+      "payment_id": null,
+      "idempotency_key": "5bcee0144918338b882bea05b03de1c8f7d13e891552155baa9da824d68093b1"
+    },
+    {
+      "attempt": 2,
+      "action": "FREE_SHIPPING",
+      "status": "CAPTURED",
+      "order_id": "order_TTrUxTdJaiTlXz",
+      "payment_id": "pay_TTrV9UhhZ7hKvx",
+      "idempotency_key": "d65a6b27b19fa46ecfc900f80089878e661a5b66e264aad2e86e6d487070f531"
+    }
+  ],
+  "outcome": {
+    "net_recovered_gmv": 4869.0,
+    "realized_contribution": 1963.76
+  },
+  "audit": [
+    {
+      "sequence": 1,
+      "timestamp": "2026-08-25T03:55:28.826033",
+      "event_type": "OPPORTUNITY_DETECTED",
+      "summary": "CHECKOUT_ABANDONMENT INR 4869.0 at risk",
+      "state_before": null,
+      "state_after": "DETECTED",
+      "payload": {
+        "scenario": "demo1_free_shipping_beats_discount",
+        "execution_mode": "RAZORPAY_TEST"
+      }
+    },
+    {
+      "sequence": 2,
+      "timestamp": "2026-08-25T03:55:39.105298",
+      "event_type": "ANALYSIS_STARTED",
+      "summary": "analysis started for attempt 1",
+      "state_before": "DETECTED",
+      "state_after": "ANALYZING",
+      "payload": {}
+    },
+    {
+      "sequence": 3,
+      "timestamp": "2026-08-25T03:55:39.221999",
+      "event_type": "ACTION_SCORED",
+      "summary": "DO_NOTHING P=0.2945",
+      "state_before": null,
+      "state_after": null,
+      "payload": {
+        "action": "DO_NOTHING",
+        "probability": 0.2944708466529846,
+        "valid": true,
+        "error": null
+      }
+    },
+    {
+      "sequence": 4,
+      "timestamp": "2026-08-25T03:55:39.223292",
+      "event_type": "ACTION_SCORED",
+      "summary": "HUMAN_ESCALATION P=0.2945",
+      "state_before": null,
+      "state_after": null,
+      "payload": {
+        "action": "HUMAN_ESCALATION",
+        "probability": 0.2944708466529846,
+        "valid": true,
+        "error": null
+      }
+    },
+    {
+      "sequence": 5,
+      "timestamp": "2026-08-25T03:55:39.224098",
+      "event_type": "ACTION_SCORED",
+      "summary": "FREE_SHIPPING P=0.3553",
+      "state_before": null,
+      "state_after": null,
+      "payload": {
+        "action": "FREE_SHIPPING",
+        "probability": 0.35534560680389404,
+        "valid": true,
+        "error": null
+      }
+    },
+    {
+      "sequence": 6,
+      "timestamp": "2026-08-25T03:55:39.224854",
+      "event_type": "ACTION_SCORED",
+      "summary": "SMALL_DISCOUNT P=0.3542",
+      "state_before": null,
+      "state_after": null,
+      "payload": {
+        "action": "SMALL_DISCOUNT",
+        "probability": 0.3541658818721771,
+        "valid": true,
+        "error": null
+      }
+    },
+    {
+      "sequence": 7,
+      "timestamp": "2026-08-25T03:55:39.225504",
+      "event_type": "ACTION_SCORED",
+      "summary": "MEDIUM_DISCOUNT P=0.3583",
+      "state_before": null,
+      "state_after": null,
+      "payload": {
+        "action": "MEDIUM_DISCOUNT",
+        "probability": 0.3583199381828308,
+        "valid": true,
+        "error": null
+      }
+    },
+    {
+      "sequence": 8,
+      "timestamp": "2026-08-25T03:55:39.226658",
+      "event_type": "ACTION_SCORED",
+      "summary": "PAYMENT_LINK P=0.2945",
+      "state_before": null,
+      "state_after": null,
+      "payload": {
+        "action": "PAYMENT_LINK",
+        "probability": 0.2944708466529846,
+        "valid": true,
+        "error": null
+      }
+    },
+    {
+      "sequence": 9,
+      "timestamp": "2026-08-25T03:55:39.227962",
+      "event_type": "ACTIONS_RANKED",
+      "summary": "6 actions scored",
+      "state_before": "ANALYZING",
+      "state_after": "CANDIDATES_SCORED",
+      "payload": {}
+    },
+    {
+      "sequence": 10,
+      "timestamp": "2026-08-25T03:55:39.231614",
+      "event_type": "ACTIONS_RANKED",
+      "summary": "candidates ranked by incremental expected value",
+      "state_before": "CANDIDATES_SCORED",
+      "state_after": "ECONOMICALLY_RANKED",
+      "payload": {
+        "ranking": [
+          {
+            "action": "FREE_SHIPPING",
+            "probability": 0.35534560680389404,
+            "expected_value": 696.52,
+            "incremental_expected_value": 105.28,
+            "incentive_cost_if_recovered": 42.05,
+            "fixed_action_cost": 2.0,
+            "valid": true,
+            "error": null
+          },
+          {
+            "action": "SMALL_DISCOUNT",
+            "probability": 0.3541658818721771,
+            "expected_value": 622.88,
+            "incremental_expected_value": 31.63,
+            "incentive_cost_if_recovered": 243.45,
+            "fixed_action_cost": 2.0,
+            "valid": true,
+            "error": null
+          },
+          {
+            "action": "DO_NOTHING",
+            "probability": 0.2944708466529846,
+            "expected_value": 591.24,
+            "incremental_expected_value": 0.0,
+            "incentive_cost_if_recovered": 0.0,
+            "fixed_action_cost": 0.0,
+            "valid": true,
+            "error": null
+          },
+          {
+            "action": "PAYMENT_LINK",
+            "probability": 0.2944708466529846,
+            "expected_value": 588.24,
+            "incremental_expected_value": -3.0,
+            "incentive_cost_if_recovered": 0.0,
+            "fixed_action_cost": 3.0,
+            "valid": true,
+            "error": null
+          },
+          {
+            "action": "MEDIUM_DISCOUNT",
+            "probability": 0.3583199381828308,
+            "expected_value": 542.97,
+            "incremental_expected_value": -48.27,
+            "incentive_cost_if_recovered": 486.9,
+            "fixed_action_cost": 2.0,
+            "valid": true,
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "sequence": 11,
+      "timestamp": "2026-08-25T03:55:39.238291",
+      "event_type": "POLICY_EVALUATED",
+      "summary": "FREE_SHIPPING: PASS (OK)",
+      "state_before": "ECONOMICALLY_RANKED",
+      "state_after": "POLICY_CHECKED",
+      "payload": {
+        "decision": "PASS",
+        "policy_version": "merchant-policy-1.0.1",
+        "maximum_authorized_downside": 44.05,
+        "reason_code": "OK",
+        "rules": [
+          {
+            "rule_id": "RULE_WORKFLOW_STATE_VALID",
+            "passed": true,
+            "decision": "PASS",
+            "reason": "state ECONOMICALLY_RANKED is valid for authorization",
+            "input": "ECONOMICALLY_RANKED",
+            "threshold": null
+          },
+          {
+            "rule_id": "RULE_INVALID_MODEL_OUTPUT",
+            "passed": true,
+            "decision": "PASS",
+            "reason": "model output is a finite probability in [0, 1]",
+            "input": "0.35534560680389404",
+            "threshold": null
+          },
+          {
+            "rule_id": "RULE_DUPLICATE_ACTION_PREVENTION",
+            "passed": true,
+            "decision": "PASS",
+            "reason": "no prior execution for this opportunity/action/attempt",
+            "input": "5bcee0144918338b882bea05b03de1c8f7d13e891552155baa9da824d68093b1",
+            "threshold": null
+          },
+          {
+            "rule_id": "RULE_MAX_RECOVERY_ATTEMPTS",
+            "passed": true,
+            "decision": "PASS",
+            "reason": "attempt 1 of 2 allowed",
+            "input": "1",
+            "threshold": "2"
+          },
+          {
+            "rule_id": "RULE_OPPORTUNITY_EXPIRED",
+            "passed": true,
+            "decision": "PASS",
+            "reason": "opportunity is within the merchant TTL window",
+            "input": "29.2",
+            "threshold": "2880"
+          },
+          {
+            "rule_id": "RULE_CUSTOMER_DECLINED",
+            "passed": true,
+            "decision": "PASS",
+            "reason": "customer has not declined further contact",
+            "input": null,
+            "threshold": null
+          },
+          {
+            "rule_id": "RULE_MINIMUM_DELTA_EV",
+            "passed": true,
+            "decision": "PASS",
+            "reason": "incremental expected value clears the threshold",
+            "input": "105.28",
+            "threshold": "0"
+          },
+          {
+            "rule_id": "RULE_MINIMUM_MODEL_CONFIDENCE",
+            "passed": true,
+            "decision": "PASS",
+            "reason": "recovery probability meets the minimum confidence",
+            "input": "0.35534560680389404",
+            "threshold": "0.2"
+          },
+          {
+            "rule_id": "RULE_MINIMUM_DECISION_MARGIN",
+            "passed": true,
+            "decision": "PASS",
+            "reason": "clear enough gap to the runner-up to decide autonomously",
+            "input": "73.65",
+            "threshold": "5"
+          },
+          {
+            "rule_id": "RULE_FREE_SHIPPING_LIMIT",
+            "passed": true,
+            "decision": "PASS",
+            "reason": "shipping subsidy within limit",
+            "input": "42.05",
+            "threshold": "150"
+          },
+          {
+            "rule_id": "RULE_MINIMUM_MARGIN",
+            "passed": true,
+            "decision": "PASS",
+            "reason": "remaining contribution margin protected",
+            "input": "40.37",
+            "threshold": "15"
+          },
+          {
+            "rule_id": "RULE_HIGH_VALUE_REQUIRES_APPROVAL",
+            "passed": true,
+            "decision": "PASS",
+            "reason": "order below the high-value approval threshold",
+            "input": "4869.00",
+            "threshold": "10000"
+          }
+        ],
+        "evaluated_at": "2026-08-25T03:55:39.232768+00:00"
+      }
+    },
+    {
+      "sequence": 12,
+      "timestamp": "2026-08-25T03:55:39.239109",
+      "event_type": "ACTION_AUTHORIZED",
+      "summary": "FREE_SHIPPING authorized; max downside INR 44.05",
+      "state_before": "POLICY_CHECKED",
+      "state_after": "AUTHORIZED",
+      "payload": {
+        "action": "FREE_SHIPPING",
+        "maximum_authorized_downside": 44.05
+      }
+    },
+    {
+      "sequence": 13,
+      "timestamp": "2026-08-25T03:55:39.325960",
+      "event_type": "EXECUTION_CREATED",
+      "summary": "execution pending for FREE_SHIPPING",
+      "state_before": "AUTHORIZED",
+      "state_after": "EXECUTION_PENDING",
+      "payload": {}
+    },
+    {
+      "sequence": 14,
+      "timestamp": "2026-08-25T03:55:39.329956",
+      "event_type": "EXECUTION_CREATED",
+      "summary": "executing FREE_SHIPPING via RAZORPAY_TEST",
+      "state_before": "EXECUTION_PENDING",
+      "state_after": "EXECUTING",
+      "payload": {
+        "execution_id": "exe_c81ad4b840db4c8c"
+      }
+    },
+    {
+      "sequence": 15,
+      "timestamp": "2026-08-25T03:55:39.583217",
+      "event_type": "RAZORPAY_ORDER_CREATED",
+      "summary": "order order_TTrUIh3l6PIT5G for INR 4869.00",
+      "state_before": null,
+      "state_after": null,
+      "payload": {
+        "order_id": "order_TTrUIh3l6PIT5G",
+        "amount": 4869.0
+      }
+    },
+    {
+      "sequence": 16,
+      "timestamp": "2026-08-25T03:55:39.584584",
+      "event_type": "CHECKOUT_STARTED",
+      "summary": "awaiting payment confirmation via webhook",
+      "state_before": "EXECUTING",
+      "state_after": "AWAITING_PAYMENT",
+      "payload": {
+        "order_id": "order_TTrUIh3l6PIT5G"
+      }
+    },
+    {
+      "sequence": 17,
+      "timestamp": "2026-08-25T03:56:15.805546",
+      "event_type": "WEBHOOK_RECEIVED",
+      "summary": "payment.failed received",
+      "state_before": null,
+      "state_after": null,
+      "payload": {
+        "event_id": "TTrUvI9SHTMroL",
+        "event_type": "payment.failed",
+        "payment_id": "pay_TTrUfArNohQDSH"
+      }
+    },
+    {
+      "sequence": 18,
+      "timestamp": "2026-08-25T03:56:15.809744",
+      "event_type": "PAYMENT_FAILED",
+      "summary": "payment failed: BAD_REQUEST_ERROR",
+      "state_before": "AWAITING_PAYMENT",
+      "state_after": "PAYMENT_FAILED_RECOVERABLE",
+      "payload": {
+        "error_code": "BAD_REQUEST_ERROR",
+        "error_step": "payment_authorization"
+      }
+    },
+    {
+      "sequence": 19,
+      "timestamp": "2026-08-25T03:56:16.498302",
+      "event_type": "ANALYSIS_STARTED",
+      "summary": "re-analysis after failed attempt 1; starting attempt 2",
+      "state_before": "PAYMENT_FAILED_RECOVERABLE",
+      "state_after": "ANALYZING",
+      "payload": {
+        "previous_attempt": 1,
+        "attempt": 2
+      }
+    },
+    {
+      "sequence": 20,
+      "timestamp": "2026-08-25T03:56:16.793078",
+      "event_type": "ACTION_SCORED",
+      "summary": "DO_NOTHING P=0.2945",
+      "state_before": null,
+      "state_after": null,
+      "payload": {
+        "action": "DO_NOTHING",
+        "probability": 0.2944708466529846,
+        "valid": true,
+        "error": null
+      }
+    },
+    {
+      "sequence": 21,
+      "timestamp": "2026-08-25T03:56:16.793769",
+      "event_type": "ACTION_SCORED",
+      "summary": "HUMAN_ESCALATION P=0.2945",
+      "state_before": null,
+      "state_after": null,
+      "payload": {
+        "action": "HUMAN_ESCALATION",
+        "probability": 0.2944708466529846,
+        "valid": true,
+        "error": null
+      }
+    },
+    {
+      "sequence": 22,
+      "timestamp": "2026-08-25T03:56:16.794360",
+      "event_type": "ACTION_SCORED",
+      "summary": "FREE_SHIPPING P=0.3553",
+      "state_before": null,
+      "state_after": null,
+      "payload": {
+        "action": "FREE_SHIPPING",
+        "probability": 0.35534560680389404,
+        "valid": true,
+        "error": null
+      }
+    },
+    {
+      "sequence": 23,
+      "timestamp": "2026-08-25T03:56:16.794923",
+      "event_type": "ACTION_SCORED",
+      "summary": "SMALL_DISCOUNT P=0.3542",
+      "state_before": null,
+      "state_after": null,
+      "payload": {
+        "action": "SMALL_DISCOUNT",
+        "probability": 0.3541658818721771,
+        "valid": true,
+        "error": null
+      }
+    },
+    {
+      "sequence": 24,
+      "timestamp": "2026-08-25T03:56:16.795472",
+      "event_type": "ACTION_SCORED",
+      "summary": "MEDIUM_DISCOUNT P=0.3583",
+      "state_before": null,
+      "state_after": null,
+      "payload": {
+        "action": "MEDIUM_DISCOUNT",
+        "probability": 0.3583199381828308,
+        "valid": true,
+        "error": null
+      }
+    },
+    {
+      "sequence": 25,
+      "timestamp": "2026-08-25T03:56:16.796001",
+      "event_type": "ACTION_SCORED",
+      "summary": "PAYMENT_LINK P=0.2945",
+      "state_before": null,
+      "state_after": null,
+      "payload": {
+        "action": "PAYMENT_LINK",
+        "probability": 0.2944708466529846,
+        "valid": true,
+        "error": null
+      }
+    },
+    {
+      "sequence": 26,
+      "timestamp": "2026-08-25T03:56:16.796611",
+      "event_type": "ACTIONS_RANKED",
+      "summary": "6 actions scored",
+      "state_before": "ANALYZING",
+      "state_after": "CANDIDATES_SCORED",
+      "payload": {}
+    },
+    {
+      "sequence": 27,
+      "timestamp": "2026-08-25T03:56:16.799175",
+      "event_type": "ACTIONS_RANKED",
+      "summary": "candidates ranked by incremental expected value",
+      "state_before": "CANDIDATES_SCORED",
+      "state_after": "ECONOMICALLY_RANKED",
+      "payload": {
+        "ranking": [
+          {
+            "action": "FREE_SHIPPING",
+            "probability": 0.35534560680389404,
+            "expected_value": 696.52,
+            "incremental_expected_value": 105.28,
+            "incentive_cost_if_recovered": 42.05,
+            "fixed_action_cost": 2.0,
+            "valid": true,
+            "error": null
+          },
+          {
+            "action": "SMALL_DISCOUNT",
+            "probability": 0.3541658818721771,
+            "expected_value": 622.88,
+            "incremental_expected_value": 31.63,
+            "incentive_cost_if_recovered": 243.45,
+            "fixed_action_cost": 2.0,
+            "valid": true,
+            "error": null
+          },
+          {
+            "action": "DO_NOTHING",
+            "probability": 0.2944708466529846,
+            "expected_value": 591.24,
+            "incremental_expected_value": 0.0,
+            "incentive_cost_if_recovered": 0.0,
+            "fixed_action_cost": 0.0,
+            "valid": true,
+            "error": null
+          },
+          {
+            "action": "PAYMENT_LINK",
+            "probability": 0.2944708466529846,
+            "expected_value": 588.24,
+            "incremental_expected_value": -3.0,
+            "incentive_cost_if_recovered": 0.0,
+            "fixed_action_cost": 3.0,
+            "valid": true,
+            "error": null
+          },
+          {
+            "action": "MEDIUM_DISCOUNT",
+            "probability": 0.3583199381828308,
+            "expected_value": 542.97,
+            "incremental_expected_value": -48.27,
+            "incentive_cost_if_recovered": 486.9,
+            "fixed_action_cost": 2.0,
+            "valid": true,
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "sequence": 28,
+      "timestamp": "2026-08-25T03:56:16.801529",
+      "event_type": "POLICY_EVALUATED",
+      "summary": "FREE_SHIPPING: PASS (OK)",
+      "state_before": "ECONOMICALLY_RANKED",
+      "state_after": "POLICY_CHECKED",
+      "payload": {
+        "decision": "PASS",
+        "policy_version": "merchant-policy-1.0.1",
+        "maximum_authorized_downside": 44.05,
+        "reason_code": "OK",
+        "rules": [
+          {
+            "rule_id": "RULE_WORKFLOW_STATE_VALID",
+            "passed": true,
+            "decision": "PASS",
+            "reason": "state ECONOMICALLY_RANKED is valid for authorization",
+            "input": "ECONOMICALLY_RANKED",
+            "threshold": null
+          },
+          {
+            "rule_id": "RULE_INVALID_MODEL_OUTPUT",
+            "passed": true,
+            "decision": "PASS",
+            "reason": "model output is a finite probability in [0, 1]",
+            "input": "0.35534560680389404",
+            "threshold": null
+          },
+          {
+            "rule_id": "RULE_DUPLICATE_ACTION_PREVENTION",
+            "passed": true,
+            "decision": "PASS",
+            "reason": "no prior execution for this opportunity/action/attempt",
+            "input": "d65a6b27b19fa46ecfc900f80089878e661a5b66e264aad2e86e6d487070f531",
+            "threshold": null
+          },
+          {
+            "rule_id": "RULE_MAX_RECOVERY_ATTEMPTS",
+            "passed": true,
+            "decision": "PASS",
+            "reason": "attempt 2 of 2 allowed",
+            "input": "2",
+            "threshold": "2"
+          },
+          {
+            "rule_id": "RULE_OPPORTUNITY_EXPIRED",
+            "passed": true,
+            "decision": "PASS",
+            "reason": "opportunity is within the merchant TTL window",
+            "input": "29.8",
+            "threshold": "2880"
+          },
+          {
+            "rule_id": "RULE_CUSTOMER_DECLINED",
+            "passed": true,
+            "decision": "PASS",
+            "reason": "customer has not declined further contact",
+            "input": null,
+            "threshold": null
+          },
+          {
+            "rule_id": "RULE_MINIMUM_DELTA_EV",
+            "passed": true,
+            "decision": "PASS",
+            "reason": "incremental expected value clears the threshold",
+            "input": "105.28",
+            "threshold": "0"
+          },
+          {
+            "rule_id": "RULE_MINIMUM_MODEL_CONFIDENCE",
+            "passed": true,
+            "decision": "PASS",
+            "reason": "recovery probability meets the minimum confidence",
+            "input": "0.35534560680389404",
+            "threshold": "0.2"
+          },
+          {
+            "rule_id": "RULE_MINIMUM_DECISION_MARGIN",
+            "passed": true,
+            "decision": "PASS",
+            "reason": "clear enough gap to the runner-up to decide autonomously",
+            "input": "73.65",
+            "threshold": "5"
+          },
+          {
+            "rule_id": "RULE_FREE_SHIPPING_LIMIT",
+            "passed": true,
+            "decision": "PASS",
+            "reason": "shipping subsidy within limit",
+            "input": "42.05",
+            "threshold": "150"
+          },
+          {
+            "rule_id": "RULE_MINIMUM_MARGIN",
+            "passed": true,
+            "decision": "PASS",
+            "reason": "remaining contribution margin protected",
+            "input": "40.37",
+            "threshold": "15"
+          },
+          {
+            "rule_id": "RULE_HIGH_VALUE_REQUIRES_APPROVAL",
+            "passed": true,
+            "decision": "PASS",
+            "reason": "order below the high-value approval threshold",
+            "input": "4869.00",
+            "threshold": "10000"
+          }
+        ],
+        "evaluated_at": "2026-08-25T03:56:16.799870+00:00"
+      }
+    },
+    {
+      "sequence": 29,
+      "timestamp": "2026-08-25T03:56:16.802175",
+      "event_type": "ACTION_AUTHORIZED",
+      "summary": "FREE_SHIPPING authorized; max downside INR 44.05",
+      "state_before": "POLICY_CHECKED",
+      "state_after": "AUTHORIZED",
+      "payload": {
+        "action": "FREE_SHIPPING",
+        "maximum_authorized_downside": 44.05
+      }
+    },
+    {
+      "sequence": 30,
+      "timestamp": "2026-08-25T03:56:16.805976",
+      "event_type": "EXECUTION_CREATED",
+      "summary": "execution pending for FREE_SHIPPING",
+      "state_before": "AUTHORIZED",
+      "state_after": "EXECUTION_PENDING",
+      "payload": {}
+    },
+    {
+      "sequence": 31,
+      "timestamp": "2026-08-25T03:56:16.809105",
+      "event_type": "EXECUTION_CREATED",
+      "summary": "executing FREE_SHIPPING via RAZORPAY_TEST",
+      "state_before": "EXECUTION_PENDING",
+      "state_after": "EXECUTING",
+      "payload": {
+        "execution_id": "exe_ee205f96408d4d33"
+      }
+    },
+    {
+      "sequence": 32,
+      "timestamp": "2026-08-25T03:56:16.915366",
+      "event_type": "RAZORPAY_ORDER_CREATED",
+      "summary": "order order_TTrUxTdJaiTlXz for INR 4869.00",
+      "state_before": null,
+      "state_after": null,
+      "payload": {
+        "order_id": "order_TTrUxTdJaiTlXz",
+        "amount": 4869.0
+      }
+    },
+    {
+      "sequence": 33,
+      "timestamp": "2026-08-25T03:56:16.916071",
+      "event_type": "CHECKOUT_STARTED",
+      "summary": "awaiting payment confirmation via webhook",
+      "state_before": "EXECUTING",
+      "state_after": "AWAITING_PAYMENT",
+      "payload": {
+        "order_id": "order_TTrUxTdJaiTlXz"
+      }
+    },
+    {
+      "sequence": 34,
+      "timestamp": "2026-08-25T03:56:32.053122",
+      "event_type": "WEBHOOK_RECEIVED",
+      "summary": "payment.authorized received",
+      "state_before": null,
+      "state_after": null,
+      "payload": {
+        "event_id": "TTrVDUweoaQWms",
+        "event_type": "payment.authorized",
+        "payment_id": "pay_TTrV9UhhZ7hKvx"
+      }
+    },
+    {
+      "sequence": 35,
+      "timestamp": "2026-08-25T03:56:32.373763",
+      "event_type": "WEBHOOK_RECEIVED",
+      "summary": "payment.captured received",
+      "state_before": null,
+      "state_after": null,
+      "payload": {
+        "event_id": "TTrVEGM3RP8g7l",
+        "event_type": "payment.captured",
+        "payment_id": "pay_TTrV9UhhZ7hKvx"
+      }
+    },
+    {
+      "sequence": 36,
+      "timestamp": "2026-08-25T03:56:32.377714",
+      "event_type": "RECOVERY_CONFIRMED",
+      "summary": "recovery confirmed by payment.captured",
+      "state_before": "AWAITING_PAYMENT",
+      "state_after": "RECOVERED",
+      "payload": {
+        "payment_id": "pay_TTrV9UhhZ7hKvx",
+        "gross": 4869.0
+      }
+    },
+    {
+      "sequence": 37,
+      "timestamp": "2026-08-25T03:56:35.261262",
+      "event_type": "RECOVERY_CONFIRMED",
+      "summary": "financial outcome recorded",
+      "state_before": null,
+      "state_after": null,
+      "payload": {
+        "counted": true
+      }
+    },
+    {
+      "sequence": 38,
+      "timestamp": "2026-08-25T03:56:35.271373",
+      "event_type": "WEBHOOK_RECEIVED",
+      "summary": "order.paid received",
+      "state_before": null,
+      "state_after": null,
+      "payload": {
+        "event_id": "TTrVErzX8RqR0c",
+        "event_type": "order.paid",
+        "payment_id": "pay_TTrV9UhhZ7hKvx"
+      }
+    },
+    {
+      "sequence": 39,
+      "timestamp": "2026-08-25T03:56:35.272960",
+      "event_type": "AUDIT_CORRECTION",
+      "summary": "order.paid arrived after recovery; state preserved",
+      "state_before": null,
+      "state_after": null,
+      "payload": {
+        "event_id": "TTrVErzX8RqR0c",
+        "state": "RECOVERED"
+      }
+    }
+  ]
+}

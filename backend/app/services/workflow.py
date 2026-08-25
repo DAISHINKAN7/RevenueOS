@@ -203,10 +203,20 @@ class RecoveryWorkflow:
         ctx = dict(opp.context)
         attempt = opp.current_attempt
 
-        if State(opp.state) in (State.PAYMENT_FAILED_RECOVERABLE, State.NOT_RECOVERED,
-                                State.EXECUTION_FAILED):
+        RETRY_STATES = (State.PAYMENT_FAILED_RECOVERABLE, State.NOT_RECOVERED,
+                        State.EXECUTION_FAILED)
+        if State(opp.state) in RETRY_STATES:
+            # A retry is a NEW attempt. Without incrementing here the idempotency
+            # key would be identical to the failed attempt's, and
+            # RULE_DUPLICATE_ACTION_PREVENTION would stop the workflow — the
+            # recovery loop would be unable to make a second attempt at all.
+            opp.current_attempt += 1
+            attempt = opp.current_attempt
+            self.s.flush()
             transition(self.s, opp, State.ANALYZING, audit, "ANALYSIS_STARTED",
-                       f"re-analysis for attempt {attempt}")
+                       f"re-analysis after failed attempt {attempt - 1}; "
+                       f"starting attempt {attempt}",
+                       {"previous_attempt": attempt - 1, "attempt": attempt})
         else:
             transition(self.s, opp, State.ANALYZING, audit, "ANALYSIS_STARTED",
                        f"analysis started for attempt {attempt}")
