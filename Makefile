@@ -3,7 +3,8 @@ PY   ?= python3
 
 .PHONY: help install data validate test test-fast clean gate phase2 api \
         features train evaluate audit model-gate clean-models \
-        seed backend-gate razorpay-gate live-demo retry-demo
+        seed backend-gate razorpay-gate live-demo retry-demo \
+        adaptive-retry-gate agent-gate agent-run agent-check demo-reset agent-traces planner-compare
 
 help:
 	@echo "RevenueOS"
@@ -31,6 +32,15 @@ help:
 	@echo "  make api            run the API on :8000"
 	@echo "  make live-demo      one live Test Mode recovery (loads .env)"
 	@echo "  make retry-demo     guided failure -> retry -> recovery loop"
+	@echo ""
+	@echo "  --- Part A / Phase 7 (adaptive retry + agent) ---"
+	@echo "  make adaptive-retry-gate  prove attempt 2 genuinely adapts"
+	@echo "  make agent-gate           agent tools, bounds, adversarial tests"
+	@echo "  make agent-run OPP=<id>   run the orchestrator on one opportunity"
+	@echo "  make agent-check          verify the configured LLM actually responds"
+	@echo "  make demo-reset           drop and reseed demo opportunities"
+	@echo "  make agent-traces         generate the six agent safety traces"
+	@echo "  make planner-compare      A/B planner quality across providers"
 	@echo "  make data-small         quick 4k-session dataset for iteration"
 
 install:
@@ -90,13 +100,39 @@ backend-gate: seed
 razorpay-gate:
 	$(PY) -m scripts.gates razorpay
 
-# Both load .env explicitly: a fresh shell does not inherit RAZORPAY_CLIENT,
-# and the smoke test correctly refuses to run against the mock without it.
+# These scripts load .env themselves (backend/app/core/dotenv.py), so they
+# behave the same whether or not the calling shell exported anything.
+adaptive-retry-gate:
+	$(PY) -m scripts.gates adaptive
+
+planner-compare:
+	$(PY) -m scripts.planner_compare
+
+agent-traces:
+	$(PY) -m scripts.agent_traces
+
+# Traces first: the gate report cites them.
+agent-gate: agent-traces
+	$(PY) -m scripts.gates agent
+
+# Runs the orchestrator against one opportunity. The script loads .env itself,
+# picking up an optional free LLM provider (Ollama / Groq / OpenRouter).
+# Wipes operational state and reseeds. Research artifacts are untouched.
+demo-reset:
+	rm -f data/revenueos.db data/revenueos.db-wal data/revenueos.db-shm
+	$(PY) -m backend.app.seed
+
+agent-check:
+	$(PY) -m scripts.agent_check
+
+agent-run:
+	$(PY) -m scripts.run_agent $(OPP)
+
 live-demo:
-	@set -a && . ./.env && set +a && $(PY) -m scripts.razorpay_smoke_test
+	$(PY) -m scripts.razorpay_smoke_test
 
 retry-demo:
-	@set -a && . ./.env && set +a && $(PY) -m scripts.retry_demo
+	$(PY) -m scripts.retry_demo
 
 api:
 	$(PY) -m uvicorn backend.app.api:app --reload --port 8000

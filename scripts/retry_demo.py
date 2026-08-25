@@ -22,6 +22,10 @@ import time
 import webbrowser
 from pathlib import Path
 
+from backend.app.core.dotenv import load_dotenv
+
+load_dotenv()  # before any settings are read
+
 from backend.app.core.config import settings
 from backend.app.db.models import (
     Opportunity, RecoveryExecution, get_session_factory,

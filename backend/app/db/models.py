@@ -306,10 +306,40 @@ def get_session_factory():
     return _Session
 
 
+def reset_sqlite_files(url: str | None = None) -> None:
+    """Delete the SQLite database and its WAL sidecars together.
+
+    WAL mode writes `-wal` and `-shm` alongside the main file. Removing only the
+    main file leaves those orphaned, and the next connection fails with an
+    opaque `disk I/O error`. They must be removed as a set.
+    """
+    from pathlib import Path
+
+    url = url or settings.database_url
+    if not url.startswith("sqlite"):
+        return
+    main = url.split("///")[-1]
+    if not main or main == ":memory:":
+        return
+    for suffix in ("", "-wal", "-shm", "-journal"):
+        f = Path(main + suffix)
+        if f.exists():
+            f.unlink()
+
+
 def init_db(drop: bool = False) -> None:
     eng = get_engine()
     if drop:
-        Base.metadata.drop_all(eng)
+        try:
+            Base.metadata.drop_all(eng)
+        except Exception:  # noqa: BLE001
+            # A corrupted or half-deleted SQLite file cannot be introspected.
+            # Rebuilding from scratch is correct here: this database holds
+            # operational demo state only, never research artifacts.
+            eng.dispose()
+            reset_engine()
+            reset_sqlite_files()
+            eng = get_engine()
     Base.metadata.create_all(eng)
 
 
@@ -318,3 +348,54 @@ def reset_engine() -> None:
     global _engine, _Session
     _engine = None
     _Session = None
+
+
+class AgentRun(Base):
+    """One orchestrator run over one opportunity (spec §25)."""
+
+    __tablename__ = "agent_runs"
+
+    agent_run_id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    opportunity_id: Mapped[str] = mapped_column(ForeignKey("opportunities.id"), index=True)
+    agent_version: Mapped[str] = mapped_column(String(40))
+
+    started_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
+    completed_at: Mapped[datetime | None] = mapped_column(DateTime)
+
+    status: Mapped[str] = mapped_column(String(24), default="RUNNING", index=True)
+    current_goal: Mapped[str | None] = mapped_column(String(64))
+    attempt_number: Mapped[int] = mapped_column(Integer, default=1)
+    final_disposition: Mapped[str | None] = mapped_column(String(40))
+
+    planner_source: Mapped[str] = mapped_column(String(16), default="FALLBACK")
+    initial_state: Mapped[str | None] = mapped_column(String(40))
+    final_state: Mapped[str | None] = mapped_column(String(40))
+    blocked_tool_calls: Mapped[int] = mapped_column(Integer, default=0)
+    planner_failures: Mapped[int] = mapped_column(Integer, default=0)
+    budget_exceeded: Mapped[bool] = mapped_column(Boolean, default=False)
+
+    llm_provider: Mapped[str] = mapped_column(String(32), default="mock")
+    llm_model: Mapped[str | None] = mapped_column(String(64))
+    tool_call_count: Mapped[int] = mapped_column(Integer, default=0)
+    replan_count: Mapped[int] = mapped_column(Integer, default=0)
+    error: Mapped[str | None] = mapped_column(Text)
+
+
+class AgentTraceEvent(Base):
+    """Concise, user-safe decision summaries. Never hidden chain-of-thought."""
+
+    __tablename__ = "agent_trace_events"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    agent_run_id: Mapped[str] = mapped_column(ForeignKey("agent_runs.agent_run_id"), index=True)
+    sequence: Mapped[int] = mapped_column(Integer)
+    timestamp: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
+
+    event_type: Mapped[str] = mapped_column(String(40))
+    tool_name: Mapped[str | None] = mapped_column(String(48))
+    tool_input_summary: Mapped[str | None] = mapped_column(Text)
+    tool_output_summary: Mapped[str | None] = mapped_column(Text)
+    reasoning_summary: Mapped[str | None] = mapped_column(Text)
+
+    workflow_state: Mapped[str | None] = mapped_column(String(40))
+    policy_state: Mapped[str | None] = mapped_column(String(24))

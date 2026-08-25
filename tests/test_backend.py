@@ -620,3 +620,234 @@ def test_attempt_limit_stops_the_retry_loop(session):
             break
     assert o.state == State.STOPPED.value
     assert o.current_attempt > limit
+
+
+# ------------------------------------------------------ retry actually adapts
+def _fail_payment(session, opp, code="GATEWAY_ERROR", step="payment_authorization"):
+    session.add(M.PaymentFailureRecord(
+        opportunity_id=opp.id, execution_id="x", failure_code=code,
+        failure_step=step, payment_method="card", payment_id="pay_x"))
+    opp.state = State.PAYMENT_FAILED_RECOVERABLE.value
+    session.commit()
+
+
+@needs_model
+@needs_data
+def test_retry_context_is_refreshed_not_frozen(session):
+    """Attempt 2 must score a CURRENT context, not the original snapshot.
+
+    A frozen context makes the agent appear to re-decide while actually
+    replaying attempt 1's probabilities exactly.
+    """
+    o = make_opportunity(session)
+    wf = RecoveryWorkflow(session)
+    wf.analyze(o)
+    session.commit()
+    before = dict(o.context)
+
+    _fail_payment(session, o)
+    wf.analyze(o)
+    session.commit()
+
+    assert o.context["attempt_number"] == 2.0
+    assert o.context["opportunity_type"] == "PAYMENT_FAILURE"
+    assert o.context["failure_reason"] != before.get("failure_reason")
+
+    # Elapsed time is recomputed from detected_at, so it tracks the clock. (The
+    # fixture's detected_at is "now" while its context carries the dataset row's
+    # original elapsed value, so compare successive refreshes rather than the
+    # seeded value.)
+    from backend.app.services.workflow import refresh_context
+    first = o.context["minutes_since_event"]
+    import time as _t
+    _t.sleep(1.1)
+    assert refresh_context(session, o)["minutes_since_event"] > first
+
+
+@needs_model
+@needs_data
+def test_retry_produces_different_probabilities(session):
+    o = make_opportunity(session)
+    wf = RecoveryWorkflow(session)
+    r1 = wf.analyze(o)
+    session.commit()
+    p1 = {c["action"]: c["probability"] for c in r1["candidate_actions"]}
+
+    _fail_payment(session, o)
+    r2 = wf.analyze(o)
+    session.commit()
+    p2 = {c["action"]: c["probability"] for c in r2["candidate_actions"]}
+
+    shared = set(p1) & set(p2)
+    assert shared
+    assert any(abs(p1[a] - p2[a]) > 1e-6 for a in shared), \
+        "attempt 2 reproduced attempt 1 exactly; context was not refreshed"
+
+
+@needs_model
+@needs_data
+def test_retry_unlocks_payment_specific_actions(session):
+    """Retry and switch actions are ineligible until a payment has failed."""
+    o = make_opportunity(session)
+    wf = RecoveryWorkflow(session)
+    r1 = wf.analyze(o)
+    session.commit()
+    assert not {"DELAYED_RETRY", "IMMEDIATE_RETRY", "PAYMENT_METHOD_SWITCH"} & {
+        c["action"] for c in r1["candidate_actions"]}
+
+    _fail_payment(session, o)
+    r2 = wf.analyze(o)
+    session.commit()
+    assert {"DELAYED_RETRY", "IMMEDIATE_RETRY"} <= {
+        c["action"] for c in r2["candidate_actions"]}
+
+
+@needs_model
+@needs_data
+def test_razorpay_error_is_mapped_to_a_trained_category(session):
+    """Provider error codes must map into the taxonomy the model was trained on."""
+    from backend.app.services.workflow import refresh_context
+    o = make_opportunity(session)
+    _fail_payment(session, o, code="BAD_REQUEST_ERROR", step="payment_authentication")
+    ctx = refresh_context(session, o)
+    assert ctx["failure_reason"] == "AUTHENTICATION_FAILURE"
+
+
+@needs_model
+@needs_data
+def test_unknown_error_falls_back_rather_than_guessing(session):
+    from backend.app.services.workflow import refresh_context
+    o = make_opportunity(session)
+    _fail_payment(session, o, code="SOMETHING_NEW", step="something_new")
+    ctx = refresh_context(session, o)
+    assert ctx["failure_reason"] == "UNKNOWN"
+
+
+# ------------------------------------------------- terminal execution paths
+@needs_model
+@needs_data
+def test_do_nothing_execution_reaches_a_terminal_state(session):
+    """The DO_NOTHING path transitions straight to terminal without a payment.
+
+    This branch was previously untested and carried a signature bug that only
+    surfaced when an opportunity actually selected DO_NOTHING.
+    """
+    o = make_opportunity(session)
+    o.state = State.AUTHORIZED.value
+    o.selected_action = "DO_NOTHING"
+    session.commit()
+    r = RecoveryWorkflow(session).execute(o, SimulatorRecoveryExecutor())
+    assert r["status"] == "COMPLETED"
+    session.expire_all()
+    assert session.get(M.Opportunity, o.id).state == State.NOT_RECOVERED.value
+    assert session.get(M.RecoveryOutcome, o.id) is None
+
+
+@needs_model
+@needs_data
+def test_forced_recovery_execution_books_outcome_once(session):
+    o = make_opportunity(session)
+    o.state = State.AUTHORIZED.value
+    o.selected_action = "FREE_SHIPPING"
+    session.commit()
+    r = RecoveryWorkflow(session).execute(
+        o, SimulatorRecoveryExecutor(force_outcome="RECOVERED"))
+    assert r["status"] == "COMPLETED"
+    session.expire_all()
+    assert session.get(M.Opportunity, o.id).state == State.RECOVERED.value
+    assert session.query(M.RecoveryOutcome).filter_by(opportunity_id=o.id).count() == 1
+
+
+@needs_model
+@needs_data
+def test_terminal_execution_audits_the_execution_id(session):
+    o = make_opportunity(session)
+    o.state = State.AUTHORIZED.value
+    o.selected_action = "DO_NOTHING"
+    session.commit()
+    r = RecoveryWorkflow(session).execute(o, SimulatorRecoveryExecutor())
+    events = session.query(M.AuditEvent).filter_by(opportunity_id=o.id).all()
+    assert any(e.structured_payload.get("execution_id") == r["execution_id"]
+               for e in events)
+
+
+# ------------------------------------------------ stranded execution recovery
+@needs_model
+@needs_data
+def test_stranded_execution_pending_is_reconciled(session):
+    """A crash mid-execution must not strand the opportunity permanently."""
+    o = make_opportunity(session)
+    o.state = State.EXECUTION_PENDING.value
+    o.selected_action = "FREE_SHIPPING"
+    session.add(M.RecoveryExecution(
+        execution_id="exe_stuck", opportunity_id=o.id, attempt_number=1,
+        action="FREE_SHIPPING", idempotency_key="k_stuck",
+        execution_provider="SIMULATOR", status="PENDING"))
+    session.commit()
+
+    wf = RecoveryWorkflow(session)
+    assert wf.reconcile_stuck_execution(o) is True
+    session.expire_all()
+    assert session.get(M.Opportunity, o.id).state == State.EXECUTION_FAILED.value
+    assert session.get(M.RecoveryExecution, "exe_stuck").status == "FAILED"
+
+
+@needs_model
+@needs_data
+def test_stranded_execution_with_order_waits_for_webhook(session):
+    """If a provider order exists the payment may still land — do not fail it."""
+    o = make_opportunity(session)
+    o.state = State.EXECUTING.value
+    o.selected_action = "FREE_SHIPPING"
+    session.add(M.RecoveryExecution(
+        execution_id="exe_order", opportunity_id=o.id, attempt_number=1,
+        action="FREE_SHIPPING", idempotency_key="k_order",
+        execution_provider="RAZORPAY_TEST", status="SUBMITTED",
+        external_order_id="order_live123"))
+    session.commit()
+
+    assert RecoveryWorkflow(session).reconcile_stuck_execution(o) is True
+    session.expire_all()
+    assert session.get(M.Opportunity, o.id).state == State.AWAITING_PAYMENT.value
+    assert session.get(M.RecoveryExecution, "exe_order").status == "SUBMITTED"
+
+
+@needs_model
+@needs_data
+def test_reconcile_is_a_noop_for_healthy_states(session):
+    o = make_opportunity(session)
+    assert RecoveryWorkflow(session).reconcile_stuck_execution(o) is False
+
+
+@needs_model
+@needs_data
+def test_analyze_recovers_from_stranded_state(session):
+    o = make_opportunity(session)
+    RecoveryWorkflow(session).analyze(o)
+    session.commit()
+    o.state = State.EXECUTION_PENDING.value
+    session.commit()
+    r = RecoveryWorkflow(session).analyze(o)   # must not raise
+    session.commit()
+    assert r["state"]
+
+
+# ---------------------------------------------------- python version portability
+def test_source_parses_under_python_311():
+    """The project targets Python 3.11; CI here may run a newer interpreter.
+
+    Newer syntax (notably PEP 701 multi-line expressions inside f-strings) parses
+    silently on 3.12+ and fails at import on 3.11, so it must be caught here
+    rather than on a contributor's machine.
+    """
+    import ast
+
+    failures = []
+    for path in Path(".").rglob("*.py"):
+        if any(part in str(path) for part in ("venv", "node_modules", ".git", "build")):
+            continue
+        try:
+            ast.parse(path.read_text(), feature_version=(3, 11))
+        except SyntaxError as exc:
+            failures.append(f"{path}:{exc.lineno} {exc.msg}")
+    assert failures == [], "syntax not valid on Python 3.11:\n" + "\n".join(failures)

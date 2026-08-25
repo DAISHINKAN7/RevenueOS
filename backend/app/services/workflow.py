@@ -18,7 +18,7 @@ from __future__ import annotations
 import hashlib
 import logging
 import uuid
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from decimal import Decimal, ROUND_HALF_UP
 
@@ -28,6 +28,8 @@ from sqlalchemy.exc import IntegrityError
 from backend.app.core.config import (
     FINANCIAL_ENGINE_VERSION, MerchantPolicy, WORKFLOW_VERSION, settings,
 )
+import numpy as np
+
 from backend.app.db.models import (
     ActionFinancialEvaluation, ActionPrediction, AuditEvent, Opportunity,
     PaymentFailureRecord, PolicyEvaluation, PolicyRuleEvaluation,
@@ -36,6 +38,11 @@ from backend.app.db.models import (
 from backend.app.domain import (
     DuplicateExecution, InvalidStateTransition, State, can_transition,
 )
+from backend.app.services.adaptive import (
+    ADAPTIVE_RULES_VERSION, RetryContext, active_incentives_from_history,
+    adapt_probabilities, filter_eligible, incremental_incentive_cost,
+)
+from backend.app.services.failure_taxonomy import normalize_failure
 from backend.app.services.policy_engine import (
     ActionEconomics, Decision, PolicyDecision, PolicyEngine,
 )
@@ -59,6 +66,93 @@ def idempotency_key(opportunity_id: str, action: str, attempt: int) -> str:
     """Stable across retries of the same attempt, different across attempts."""
     raw = f"{opportunity_id}|{action}|{attempt}|{WORKFLOW_VERSION}"
     return hashlib.sha256(raw.encode()).hexdigest()
+
+
+# ------------------------------------------------------------ context refresh
+def build_retry_context(session, opp: Opportunity) -> RetryContext:
+    """Assemble structured workflow evidence for the adaptive layer (§4)."""
+    execs = session.execute(
+        select(RecoveryExecution)
+        .where(RecoveryExecution.opportunity_id == opp.id)
+        .order_by(RecoveryExecution.attempt_number)).scalars().all()
+    last_fail = session.execute(
+        select(PaymentFailureRecord)
+        .where(PaymentFailureRecord.opportunity_id == opp.id)
+        .order_by(PaymentFailureRecord.id.desc())).scalars().first()
+
+    prior_actions = [e.action for e in execs]
+    ctx = RetryContext(
+        attempt_number=opp.current_attempt,
+        prior_interventions=prior_actions,
+        prior_failed_attempts=sum(1 for e in execs if e.status == "FAILED"),
+        active_incentives=active_incentives_from_history(prior_actions),
+        cumulative_fixed_cost=sum(
+            (Decimal(str(spec_for(e.action).fixed_cost)) for e in execs), Decimal("0")),
+        customer_declined=bool(dict(opp.context).get("customer_declined")),
+    )
+    if execs:
+        last = execs[-1]
+        ctx.previous_action = last.action
+        ctx.previous_action_status = last.status
+        prev_ts = last.updated_at or last.created_at
+        if prev_ts is not None:
+            if prev_ts.tzinfo is None:
+                prev_ts = prev_ts.replace(tzinfo=timezone.utc)
+            ctx.minutes_since_previous_attempt = round(
+                (utcnow() - prev_ts).total_seconds() / 60.0, 2)
+        # An incentive is only "committed" if the attempt actually converted.
+        # A failed attempt costs the fixed cost only, never the incentive.
+        outcome = session.get(RecoveryOutcome, opp.id)
+        if outcome is not None:
+            ctx.cumulative_incentive_cost = (
+                Decimal(str(outcome.discount_amount)) + Decimal(str(outcome.shipping_subsidy)))
+    if last_fail is not None:
+        reason, category = normalize_failure(
+            last_fail.failure_code, last_fail.failure_step, last_fail.failure_description)
+        ctx.previous_failure_reason = reason
+        ctx.previous_failure_category = category
+        ctx.previous_failure_step = last_fail.failure_step
+        ctx.previous_payment_method = last_fail.payment_method
+        ctx.previous_payment_id = last_fail.payment_id
+    return ctx
+
+
+def refresh_context(session, opp: Opportunity) -> dict:
+    """Rebuild model-input context from current state before a re-analysis.
+
+    Without this the model scores a stale snapshot: `attempt_number`,
+    `minutes_since_event`, `failure_reason`, `payment_method` and
+    `opportunity_type` are all live features, so a frozen context makes attempt 2
+    reproduce attempt 1's probabilities exactly — the agent appears to
+    "re-decide" while actually repeating itself.
+    """
+    ctx = dict(opp.context)
+
+    detected = opp.detected_at
+    if detected.tzinfo is None:
+        detected = detected.replace(tzinfo=timezone.utc)
+    minutes = max(0.0, (utcnow() - detected).total_seconds() / 60.0)
+    ctx["minutes_since_event"] = round(minutes, 2)
+    ctx["log_minutes_since_event"] = float(np.log1p(minutes))
+    ctx["attempt_number"] = float(opp.current_attempt)
+
+    last = (session.execute(
+        select(PaymentFailureRecord)
+        .where(PaymentFailureRecord.opportunity_id == opp.id)
+        .order_by(PaymentFailureRecord.id.desc())).scalars().first())
+    if last is not None:
+        reason, _ = normalize_failure(
+            last.failure_code, last.failure_step, last.failure_description)
+        ctx["failure_reason"] = reason
+        ctx["opportunity_type"] = "PAYMENT_FAILURE"
+        if last.payment_method:
+            ctx["payment_method"] = str(last.payment_method).upper()
+        ctx["previous_payment_failures"] = float(
+            ctx.get("previous_payment_failures") or 0) + 1
+
+    opp.context = ctx
+    session.flush()
+    return ctx
 
 
 # --------------------------------------------------------------- eligibility
@@ -161,10 +255,18 @@ class CandidateResult:
     expected_return_loss: Decimal
     expected_cancellation_loss: Decimal
     error: str | None = None
+    # Adaptive layer provenance: the model's raw estimate is preserved
+    # alongside the adjusted one so the two are never conflated.
+    base_probability: float | None = None
+    adaptive_delta: float = 0.0
+    adaptive_reasons: list[str] = field(default_factory=list)
 
     def as_dict(self) -> dict:
         return {
             "action": self.action, "probability": self.probability,
+            "base_probability": self.base_probability,
+            "adaptive_delta": round(self.adaptive_delta, 6),
+            "adaptive_reasons": self.adaptive_reasons,
             "expected_value": float(self.expected_value),
             "incremental_expected_value": float(self.incremental_expected_value),
             "incentive_cost_if_recovered": float(self.incentive_cost),
@@ -197,8 +299,57 @@ class RecoveryWorkflow:
             .where(RecoveryExecution.opportunity_id == opportunity_id)
         ).scalars().all())
 
+    # ------------------------------------------------------------- reconcile
+    def reconcile_stuck_execution(self, opp: Opportunity) -> bool:
+        """Recover an opportunity stranded mid-execution.
+
+        A process that dies between claiming the idempotency key and recording
+        the provider result leaves the workflow in EXECUTION_PENDING or
+        EXECUTING with no way forward. Rather than weaken the state machine to
+        allow a shortcut, move it to EXECUTION_FAILED — a legal transition that
+        already permits re-analysis — and say so in the audit trail.
+
+        Returns True if a reconciliation was performed.
+        """
+        state = State(opp.state)
+        if state not in (State.EXECUTION_PENDING, State.EXECUTING):
+            return False
+
+        audit = AuditRecorder(self.s, opp)
+        execs = self.s.execute(
+            select(RecoveryExecution)
+            .where(RecoveryExecution.opportunity_id == opp.id,
+                   RecoveryExecution.attempt_number == opp.current_attempt)
+        ).scalars().all()
+        pending = [e for e in execs if e.status in ("PENDING", "SUBMITTED")]
+
+        # If an external order exists the payment may still land, so wait for
+        # the webhook instead of declaring failure.
+        if any(e.external_order_id for e in pending):
+            transition(self.s, opp, State.AWAITING_PAYMENT, audit,
+                       "EXECUTION_CREATED",
+                       "reconciled a stranded execution that already has a "
+                       "provider order; awaiting the payment webhook",
+                       {"reconciled": True,
+                        "order_ids": [e.external_order_id for e in pending]})
+        else:
+            for e in pending:
+                e.status = "FAILED"
+                e.error_code = e.error_code or "EXECUTION_INTERRUPTED"
+            transition(self.s, opp, State.EXECUTION_FAILED, audit,
+                       "EXECUTION_ERROR",
+                       "reconciled a stranded execution with no provider order; "
+                       "marked failed so recovery can be re-attempted",
+                       {"reconciled": True, "executions": len(pending)})
+        self.s.commit()
+        return True
+
     # ---------------------------------------------------------------- analyze
     def analyze(self, opp: Opportunity) -> dict:
+        # A stranded mid-execution state is reconciled first; otherwise the
+        # legal-transition check below would reject an otherwise valid retry.
+        self.reconcile_stuck_execution(opp)
+
         audit = AuditRecorder(self.s, opp)
         ctx = dict(opp.context)
         attempt = opp.current_attempt
@@ -213,15 +364,22 @@ class RecoveryWorkflow:
             opp.current_attempt += 1
             attempt = opp.current_attempt
             self.s.flush()
+            before = {k: ctx.get(k) for k in
+                      ("attempt_number", "minutes_since_event",
+                       "failure_reason", "opportunity_type")}
+            ctx = refresh_context(self.s, opp)
+            after = {k: ctx.get(k) for k in before}
             transition(self.s, opp, State.ANALYZING, audit, "ANALYSIS_STARTED",
                        f"re-analysis after failed attempt {attempt - 1}; "
                        f"starting attempt {attempt}",
-                       {"previous_attempt": attempt - 1, "attempt": attempt})
+                       {"previous_attempt": attempt - 1, "attempt": attempt,
+                        "context_before": before, "context_after": after})
         else:
             transition(self.s, opp, State.ANALYZING, audit, "ANALYSIS_STARTED",
                        f"analysis started for attempt {attempt}")
 
-        actions = eligible_actions(ctx)
+        retry = build_retry_context(self.s, opp)
+        actions = filter_eligible(eligible_actions(ctx), retry)
         econ_base = self._econ(ctx)
 
         # --- score ---------------------------------------------------------
@@ -242,6 +400,19 @@ class RecoveryWorkflow:
         transition(self.s, opp, State.CANDIDATES_SCORED, audit, "ACTIONS_RANKED",
                    f"{len(preds)} actions scored")
 
+        # --- adaptive adjustment (deterministic, post-model) ---------------
+        base_probs = {p.action: p.probability for p in preds if p.valid}
+        adjustments = adapt_probabilities(base_probs, retry)
+        if retry.is_retry:
+            moved = [a.as_dict() for a in adjustments.values() if abs(a.delta) > 1e-9]
+            if moved:
+                audit.record(
+                    "ADAPTIVE_ADJUSTMENT_APPLIED",
+                    f"{len(moved)} action(s) adjusted for "
+                    f"{retry.previous_failure_category.value if retry.previous_failure_category else 'retry context'}",
+                    {"rules_version": ADAPTIVE_RULES_VERSION,
+                     "retry_context": retry.as_dict(), "adjustments": moved})
+
         # --- finance -------------------------------------------------------
         by_action = {p.action: p for p in preds}
         dn = by_action.get(Action.DO_NOTHING.value)
@@ -252,21 +423,38 @@ class RecoveryWorkflow:
                     "candidate_actions": [], "policy": None,
                     "reason": "baseline_unavailable"}
 
-        ev_nothing = valuate_action(econ_base, Action.DO_NOTHING, dn.probability)
+        p_nothing = adjustments[Action.DO_NOTHING.value].adapted_probability
+        ev_nothing = valuate_action(econ_base, Action.DO_NOTHING, p_nothing)
         candidates: list[CandidateResult] = []
         for p in preds:
             if not p.valid:
                 candidates.append(CandidateResult(
-                    p.action, None, False, Decimal("0"), Decimal("0"), Decimal("0"),
-                    Decimal("0"), money(econ_base.base_contribution_margin),
-                    Decimal("0"), Decimal("0"), p.error))
+                    action=p.action, probability=None, valid=False,
+                    expected_value=Decimal("0"),
+                    incremental_expected_value=Decimal("0"),
+                    incentive_cost=Decimal("0"), fixed_cost=Decimal("0"),
+                    base_margin=money(econ_base.base_contribution_margin),
+                    expected_return_loss=Decimal("0"),
+                    expected_cancellation_loss=Decimal("0"), error=p.error))
                 continue
-            v = valuate_action(econ_base, Action(p.action), p.probability)
+            adj = adjustments[p.action]
+            v = valuate_action(econ_base, Action(p.action), adj.adapted_probability)
+            # An incentive already in force is not paid twice (§10).
+            inc_cost, waiver = incremental_incentive_cost(
+                p.action, money(v.incentive_cost), retry)
+            if waiver:
+                v_adj_ev = adj.adapted_probability * (
+                    float(econ_base.base_contribution_margin) - float(inc_cost)) - v.fixed_cost
+            else:
+                v_adj_ev = v.expected_value
             candidates.append(CandidateResult(
-                action=p.action, probability=p.probability, valid=True,
-                expected_value=money(v.expected_value),
-                incremental_expected_value=money(v.expected_value - ev_nothing.expected_value),
-                incentive_cost=money(v.incentive_cost), fixed_cost=money(v.fixed_cost),
+                action=p.action, probability=adj.adapted_probability, valid=True,
+                base_probability=adj.base_probability,
+                adaptive_delta=adj.delta,
+                adaptive_reasons=adj.reasons,
+                expected_value=money(v_adj_ev),
+                incremental_expected_value=money(v_adj_ev - ev_nothing.expected_value),
+                incentive_cost=money(inc_cost), fixed_cost=money(v.fixed_cost),
                 base_margin=money(econ_base.base_contribution_margin),
                 expected_return_loss=money(v.expected_return_loss),
                 expected_cancellation_loss=money(v.expected_cancellation_loss)))
@@ -519,7 +707,8 @@ class RecoveryWorkflow:
                        "RECOVERY_CONFIRMED" if result["terminal_state"] == "RECOVERED"
                        else "WORKFLOW_STOPPED",
                        result.get("summary", "execution completed"),
-                       execution_id=execution.execution_id)
+                       {"execution_id": execution.execution_id,
+                        "terminal_state": result["terminal_state"]})
             if result["terminal_state"] == "RECOVERED":
                 self.confirm_recovery(opp, execution, gross=result.get("amount", 0))
         else:
