@@ -1,24 +1,24 @@
 # RevenueOS — Model Report (Phase 3 & 4)
 
-Model `dcbdeaa11e1f49df` · calibration `isotonic` · simulator `1.1.0` · seed `42`
+Model `dcbdeaa11e1f49df` · calibration `none` · simulator `1.1.0` · seed `42`
 
 ## 1. Executive summary
 
 
 | item | value |
 |---|---|
-| Selected model | XGBoost + isotonic calibration |
-| TEST ROC-AUC | 0.5949 |
-| TEST PR-AUC | 0.4600 |
-| TEST Brier | 0.2285 |
-| TEST ECE | 0.0221 |
-| DR estimated RevenueOS policy value | INR 807.19/opp (95% CI [708.45, 912.58]) |
-| Oracle RevenueOS policy value | INR 836.55/opp |
-| RevenueOS vs flat 10% contribution | +263.49/opp |
-| RevenueOS vs do-nothing contribution | +75.30/opp |
-| Conversion-max vs economics divergence | 31.6% |
-| DO_NOTHING selection rate | 28.2% |
-| Mean policy regret vs oracle | INR 76.31/opp |
+| Selected model | XGBoost + none calibration |
+| TEST ROC-AUC | 0.5965 |
+| TEST PR-AUC | 0.4703 |
+| TEST Brier | 0.2278 |
+| TEST ECE | 0.0125 |
+| DR estimated RevenueOS policy value | INR 827.94/opp (95% CI [719.13, 940.65]) |
+| Oracle RevenueOS policy value | INR 853.15/opp |
+| RevenueOS vs flat 10% contribution | +280.09/opp |
+| RevenueOS vs do-nothing contribution | +91.90/opp |
+| Conversion-max vs economics divergence | 40.5% |
+| DO_NOTHING selection rate | 34.5% |
+| Mean policy regret vs oracle | INR 59.71/opp |
 
 ## 2. Data integrity
 
@@ -32,7 +32,7 @@ Model `dcbdeaa11e1f49df` · calibration `isotonic` · simulator `1.1.0` · seed 
 | Test hash | `603a48f175ace88c` |
 | Oracle hash | `c81fa26e0f9c92a1` |
 | Oracle access policy | `evaluation_only` |
-| Model frozen at | 2026-08-24T13:48:06.054546+00:00 |
+| Model frozen at | 2026-08-24T18:16:53.289779+00:00 |
 | Leakage audit | PASS (no forbidden columns in feature matrix) |
 
 The model was frozen before any TEST or oracle read. Calibration was fitted on
@@ -42,20 +42,20 @@ VALIDATION only.
 
 | model               |   roc_auc |   pr_auc |   brier |   log_loss |    ece |
 |:--------------------|----------:|---------:|--------:|-----------:|-------:|
-| global_mean         |    0.5000 |   0.3645 |  0.2317 |     0.6561 | 0.0065 |
-| segment_lookup      |    0.5733 |   0.4173 |  0.2289 |     0.6500 | 0.0260 |
-| logistic_regression |    0.6012 |   0.4639 |  0.2242 |     0.6398 | 0.0102 |
-| xgboost_raw         |    0.6160 |   0.4799 |  0.2220 |     0.6351 | 0.0134 |
-| xgboost_platt       |    0.6160 |   0.4799 |  0.2220 |     0.6351 | 0.0118 |
-| xgboost_isotonic    |    0.6209 |   0.4727 |  0.2204 |     0.6313 | 0.0000 |
+| global_mean         |    0.5000 |   0.3783 |  0.2352 |     0.6633 | 0.0073 |
+| segment_lookup      |    0.5734 |   0.4357 |  0.2319 |     0.6562 | 0.0258 |
+| logistic_regression |    0.6099 |   0.4908 |  0.2259 |     0.6433 | 0.0151 |
+| xgboost_raw         |    0.6292 |   0.5117 |  0.2231 |     0.6373 | 0.0254 |
+| xgboost_platt       |    0.6292 |   0.5117 |  0.2248 |     0.6410 | 0.0373 |
+| xgboost_isotonic    |    0.6271 |   0.4930 |  0.2237 |     0.6382 | 0.0283 |
 
 
-Held-out TEST, selected model: Brier **0.2285** vs global-mean floor
-**0.2317** — an improvement of
-1.4%.
+Held-out TEST, selected model: Brier **0.2278** vs global-mean floor
+**0.2352** — an improvement of
+3.2%.
 Uncalibrated TEST Brier was 0.2278.
 
-ROC-AUC of 0.595 is modest by classification standards and that is
+ROC-AUC of 0.596 is modest by classification standards and that is
 expected: the simulator injects shared logit noise plus hidden environment
 windows that cap achievable accuracy. What matters for this system is whether
 probabilities are *calibrated* and whether *relative* action response is
@@ -66,15 +66,15 @@ recovered, both reported below.
 ### By action
 | action                |    n |   actual_rate |   predicted_mean |     gap |   brier |
 |:----------------------|-----:|--------------:|-----------------:|--------:|--------:|
-| DELAYED_RETRY         |  145 |        0.4966 |           0.4774 | -0.0192 |  0.2336 |
-| DO_NOTHING            | 1825 |        0.3627 |           0.3388 | -0.0239 |  0.2259 |
-| FREE_SHIPPING         |  674 |        0.4837 |           0.4828 | -0.0009 |  0.2369 |
-| HUMAN_ESCALATION      |  269 |        0.3346 |           0.3180 | -0.0165 |  0.2293 |
-| IMMEDIATE_RETRY       |  230 |        0.3826 |           0.4162 |  0.0336 |  0.2296 |
-| MEDIUM_DISCOUNT       |  519 |        0.3410 |           0.3581 |  0.0170 |  0.2249 |
-| PAYMENT_LINK          |  248 |        0.3347 |           0.3393 |  0.0046 |  0.2171 |
-| PAYMENT_METHOD_SWITCH |  352 |        0.3352 |           0.3279 | -0.0073 |  0.2232 |
-| SMALL_DISCOUNT        | 1178 |        0.3633 |           0.3432 | -0.0201 |  0.2322 |
+| DELAYED_RETRY         |  145 |        0.4966 |           0.4730 | -0.0236 |  0.2374 |
+| DO_NOTHING            | 1825 |        0.3627 |           0.3471 | -0.0157 |  0.2252 |
+| FREE_SHIPPING         |  674 |        0.4837 |           0.4730 | -0.0107 |  0.2387 |
+| HUMAN_ESCALATION      |  269 |        0.3346 |           0.3321 | -0.0024 |  0.2237 |
+| IMMEDIATE_RETRY       |  230 |        0.3826 |           0.4193 |  0.0366 |  0.2293 |
+| MEDIUM_DISCOUNT       |  519 |        0.3410 |           0.3648 |  0.0237 |  0.2236 |
+| PAYMENT_LINK          |  248 |        0.3347 |           0.3464 |  0.0117 |  0.2174 |
+| PAYMENT_METHOD_SWITCH |  352 |        0.3352 |           0.3384 |  0.0032 |  0.2212 |
+| SMALL_DISCOUNT        | 1178 |        0.3633 |           0.3522 | -0.0112 |  0.2311 |
 
 
 > Aggregate calibration can hide action-specific failure, which is why this table exists. A large positive gap means the model over-promises recovery for that action and would over-spend on it.
@@ -86,14 +86,14 @@ recovered, both reported below.
 
 | action                |    n |   pred_mean_dP |   true_mean_dP |    bias |    mae |   rmse |   pearson |   spearman |
 |:----------------------|-----:|---------------:|---------------:|--------:|-------:|-------:|----------:|-----------:|
-| FREE_SHIPPING         | 2916 |         0.1613 |         0.1598 |  0.0015 | 0.0755 | 0.0937 |    0.3543 |     0.3228 |
-| SMALL_DISCOUNT        | 5440 |         0.0241 |         0.0084 |  0.0158 | 0.0559 | 0.0695 |    0.4718 |     0.4820 |
-| MEDIUM_DISCOUNT       | 5440 |         0.0357 |         0.0371 | -0.0014 | 0.0663 | 0.0815 |    0.4482 |     0.4626 |
-| PAYMENT_METHOD_SWITCH | 1536 |        -0.0013 |         0.0447 | -0.0460 | 0.0846 | 0.1111 |    0.0320 |    -0.0014 |
-| IMMEDIATE_RETRY       | 1536 |         0.0265 |         0.0147 |  0.0118 | 0.0460 | 0.0574 |    0.1113 |     0.1180 |
-| DELAYED_RETRY         | 1536 |         0.0881 |         0.1197 | -0.0316 | 0.0812 | 0.1022 |    0.1644 |     0.1741 |
-| PAYMENT_LINK          | 5440 |        -0.0006 |        -0.0213 |  0.0207 | 0.0393 | 0.0517 |    0.0510 |     0.0271 |
-| HUMAN_ESCALATION      | 5440 |        -0.0006 |         0.0056 | -0.0062 | 0.0353 | 0.0415 |    0.0643 |     0.0337 |
+| FREE_SHIPPING         | 2916 |         0.1413 |         0.1598 | -0.0185 | 0.0734 | 0.0900 |    0.3866 |     0.3463 |
+| SMALL_DISCOUNT        | 5440 |         0.0226 |         0.0084 |  0.0142 | 0.0533 | 0.0654 |    0.5655 |     0.5448 |
+| MEDIUM_DISCOUNT       | 5440 |         0.0337 |         0.0371 | -0.0034 | 0.0643 | 0.0780 |    0.5302 |     0.5064 |
+| PAYMENT_METHOD_SWITCH | 1536 |        -0.0011 |         0.0447 | -0.0458 | 0.0843 | 0.1108 |    0.1306 |     0.1360 |
+| IMMEDIATE_RETRY       | 1536 |         0.0250 |         0.0147 |  0.0103 | 0.0389 | 0.0486 |    0.2110 |     0.1535 |
+| DELAYED_RETRY         | 1536 |         0.0805 |         0.1197 | -0.0392 | 0.0773 | 0.0970 |    0.2029 |     0.2031 |
+| PAYMENT_LINK          | 5440 |        -0.0006 |        -0.0213 |  0.0207 | 0.0391 | 0.0513 |    0.2155 |     0.1952 |
+| HUMAN_ESCALATION      | 5440 |        -0.0006 |         0.0056 | -0.0062 | 0.0351 | 0.0411 |    0.2567 |     0.2232 |
 
 
 `bias` is mean(predicted dP - true dP): positive means the model over-estimates
@@ -109,9 +109,9 @@ ranking.
 | DO_NOTHING             |       0.3450 |         2423.8744 |                   0.0000 |               0.0000 |                   761.2542 |
 | FLAT_10_PERCENT        |       0.3821 |         2421.3947 |                 269.0439 |               2.0000 |                   573.0587 |
 | RULES                  |       0.4153 |         2744.5555 |                  56.4260 |               1.2950 |                   819.4090 |
-| MODEL_CONVERSION_MAX   |       0.4548 |         2825.6154 |                 106.9180 |               1.6708 |                   806.2747 |
-| REVENUEOS              |       0.4377 |         2764.5294 |                  44.5558 |               1.2119 |                   836.5513 |
-| REVENUEOS_CONSERVATIVE |       0.4201 |         2723.9394 |                  36.1195 |               0.9434 |                   830.6837 |
+| MODEL_CONVERSION_MAX   |       0.4635 |         2895.8916 |                 152.1749 |               1.7200 |                   796.2557 |
+| REVENUEOS              |       0.4354 |         2767.0180 |                  22.1444 |               1.0553 |                   853.1508 |
+| REVENUEOS_CONSERVATIVE |       0.4173 |         2734.8859 |                  15.1671 |               0.8018 |                   849.2704 |
 | ORACLE_ECONOMIC        |       0.4634 |         3015.0236 |                  44.8166 |               3.7893 |                   912.8593 |
 
 
@@ -121,35 +121,35 @@ ranking.
 |---|---:|---:|---:|
 | DO_NOTHING | 0.3450 | 0.00 | 761.25 |
 | FLAT 10% | 0.3821 | 269.04 | 573.06 |
-| REVENUEOS | 0.4377 | 44.56 | 836.55 |
+| REVENUEOS | 0.4354 | 22.14 | 853.15 |
 
 Flat 10% converts better than doing
 nothing and earns less.
-RevenueOS spends INR 224.49/opp
+RevenueOS spends INR 246.90/opp
 less on incentives than flat discounting.
 
 ## 7. Conversion vs contribution
 
 
-- Conversion-max and economics-max select **different actions in 31.6%** of TEST opportunities.
-- DO_NOTHING selection rate: **28.2%**
-- DO_NOTHING precision (selected & oracle-optimal): **54.8%**
-- DO_NOTHING recall (of oracle DO_NOTHING cases): **60.5%**
+- Conversion-max and economics-max select **different actions in 40.5%** of TEST opportunities.
+- DO_NOTHING selection rate: **34.5%**
+- DO_NOTHING precision (selected & oracle-optimal): **52.7%**
+- DO_NOTHING recall (of oracle DO_NOTHING cases): **71.3%**
 
 Action distribution vs the logged historical policy:
 
 
 | action                |   revenueos |   logged |
 |:----------------------|------------:|---------:|
-| DELAYED_RETRY         |      0.1866 |   0.0267 |
-| DO_NOTHING            |      0.2816 |   0.3355 |
-| FREE_SHIPPING         |      0.3796 |   0.1239 |
+| DELAYED_RETRY         |      0.2349 |   0.0267 |
+| DO_NOTHING            |      0.3454 |   0.3355 |
+| FREE_SHIPPING         |      0.3631 |   0.1239 |
 | HUMAN_ESCALATION      |      0.0000 |   0.0494 |
-| IMMEDIATE_RETRY       |      0.0382 |   0.0423 |
-| MEDIUM_DISCOUNT       |      0.0039 |   0.0954 |
+| IMMEDIATE_RETRY       |      0.0189 |   0.0423 |
+| MEDIUM_DISCOUNT       |      0.0000 |   0.0954 |
 | PAYMENT_LINK          |      0.0000 |   0.0456 |
 | PAYMENT_METHOD_SWITCH |      0.0000 |   0.0647 |
-| SMALL_DISCOUNT        |      0.1101 |   0.2165 |
+| SMALL_DISCOUNT        |      0.0377 |   0.2165 |
 
 ## 8. Off-policy evaluation
 
@@ -167,12 +167,12 @@ Reward is realised **net contribution in rupees**, not binary recovery.
 | RULES                | none         | 774.2195 | 784.1960 | 798.0027 |  852.2418 |       0.2410 |      31.6596 |        1311 |
 | RULES                | clip20       | 760.5221 | 782.0388 | 790.8048 |  938.6667 |       0.2410 |      20.0000 |        1311 |
 | RULES                | clip10       | 736.3055 | 778.3565 | 778.8213 | 1020.8483 |       0.2410 |      10.0000 |        1311 |
-| MODEL_CONVERSION_MAX | none         | 812.9079 | 814.9102 | 798.5287 |  845.4664 |       0.2143 |      27.1370 |        1166 |
-| MODEL_CONVERSION_MAX | clip20       | 806.9830 | 814.8528 | 798.8558 |  878.3950 |       0.2143 |      20.0000 |        1166 |
-| MODEL_CONVERSION_MAX | clip10       | 758.8061 | 796.0562 | 797.7947 |  982.1821 |       0.2143 |      10.0000 |        1166 |
-| REVENUEOS            | none         | 811.5140 | 809.0328 | 807.1868 |  808.1619 |       0.2276 |      27.1370 |        1238 |
-| REVENUEOS            | clip20       | 803.4953 | 811.6947 | 806.9021 |  863.1462 |       0.2276 |      20.0000 |        1238 |
-| REVENUEOS            | clip10       | 755.7193 | 802.6338 | 811.5659 | 1009.8221 |       0.2276 |      10.0000 |        1238 |
+| MODEL_CONVERSION_MAX | none         | 788.6696 | 814.7711 | 771.5832 |  734.2792 |       0.1763 |      27.1370 |         959 |
+| MODEL_CONVERSION_MAX | clip20       | 781.8294 | 814.3313 | 771.5415 |  761.6680 |       0.1763 |      20.0000 |         959 |
+| MODEL_CONVERSION_MAX | clip10       | 721.7152 | 784.3686 | 770.3194 |  846.0035 |       0.1763 |      10.0000 |         959 |
+| REVENUEOS            | none         | 871.5217 | 880.2636 | 827.9388 |  764.6830 |       0.2191 |      27.1370 |        1192 |
+| REVENUEOS            | clip20       | 864.0771 | 886.3125 | 829.4134 |  822.6198 |       0.2191 |      20.0000 |        1192 |
+| REVENUEOS            | clip10       | 805.9168 | 874.1007 | 834.2628 |  976.5091 |       0.2191 |      10.0000 |        1192 |
 
 
 ### Bootstrap CIs (DR, unclipped, 1000 resamples)
@@ -182,8 +182,8 @@ Reward is realised **net contribution in rupees**, not binary recovery.
 | DO_NOTHING           |  732.3466 | 638.1220 |  825.9264 |
 | FLAT_10_PERCENT      |  508.6547 | 401.7862 |  604.5805 |
 | RULES                |  797.0580 | 704.6886 |  889.2217 |
-| MODEL_CONVERSION_MAX |  796.7505 | 696.3704 |  909.7340 |
-| REVENUEOS            |  805.8845 | 708.4495 |  912.5754 |
+| MODEL_CONVERSION_MAX |  772.5266 | 663.8401 |  892.4610 |
+| REVENUEOS            |  827.1849 | 719.1329 |  940.6509 |
 
 
 `ess` is Kish effective sample size on matched rows; `match_rate` is the share
@@ -197,8 +197,8 @@ match rate means the estimate rests on few rows regardless of nominal n.
 | DO_NOTHING           |       761.2542 |      733.5915 |    27.6627 |     0.0363 |
 | FLAT_10_PERCENT      |       573.0587 |      508.7048 |    64.3539 |     0.1123 |
 | RULES                |       819.4090 |      798.0027 |    21.4063 |     0.0261 |
-| MODEL_CONVERSION_MAX |       806.2747 |      798.5287 |     7.7460 |     0.0096 |
-| REVENUEOS            |       836.5513 |      807.1868 |    29.3646 |     0.0351 |
+| MODEL_CONVERSION_MAX |       796.2557 |      771.5832 |    24.6725 |     0.0310 |
+| REVENUEOS            |       853.1508 |      827.9388 |    25.2120 |     0.0296 |
 
 
 This is the most methodologically important table in the report. Stream B (DR,
@@ -222,25 +222,25 @@ working; where they disagree, the discrepancy is reported rather than hidden.
 
 |   perturbation |   action_change_rate |
 |---------------:|---------------------:|
-|         0.0200 |               0.2550 |
-|         0.0500 |               0.4033 |
+|         0.0200 |               0.2638 |
+|         0.0500 |               0.4384 |
 
 
 ### Calibration impact on economics
 Using raw (uncalibrated) probabilities instead of calibrated ones changes the
-selected action on **16.6%** of opportunities. This is the practical
+selected action on **0.0%** of opportunities. This is the practical
 argument for calibration: miscalibrated probabilities feed directly into dEV and
 shift real spending decisions.
 
 ### Regret distribution
-mean INR 76.31 · median INR 0.00 · p90 INR 178.52
+mean INR 59.71 · median INR 0.00 · p90 INR 150.45
 
 ## 12. Error analysis
 
 
 The 20 highest-regret TEST cases are in `high_regret_cases.csv`. Regret is
 concentrated: the top decile accounts for
-79%
+77%
 of total regret, so failures are localised rather than systemic.
 
 ## 13. Warnings

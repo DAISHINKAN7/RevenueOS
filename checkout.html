@@ -1,0 +1,22 @@
+<!doctype html><html><body style="font-family:sans-serif;padding:40px">
+<h2>RevenueOS — Razorpay Test Mode</h2>
+<p id="s">Order <code>order_TTr8lgQrJPLg6O</code> — ₹4,869 (FREE_SHIPPING)</p>
+<button onclick="pay()" style="padding:12px 24px;font-size:16px">Pay now</button>
+<p style="color:#666;font-size:14px">Netbanking → any bank → Success is the most reliable path.</p>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+function pay(){
+  new Razorpay({
+    key: "rzp_test_TTq8R5pZdR6iSl",
+    order_id: "order_TTr8lgQrJPLg6O",
+    amount: 486900,
+    currency: "INR",
+    name: "NovaCart",
+    description: "Recovery — FREE_SHIPPING",
+    handler: function(r){
+      document.getElementById('s').innerHTML =
+        "Paid. payment_id <code>"+r.razorpay_payment_id+"</code>";
+    }
+  }).open();
+}
+</script></body></html>

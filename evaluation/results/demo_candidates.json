@@ -10,47 +10,47 @@
       "candidates": [
         {
           "action": "DELAYED_RETRY",
-          "p": 0.5181,
-          "delta_ev": 93.72
+          "p": 0.4828,
+          "delta_ev": 61.06
         },
         {
           "action": "FREE_SHIPPING",
-          "p": 0.5181,
-          "delta_ev": 61.79
+          "p": 0.5052,
+          "delta_ev": 46.25
         },
         {
           "action": "IMMEDIATE_RETRY",
-          "p": 0.3885,
-          "delta_ev": -1.0
+          "p": 0.4259,
+          "delta_ev": 19.48
         },
         {
           "action": "PAYMENT_METHOD_SWITCH",
-          "p": 0.3885,
+          "p": 0.3979,
           "delta_ev": -2.0
         },
         {
           "action": "PAYMENT_LINK",
-          "p": 0.3885,
+          "p": 0.3979,
           "delta_ev": -3.0
         },
         {
           "action": "SMALL_DISCOUNT",
-          "p": 0.3343,
-          "delta_ev": -90.78
+          "p": 0.3362,
+          "delta_ev": -96.46
         },
         {
           "action": "MEDIUM_DISCOUNT",
-          "p": 0.3885,
-          "delta_ev": -116.19
+          "p": 0.3859,
+          "delta_ev": -124.15
         },
         {
           "action": "HUMAN_ESCALATION",
-          "p": 0.3885,
+          "p": 0.3979,
           "delta_ev": -130.0
         },
         {
           "action": "DO_NOTHING",
-          "p": 0.3885,
+          "p": 0.3979,
           "delta_ev": 0.0
         }
       ],
@@ -59,56 +59,41 @@
       "regret": 0.0
     },
     {
-      "opportunity_id": "OPP0034399",
-      "opportunity_type": "PAYMENT_FAILURE",
-      "failure_reason": "AUTHENTICATION_FAILURE",
-      "segment": "DEAL_SEEKER",
-      "cart_value": 3718.0,
-      "base_contribution_margin": 1213.56,
+      "opportunity_id": "OPP0034388",
+      "opportunity_type": "CHECKOUT_ABANDONMENT",
+      "failure_reason": "NO_PAYMENT_FAILURE",
+      "segment": "CONVENIENCE_SENSITIVE",
+      "cart_value": 1279.0,
+      "base_contribution_margin": 362.79,
       "candidates": [
         {
           "action": "FREE_SHIPPING",
-          "p": 0.428,
-          "delta_ev": 54.06
-        },
-        {
-          "action": "DELAYED_RETRY",
-          "p": 0.3389,
-          "delta_ev": 4.61
-        },
-        {
-          "action": "IMMEDIATE_RETRY",
-          "p": 0.3343,
-          "delta_ev": -1.0
-        },
-        {
-          "action": "PAYMENT_METHOD_SWITCH",
-          "p": 0.3343,
-          "delta_ev": -2.0
+          "p": 0.4595,
+          "delta_ev": 37.91
         },
         {
           "action": "PAYMENT_LINK",
-          "p": 0.3343,
+          "p": 0.2822,
           "delta_ev": -3.0
         },
         {
           "action": "SMALL_DISCOUNT",
-          "p": 0.3343,
-          "delta_ev": -64.14
+          "p": 0.3391,
+          "delta_ev": -3.07
         },
         {
           "action": "MEDIUM_DISCOUNT",
-          "p": 0.3389,
-          "delta_ev": -122.39
+          "p": 0.358,
+          "delta_ev": -20.29
         },
         {
           "action": "HUMAN_ESCALATION",
-          "p": 0.3343,
+          "p": 0.2822,
           "delta_ev": -130.0
         },
         {
           "action": "DO_NOTHING",
-          "p": 0.3343,
+          "p": 0.2822,
           "delta_ev": 0.0
         }
       ],
@@ -117,147 +102,122 @@
       "regret": 0.0
     },
     {
-      "opportunity_id": "OPP0034400",
-      "opportunity_type": "PAYMENT_FAILURE",
-      "failure_reason": "INSUFFICIENT_FUNDS",
-      "segment": "PRICE_SENSITIVE",
-      "cart_value": 1859.0,
-      "base_contribution_margin": 609.16,
-      "candidates": [
-        {
-          "action": "DELAYED_RETRY",
-          "p": 0.5181,
-          "delta_ev": 108.18
-        },
-        {
-          "action": "FREE_SHIPPING",
-          "p": 0.5181,
-          "delta_ev": 79.23
-        },
-        {
-          "action": "IMMEDIATE_RETRY",
-          "p": 0.3832,
-          "delta_ev": 26.01
-        },
-        {
-          "action": "PAYMENT_METHOD_SWITCH",
-          "p": 0.3389,
-          "delta_ev": -2.0
-        },
-        {
-          "action": "PAYMENT_LINK",
-          "p": 0.3389,
-          "delta_ev": -3.0
-        },
-        {
-          "action": "SMALL_DISCOUNT",
-          "p": 0.3885,
-          "delta_ev": -7.87
-        },
-        {
-          "action": "MEDIUM_DISCOUNT",
-          "p": 0.3885,
-          "delta_ev": -43.99
-        },
-        {
-          "action": "HUMAN_ESCALATION",
-          "p": 0.3389,
-          "delta_ev": -130.0
-        },
-        {
-          "action": "DO_NOTHING",
-          "p": 0.3389,
-          "delta_ev": 0.0
-        }
-      ],
-      "selected": "DELAYED_RETRY",
-      "oracle_action": "DELAYED_RETRY",
-      "regret": 0.0
-    },
-    {
-      "opportunity_id": "OPP0034401",
-      "opportunity_type": "PAYMENT_FAILURE",
-      "failure_reason": "UPI_TIMEOUT",
-      "segment": "DEAL_SEEKER",
-      "cart_value": 5989.0,
-      "base_contribution_margin": 2242.72,
-      "candidates": [
-        {
-          "action": "DELAYED_RETRY",
-          "p": 0.3885,
-          "delta_ev": 120.7
-        },
-        {
-          "action": "IMMEDIATE_RETRY",
-          "p": 0.3832,
-          "delta_ev": 108.82
-        },
-        {
-          "action": "PAYMENT_METHOD_SWITCH",
-          "p": 0.3343,
-          "delta_ev": -2.0
-        },
-        {
-          "action": "PAYMENT_LINK",
-          "p": 0.3343,
-          "delta_ev": -3.0
-        },
-        {
-          "action": "SMALL_DISCOUNT",
-          "p": 0.3343,
-          "delta_ev": -102.1
-        },
-        {
-          "action": "HUMAN_ESCALATION",
-          "p": 0.3343,
-          "delta_ev": -130.0
-        },
-        {
-          "action": "MEDIUM_DISCOUNT",
-          "p": 0.3343,
-          "delta_ev": -202.19
-        },
-        {
-          "action": "DO_NOTHING",
-          "p": 0.3343,
-          "delta_ev": 0.0
-        }
-      ],
-      "selected": "DELAYED_RETRY",
-      "oracle_action": "DELAYED_RETRY",
-      "regret": 0.0
-    },
-    {
-      "opportunity_id": "OPP0034407",
+      "opportunity_id": "OPP0034389",
       "opportunity_type": "CHECKOUT_ABANDONMENT",
       "failure_reason": "NO_PAYMENT_FAILURE",
-      "segment": "AT_RISK",
-      "cart_value": 23247.0,
-      "base_contribution_margin": 9085.48,
+      "segment": "NEW_CUSTOMER",
+      "cart_value": 1859.0,
+      "base_contribution_margin": 606.78,
       "candidates": [
         {
-          "action": "SMALL_DISCOUNT",
-          "p": 0.2383,
-          "delta_ev": 562.22
-        },
-        {
-          "action": "MEDIUM_DISCOUNT",
-          "p": 0.2383,
-          "delta_ev": 285.25
+          "action": "FREE_SHIPPING",
+          "p": 0.5376,
+          "delta_ev": 64.01
         },
         {
           "action": "PAYMENT_LINK",
-          "p": 0.1457,
+          "p": 0.3691,
           "delta_ev": -3.0
         },
         {
+          "action": "SMALL_DISCOUNT",
+          "p": 0.4165,
+          "delta_ev": -11.96
+        },
+        {
+          "action": "MEDIUM_DISCOUNT",
+          "p": 0.4381,
+          "delta_ev": -41.59
+        },
+        {
           "action": "HUMAN_ESCALATION",
-          "p": 0.1457,
+          "p": 0.3691,
           "delta_ev": -130.0
         },
         {
           "action": "DO_NOTHING",
-          "p": 0.1457,
+          "p": 0.3691,
+          "delta_ev": 0.0
+        }
+      ],
+      "selected": "FREE_SHIPPING",
+      "oracle_action": "FREE_SHIPPING",
+      "regret": 0.0
+    },
+    {
+      "opportunity_id": "OPP0034390",
+      "opportunity_type": "CHECKOUT_ABANDONMENT",
+      "failure_reason": "NO_PAYMENT_FAILURE",
+      "segment": "CONVENIENCE_SENSITIVE",
+      "cart_value": 1859.0,
+      "base_contribution_margin": 606.78,
+      "candidates": [
+        {
+          "action": "FREE_SHIPPING",
+          "p": 0.546,
+          "delta_ev": 55.41
+        },
+        {
+          "action": "PAYMENT_LINK",
+          "p": 0.3907,
+          "delta_ev": -3.0
+        },
+        {
+          "action": "SMALL_DISCOUNT",
+          "p": 0.4139,
+          "delta_ev": -26.38
+        },
+        {
+          "action": "MEDIUM_DISCOUNT",
+          "p": 0.4291,
+          "delta_ev": -58.45
+        },
+        {
+          "action": "HUMAN_ESCALATION",
+          "p": 0.3907,
+          "delta_ev": -130.0
+        },
+        {
+          "action": "DO_NOTHING",
+          "p": 0.3907,
+          "delta_ev": 0.0
+        }
+      ],
+      "selected": "FREE_SHIPPING",
+      "oracle_action": "FREE_SHIPPING",
+      "regret": 0.0
+    },
+    {
+      "opportunity_id": "OPP0034396",
+      "opportunity_type": "CHECKOUT_ABANDONMENT",
+      "failure_reason": "NO_PAYMENT_FAILURE",
+      "segment": "PRICE_SENSITIVE",
+      "cart_value": 23247.0,
+      "base_contribution_margin": 9138.73,
+      "candidates": [
+        {
+          "action": "SMALL_DISCOUNT",
+          "p": 0.2742,
+          "delta_ev": 119.32
+        },
+        {
+          "action": "PAYMENT_LINK",
+          "p": 0.2261,
+          "delta_ev": -3.0
+        },
+        {
+          "action": "HUMAN_ESCALATION",
+          "p": 0.2261,
+          "delta_ev": -130.0
+        },
+        {
+          "action": "MEDIUM_DISCOUNT",
+          "p": 0.2731,
+          "delta_ev": -206.96
+        },
+        {
+          "action": "DO_NOTHING",
+          "p": 0.2261,
           "delta_ev": 0.0
         }
       ],
@@ -277,32 +237,32 @@
       "candidates": [
         {
           "action": "PAYMENT_LINK",
-          "p": 0.5427,
+          "p": 0.5385,
           "delta_ev": -3.0
         },
         {
           "action": "FREE_SHIPPING",
-          "p": 0.6947,
-          "delta_ev": -11.78
-        },
-        {
-          "action": "MEDIUM_DISCOUNT",
-          "p": 0.6336,
-          "delta_ev": -14.04
+          "p": 0.728,
+          "delta_ev": -6.37
         },
         {
           "action": "SMALL_DISCOUNT",
-          "p": 0.5427,
-          "delta_ev": -14.73
+          "p": 0.5475,
+          "delta_ev": -13.09
+        },
+        {
+          "action": "MEDIUM_DISCOUNT",
+          "p": 0.6051,
+          "delta_ev": -17.43
         },
         {
           "action": "HUMAN_ESCALATION",
-          "p": 0.5427,
+          "p": 0.5385,
           "delta_ev": -130.0
         },
         {
           "action": "DO_NOTHING",
-          "p": 0.5427,
+          "p": 0.5385,
           "delta_ev": 0.0
         }
       ],
@@ -320,27 +280,27 @@
       "candidates": [
         {
           "action": "PAYMENT_LINK",
-          "p": 0.3343,
+          "p": 0.3193,
           "delta_ev": -3.0
         },
         {
           "action": "HUMAN_ESCALATION",
-          "p": 0.3343,
+          "p": 0.3193,
           "delta_ev": -130.0
         },
         {
           "action": "SMALL_DISCOUNT",
-          "p": 0.2903,
-          "delta_ev": -300.49
+          "p": 0.3072,
+          "delta_ev": -214.55
         },
         {
           "action": "MEDIUM_DISCOUNT",
-          "p": 0.3072,
-          "delta_ev": -435.58
+          "p": 0.3124,
+          "delta_ev": -380.91
         },
         {
           "action": "DO_NOTHING",
-          "p": 0.3343,
+          "p": 0.3193,
           "delta_ev": 0.0
         }
       ],
@@ -358,27 +318,27 @@
       "candidates": [
         {
           "action": "PAYMENT_LINK",
-          "p": 0.3885,
+          "p": 0.3908,
           "delta_ev": -3.0
         },
         {
           "action": "SMALL_DISCOUNT",
-          "p": 0.3885,
-          "delta_ev": -116.97
+          "p": 0.3777,
+          "delta_ev": -121.35
         },
         {
           "action": "HUMAN_ESCALATION",
-          "p": 0.3885,
+          "p": 0.3908,
           "delta_ev": -130.0
         },
         {
           "action": "MEDIUM_DISCOUNT",
-          "p": 0.3389,
-          "delta_ev": -231.31
+          "p": 0.3618,
+          "delta_ev": -232.92
         },
         {
           "action": "DO_NOTHING",
-          "p": 0.3885,
+          "p": 0.3908,
           "delta_ev": 0.0
         }
       ],
@@ -396,27 +356,27 @@
       "candidates": [
         {
           "action": "PAYMENT_LINK",
-          "p": 0.3885,
+          "p": 0.4001,
           "delta_ev": -3.0
         },
         {
           "action": "HUMAN_ESCALATION",
-          "p": 0.3885,
+          "p": 0.4001,
           "delta_ev": -130.0
         },
         {
           "action": "SMALL_DISCOUNT",
-          "p": 0.3832,
-          "delta_ev": -205.53
+          "p": 0.3719,
+          "delta_ev": -275.51
         },
         {
           "action": "MEDIUM_DISCOUNT",
-          "p": 0.3885,
-          "delta_ev": -379.22
+          "p": 0.3833,
+          "delta_ev": -429.4
         },
         {
           "action": "DO_NOTHING",
-          "p": 0.3885,
+          "p": 0.4001,
           "delta_ev": 0.0
         }
       ],
@@ -425,36 +385,36 @@
       "regret": 0.0
     },
     {
-      "opportunity_id": "OPP0034364",
+      "opportunity_id": "OPP0034363",
       "opportunity_type": "CHECKOUT_ABANDONMENT",
       "failure_reason": "NO_PAYMENT_FAILURE",
-      "segment": "AT_RISK",
-      "cart_value": 6716.0,
-      "base_contribution_margin": 2279.37,
+      "segment": "NEW_CUSTOMER",
+      "cart_value": 6698.0,
+      "base_contribution_margin": 2087.82,
       "candidates": [
         {
           "action": "PAYMENT_LINK",
-          "p": 0.2893,
+          "p": 0.2681,
           "delta_ev": -3.0
         },
         {
           "action": "SMALL_DISCOUNT",
-          "p": 0.3343,
-          "delta_ev": -11.71
-        },
-        {
-          "action": "MEDIUM_DISCOUNT",
-          "p": 0.3343,
-          "delta_ev": -123.96
+          "p": 0.2885,
+          "delta_ev": -56.11
         },
         {
           "action": "HUMAN_ESCALATION",
-          "p": 0.2893,
+          "p": 0.2681,
           "delta_ev": -130.0
         },
         {
+          "action": "MEDIUM_DISCOUNT",
+          "p": 0.2955,
+          "delta_ev": -142.71
+        },
+        {
           "action": "DO_NOTHING",
-          "p": 0.2893,
+          "p": 0.2681,
           "delta_ev": 0.0
         }
       ],
@@ -474,47 +434,47 @@
       "candidates": [
         {
           "action": "DELAYED_RETRY",
-          "p": 0.5181,
-          "delta_ev": 93.72
+          "p": 0.4828,
+          "delta_ev": 61.06
         },
         {
           "action": "FREE_SHIPPING",
-          "p": 0.5181,
-          "delta_ev": 61.79
+          "p": 0.5052,
+          "delta_ev": 46.25
         },
         {
           "action": "IMMEDIATE_RETRY",
-          "p": 0.3885,
-          "delta_ev": -1.0
+          "p": 0.4259,
+          "delta_ev": 19.48
         },
         {
           "action": "PAYMENT_METHOD_SWITCH",
-          "p": 0.3885,
+          "p": 0.3979,
           "delta_ev": -2.0
         },
         {
           "action": "PAYMENT_LINK",
-          "p": 0.3885,
+          "p": 0.3979,
           "delta_ev": -3.0
         },
         {
           "action": "SMALL_DISCOUNT",
-          "p": 0.3343,
-          "delta_ev": -90.78
+          "p": 0.3362,
+          "delta_ev": -96.46
         },
         {
           "action": "MEDIUM_DISCOUNT",
-          "p": 0.3885,
-          "delta_ev": -116.19
+          "p": 0.3859,
+          "delta_ev": -124.15
         },
         {
           "action": "HUMAN_ESCALATION",
-          "p": 0.3885,
+          "p": 0.3979,
           "delta_ev": -130.0
         },
         {
           "action": "DO_NOTHING",
-          "p": 0.3885,
+          "p": 0.3979,
           "delta_ev": 0.0
         }
       ],
@@ -523,56 +483,51 @@
       "regret": 0.0
     },
     {
-      "opportunity_id": "OPP0034442",
+      "opportunity_id": "OPP0034457",
       "opportunity_type": "PAYMENT_FAILURE",
-      "failure_reason": "BANK_TIMEOUT",
-      "segment": "AT_RISK",
-      "cart_value": 2229.0,
-      "base_contribution_margin": 720.97,
+      "failure_reason": "UPI_TIMEOUT",
+      "segment": "CONVENIENCE_SENSITIVE",
+      "cart_value": 11978.0,
+      "base_contribution_margin": 4569.4,
       "candidates": [
         {
           "action": "DELAYED_RETRY",
-          "p": 0.5181,
-          "delta_ev": 131.56
-        },
-        {
-          "action": "FREE_SHIPPING",
-          "p": 0.428,
-          "delta_ev": 48.25
+          "p": 0.659,
+          "delta_ev": 412.61
         },
         {
           "action": "IMMEDIATE_RETRY",
-          "p": 0.3885,
-          "delta_ev": 38.12
+          "p": 0.6112,
+          "delta_ev": 194.22
         },
         {
           "action": "PAYMENT_METHOD_SWITCH",
-          "p": 0.3343,
+          "p": 0.5684,
           "delta_ev": -2.0
         },
         {
           "action": "PAYMENT_LINK",
-          "p": 0.3343,
+          "p": 0.5684,
           "delta_ev": -3.0
         },
         {
-          "action": "SMALL_DISCOUNT",
-          "p": 0.3832,
-          "delta_ev": -9.41
-        },
-        {
-          "action": "MEDIUM_DISCOUNT",
-          "p": 0.3885,
-          "delta_ev": -49.48
-        },
-        {
           "action": "HUMAN_ESCALATION",
-          "p": 0.3343,
+          "p": 0.5684,
           "delta_ev": -130.0
         },
         {
+          "action": "SMALL_DISCOUNT",
+          "p": 0.4756,
+          "delta_ev": -711.28
+        },
+        {
+          "action": "MEDIUM_DISCOUNT",
+          "p": 0.474,
+          "delta_ev": -1001.27
+        },
+        {
           "action": "DO_NOTHING",
-          "p": 0.3343,
+          "p": 0.5684,
           "delta_ev": 0.0
         }
       ],
@@ -581,51 +536,51 @@
       "regret": 0.0
     },
     {
-      "opportunity_id": "OPP0034447",
+      "opportunity_id": "OPP0034460",
       "opportunity_type": "PAYMENT_FAILURE",
-      "failure_reason": "BANK_TIMEOUT",
-      "segment": "CONVENIENCE_SENSITIVE",
+      "failure_reason": "NETWORK_ERROR",
+      "segment": "NEW_CUSTOMER",
       "cart_value": 6698.0,
       "base_contribution_margin": 2087.82,
       "candidates": [
         {
           "action": "DELAYED_RETRY",
-          "p": 0.3885,
-          "delta_ev": 206.21
+          "p": 0.4624,
+          "delta_ev": 191.89
         },
         {
           "action": "IMMEDIATE_RETRY",
-          "p": 0.3072,
-          "delta_ev": 36.47
+          "p": 0.4081,
+          "delta_ev": 78.55
         },
         {
           "action": "PAYMENT_METHOD_SWITCH",
-          "p": 0.2893,
+          "p": 0.37,
           "delta_ev": -2.0
         },
         {
           "action": "PAYMENT_LINK",
-          "p": 0.2893,
+          "p": 0.37,
           "delta_ev": -3.0
         },
         {
           "action": "SMALL_DISCOUNT",
-          "p": 0.2893,
-          "delta_ev": -98.88
+          "p": 0.3756,
+          "delta_ev": -116.12
         },
         {
           "action": "HUMAN_ESCALATION",
-          "p": 0.2893,
+          "p": 0.37,
           "delta_ev": -130.0
         },
         {
           "action": "MEDIUM_DISCOUNT",
-          "p": 0.3072,
-          "delta_ev": -170.31
+          "p": 0.3913,
+          "delta_ev": -219.64
         },
         {
           "action": "DO_NOTHING",
-          "p": 0.2893,
+          "p": 0.37,
           "delta_ev": 0.0
         }
       ],
@@ -634,56 +589,56 @@
       "regret": 0.0
     },
     {
-      "opportunity_id": "OPP0034448",
+      "opportunity_id": "OPP0034470",
       "opportunity_type": "PAYMENT_FAILURE",
-      "failure_reason": "UNKNOWN",
-      "segment": "LOYAL",
-      "cart_value": 339.0,
-      "base_contribution_margin": 157.23,
+      "failure_reason": "INSUFFICIENT_FUNDS",
+      "segment": "PRICE_SENSITIVE",
+      "cart_value": 2229.0,
+      "base_contribution_margin": 720.97,
       "candidates": [
         {
           "action": "DELAYED_RETRY",
-          "p": 0.6336,
-          "delta_ev": 17.15
-        },
-        {
-          "action": "IMMEDIATE_RETRY",
-          "p": 0.5181,
-          "delta_ev": -1.0
+          "p": 0.5521,
+          "delta_ev": 125.36
         },
         {
           "action": "FREE_SHIPPING",
-          "p": 0.6947,
-          "delta_ev": -1.81
+          "p": 0.4771,
+          "delta_ev": 50.96
+        },
+        {
+          "action": "IMMEDIATE_RETRY",
+          "p": 0.4448,
+          "delta_ev": 47.97
         },
         {
           "action": "PAYMENT_METHOD_SWITCH",
-          "p": 0.5181,
+          "p": 0.3768,
           "delta_ev": -2.0
         },
         {
           "action": "PAYMENT_LINK",
-          "p": 0.5181,
+          "p": 0.3768,
           "delta_ev": -3.0
         },
         {
           "action": "SMALL_DISCOUNT",
-          "p": 0.5181,
-          "delta_ev": -10.78
+          "p": 0.4161,
+          "delta_ev": -20.08
         },
         {
           "action": "MEDIUM_DISCOUNT",
-          "p": 0.5181,
-          "delta_ev": -19.56
+          "p": 0.4378,
+          "delta_ev": -55.62
         },
         {
           "action": "HUMAN_ESCALATION",
-          "p": 0.5181,
+          "p": 0.3768,
           "delta_ev": -130.0
         },
         {
           "action": "DO_NOTHING",
-          "p": 0.5181,
+          "p": 0.3768,
           "delta_ev": 0.0
         }
       ],
@@ -692,51 +647,56 @@
       "regret": 0.0
     },
     {
-      "opportunity_id": "OPP0034452",
+      "opportunity_id": "OPP0034473",
       "opportunity_type": "PAYMENT_FAILURE",
-      "failure_reason": "BANK_TIMEOUT",
-      "segment": "CONVENIENCE_SENSITIVE",
-      "cart_value": 8209.0,
-      "base_contribution_margin": 1968.82,
+      "failure_reason": "UNKNOWN",
+      "segment": "LOYAL",
+      "cart_value": 1149.0,
+      "base_contribution_margin": 409.42,
       "candidates": [
         {
           "action": "DELAYED_RETRY",
-          "p": 0.428,
-          "delta_ev": 76.77
+          "p": 0.7211,
+          "delta_ev": 48.97
         },
         {
           "action": "IMMEDIATE_RETRY",
-          "p": 0.3885,
-          "delta_ev": -1.0
+          "p": 0.6658,
+          "delta_ev": 26.34
+        },
+        {
+          "action": "FREE_SHIPPING",
+          "p": 0.6847,
+          "delta_ev": 9.8
         },
         {
           "action": "PAYMENT_METHOD_SWITCH",
-          "p": 0.3885,
+          "p": 0.599,
           "delta_ev": -2.0
         },
         {
           "action": "PAYMENT_LINK",
-          "p": 0.3885,
+          "p": 0.599,
           "delta_ev": -3.0
         },
         {
-          "action": "HUMAN_ESCALATION",
-          "p": 0.3885,
-          "delta_ev": -130.0
-        },
-        {
           "action": "SMALL_DISCOUNT",
-          "p": 0.3389,
-          "delta_ev": -238.83
+          "p": 0.6102,
+          "delta_ev": -32.49
         },
         {
           "action": "MEDIUM_DISCOUNT",
-          "p": 0.3389,
-          "delta_ev": -377.93
+          "p": 0.5775,
+          "delta_ev": -77.17
+        },
+        {
+          "action": "HUMAN_ESCALATION",
+          "p": 0.599,
+          "delta_ev": -130.0
         },
         {
           "action": "DO_NOTHING",
-          "p": 0.3885,
+          "p": 0.599,
           "delta_ev": 0.0
         }
       ],
@@ -747,44 +707,6 @@
   ],
   "D_high_regret_mistakes": [
     {
-      "opportunity_id": "OPP0035976",
-      "opportunity_type": "CHECKOUT_ABANDONMENT",
-      "failure_reason": "NO_PAYMENT_FAILURE",
-      "segment": "HIGH_LTV",
-      "cart_value": 65436.0,
-      "base_contribution_margin": 23707.08,
-      "candidates": [
-        {
-          "action": "MEDIUM_DISCOUNT",
-          "p": 0.2353,
-          "delta_ev": 582.45
-        },
-        {
-          "action": "PAYMENT_LINK",
-          "p": 0.1457,
-          "delta_ev": -3.0
-        },
-        {
-          "action": "HUMAN_ESCALATION",
-          "p": 0.1457,
-          "delta_ev": -130.0
-        },
-        {
-          "action": "SMALL_DISCOUNT",
-          "p": 0.1457,
-          "delta_ev": -478.69
-        },
-        {
-          "action": "DO_NOTHING",
-          "p": 0.1457,
-          "delta_ev": 0.0
-        }
-      ],
-      "selected": "MEDIUM_DISCOUNT",
-      "oracle_action": "DO_NOTHING",
-      "regret": 4601.19
-    },
-    {
       "opportunity_id": "OPP0030856",
       "opportunity_type": "PAYMENT_FAILURE",
       "failure_reason": "CARD_DECLINED",
@@ -794,42 +716,42 @@
       "candidates": [
         {
           "action": "IMMEDIATE_RETRY",
-          "p": 0.2893,
-          "delta_ev": 603.03
+          "p": 0.2878,
+          "delta_ev": 235.9
         },
         {
           "action": "PAYMENT_METHOD_SWITCH",
-          "p": 0.2553,
+          "p": 0.2744,
           "delta_ev": -2.0
         },
         {
           "action": "PAYMENT_LINK",
-          "p": 0.2553,
+          "p": 0.2744,
           "delta_ev": -3.0
         },
         {
+          "action": "DELAYED_RETRY",
+          "p": 0.2678,
+          "delta_ev": -119.53
+        },
+        {
           "action": "HUMAN_ESCALATION",
-          "p": 0.2553,
+          "p": 0.2744,
           "delta_ev": -130.0
         },
         {
           "action": "SMALL_DISCOUNT",
-          "p": 0.2893,
-          "delta_ev": -195.17
-        },
-        {
-          "action": "DELAYED_RETRY",
-          "p": 0.2414,
-          "delta_ev": -248.93
+          "p": 0.2799,
+          "delta_ev": -676.09
         },
         {
           "action": "MEDIUM_DISCOUNT",
-          "p": 0.2893,
-          "delta_ev": -992.37
+          "p": 0.2996,
+          "delta_ev": -1205.95
         },
         {
           "action": "DO_NOTHING",
-          "p": 0.2553,
+          "p": 0.2744,
           "delta_ev": 0.0
         }
       ],
@@ -847,42 +769,42 @@
       "candidates": [
         {
           "action": "IMMEDIATE_RETRY",
-          "p": 0.3885,
-          "delta_ev": 722.85
+          "p": 0.381,
+          "delta_ev": 565.17
         },
         {
           "action": "DELAYED_RETRY",
-          "p": 0.3444,
-          "delta_ev": 134.67
+          "p": 0.368,
+          "delta_ev": 391.07
         },
         {
           "action": "PAYMENT_METHOD_SWITCH",
-          "p": 0.3343,
+          "p": 0.3386,
           "delta_ev": -2.0
         },
         {
           "action": "PAYMENT_LINK",
-          "p": 0.3343,
+          "p": 0.3386,
           "delta_ev": -3.0
         },
         {
           "action": "HUMAN_ESCALATION",
-          "p": 0.3343,
+          "p": 0.3386,
           "delta_ev": -130.0
         },
         {
           "action": "SMALL_DISCOUNT",
-          "p": 0.2893,
-          "delta_ev": -1199.95
+          "p": 0.2995,
+          "delta_ev": -1142.0
         },
         {
           "action": "MEDIUM_DISCOUNT",
-          "p": 0.3343,
-          "delta_ev": -1383.75
+          "p": 0.325,
+          "delta_ev": -1526.76
         },
         {
           "action": "DO_NOTHING",
-          "p": 0.3343,
+          "p": 0.3386,
           "delta_ev": 0.0
         }
       ],
@@ -891,110 +813,163 @@
       "regret": 3724.43
     },
     {
-      "opportunity_id": "OPP0034403",
+      "opportunity_id": "OPP0035925",
       "opportunity_type": "PAYMENT_FAILURE",
-      "failure_reason": "NETWORK_ERROR",
+      "failure_reason": "CARD_DECLINED",
       "segment": "PRICE_SENSITIVE",
-      "cart_value": 55116.0,
-      "base_contribution_margin": 17732.61,
+      "cart_value": 49077.0,
+      "base_contribution_margin": 17748.86,
       "candidates": [
         {
-          "action": "IMMEDIATE_RETRY",
-          "p": 0.1457,
-          "delta_ev": -1.0
+          "action": "DELAYED_RETRY",
+          "p": 0.2562,
+          "delta_ev": 349.8
         },
         {
-          "action": "DELAYED_RETRY",
-          "p": 0.1457,
-          "delta_ev": -1.0
+          "action": "IMMEDIATE_RETRY",
+          "p": 0.2383,
+          "delta_ev": 32.97
         },
         {
           "action": "PAYMENT_METHOD_SWITCH",
-          "p": 0.1457,
+          "p": 0.2364,
           "delta_ev": -2.0
         },
         {
           "action": "PAYMENT_LINK",
-          "p": 0.1457,
+          "p": 0.2364,
           "delta_ev": -3.0
         },
         {
           "action": "HUMAN_ESCALATION",
-          "p": 0.1457,
+          "p": 0.2364,
           "delta_ev": -130.0
         },
         {
           "action": "SMALL_DISCOUNT",
-          "p": 0.1457,
-          "delta_ev": -403.51
+          "p": 0.2498,
+          "delta_ev": -376.66
         },
         {
           "action": "MEDIUM_DISCOUNT",
-          "p": 0.1457,
-          "delta_ev": -805.01
+          "p": 0.2656,
+          "delta_ev": -787.35
         },
         {
           "action": "DO_NOTHING",
-          "p": 0.1457,
+          "p": 0.2364,
           "delta_ev": 0.0
         }
       ],
-      "selected": "DO_NOTHING",
-      "oracle_action": "DELAYED_RETRY",
-      "regret": 3722.92
+      "selected": "DELAYED_RETRY",
+      "oracle_action": "PAYMENT_METHOD_SWITCH",
+      "regret": 2706.48
     },
     {
-      "opportunity_id": "OPP0034757",
+      "opportunity_id": "OPP0035402",
       "opportunity_type": "PAYMENT_FAILURE",
-      "failure_reason": "BANK_TIMEOUT",
-      "segment": "LOYAL",
+      "failure_reason": "CARD_DECLINED",
+      "segment": "PAYMENT_FRICTION",
       "cart_value": 43618.0,
-      "base_contribution_margin": 11467.05,
+      "base_contribution_margin": 11475.82,
       "candidates": [
         {
-          "action": "IMMEDIATE_RETRY",
-          "p": 0.5427,
-          "delta_ev": 280.62
-        },
-        {
           "action": "DELAYED_RETRY",
-          "p": 0.5427,
-          "delta_ev": 280.62
+          "p": 0.2963,
+          "delta_ev": 31.55
         },
         {
           "action": "PAYMENT_METHOD_SWITCH",
-          "p": 0.5181,
+          "p": 0.2934,
           "delta_ev": -2.0
         },
         {
           "action": "PAYMENT_LINK",
-          "p": 0.5181,
+          "p": 0.2934,
           "delta_ev": -3.0
         },
         {
+          "action": "IMMEDIATE_RETRY",
+          "p": 0.2881,
+          "delta_ev": -62.41
+        },
+        {
           "action": "HUMAN_ESCALATION",
-          "p": 0.5181,
+          "p": 0.2934,
           "delta_ev": -130.0
         },
         {
           "action": "SMALL_DISCOUNT",
-          "p": 0.3885,
-          "delta_ev": -2335.41
+          "p": 0.3165,
+          "delta_ev": -427.82
         },
         {
           "action": "MEDIUM_DISCOUNT",
-          "p": 0.3885,
-          "delta_ev": -3182.75
+          "p": 0.3169,
+          "delta_ev": -1114.85
         },
         {
           "action": "DO_NOTHING",
-          "p": 0.5181,
+          "p": 0.2934,
+          "delta_ev": 0.0
+        }
+      ],
+      "selected": "DELAYED_RETRY",
+      "oracle_action": "PAYMENT_METHOD_SWITCH",
+      "regret": 2651.6
+    },
+    {
+      "opportunity_id": "OPP0033159",
+      "opportunity_type": "PAYMENT_FAILURE",
+      "failure_reason": "UPI_TIMEOUT",
+      "segment": "HIGH_LTV",
+      "cart_value": 41337.0,
+      "base_contribution_margin": 13243.73,
+      "candidates": [
+        {
+          "action": "IMMEDIATE_RETRY",
+          "p": 0.46,
+          "delta_ev": 627.48
+        },
+        {
+          "action": "DELAYED_RETRY",
+          "p": 0.4266,
+          "delta_ev": 184.43
+        },
+        {
+          "action": "PAYMENT_METHOD_SWITCH",
+          "p": 0.4084,
+          "delta_ev": -57.54
+        },
+        {
+          "action": "PAYMENT_LINK",
+          "p": 0.4081,
+          "delta_ev": -61.59
+        },
+        {
+          "action": "HUMAN_ESCALATION",
+          "p": 0.4081,
+          "delta_ev": -188.59
+        },
+        {
+          "action": "SMALL_DISCOUNT",
+          "p": 0.3007,
+          "delta_ev": -2105.16
+        },
+        {
+          "action": "MEDIUM_DISCOUNT",
+          "p": 0.3157,
+          "delta_ev": -2589.72
+        },
+        {
+          "action": "DO_NOTHING",
+          "p": 0.4126,
           "delta_ev": 0.0
         }
       ],
       "selected": "IMMEDIATE_RETRY",
       "oracle_action": "DELAYED_RETRY",
-      "regret": 2985.21
+      "regret": 2639.44
     }
   ],
   "E_bounded_downside_errors": [
@@ -1008,47 +983,47 @@
       "candidates": [
         {
           "action": "DELAYED_RETRY",
-          "p": 0.5181,
-          "delta_ev": 57.45
+          "p": 0.51,
+          "delta_ev": 49.28
         },
         {
           "action": "FREE_SHIPPING",
-          "p": 0.5427,
-          "delta_ev": 43.55
+          "p": 0.5504,
+          "delta_ev": 42.2
         },
         {
           "action": "IMMEDIATE_RETRY",
-          "p": 0.3885,
-          "delta_ev": -1.0
+          "p": 0.4,
+          "delta_ev": -0.35
         },
         {
           "action": "PAYMENT_METHOD_SWITCH",
-          "p": 0.3885,
+          "p": 0.3985,
           "delta_ev": -2.0
         },
         {
           "action": "PAYMENT_LINK",
-          "p": 0.3885,
+          "p": 0.3985,
           "delta_ev": -3.0
         },
         {
           "action": "SMALL_DISCOUNT",
-          "p": 0.428,
-          "delta_ev": -20.55
+          "p": 0.4378,
+          "delta_ev": -21.47
         },
         {
           "action": "MEDIUM_DISCOUNT",
-          "p": 0.428,
-          "delta_ev": -56.91
+          "p": 0.4542,
+          "delta_ev": -54.07
         },
         {
           "action": "HUMAN_ESCALATION",
-          "p": 0.3885,
+          "p": 0.3985,
           "delta_ev": -130.0
         },
         {
           "action": "DO_NOTHING",
-          "p": 0.3885,
+          "p": 0.3985,
           "delta_ev": 0.0
         }
       ],
@@ -1066,42 +1041,42 @@
       "candidates": [
         {
           "action": "DELAYED_RETRY",
-          "p": 0.3885,
-          "delta_ev": 207.02
+          "p": 0.4157,
+          "delta_ev": 272.81
         },
         {
           "action": "IMMEDIATE_RETRY",
-          "p": 0.3832,
-          "delta_ev": 186.72
+          "p": 0.3756,
+          "delta_ev": 119.09
         },
         {
           "action": "PAYMENT_METHOD_SWITCH",
-          "p": 0.3343,
+          "p": 0.3442,
           "delta_ev": -2.0
         },
         {
           "action": "PAYMENT_LINK",
-          "p": 0.3343,
+          "p": 0.3442,
           "delta_ev": -3.0
         },
         {
           "action": "HUMAN_ESCALATION",
-          "p": 0.3343,
+          "p": 0.3442,
           "delta_ev": -130.0
         },
         {
           "action": "SMALL_DISCOUNT",
-          "p": 0.3343,
-          "delta_ev": -169.77
+          "p": 0.3516,
+          "delta_ev": -150.19
         },
         {
           "action": "MEDIUM_DISCOUNT",
-          "p": 0.3389,
-          "delta_ev": -324.45
+          "p": 0.3658,
+          "delta_ev": -286.44
         },
         {
           "action": "DO_NOTHING",
-          "p": 0.3343,
+          "p": 0.3442,
           "delta_ev": 0.0
         }
       ],
@@ -1119,27 +1094,27 @@
       "candidates": [
         {
           "action": "PAYMENT_LINK",
-          "p": 0.2893,
+          "p": 0.3021,
           "delta_ev": -3.0
         },
         {
           "action": "SMALL_DISCOUNT",
-          "p": 0.3343,
-          "delta_ev": -16.44
+          "p": 0.3336,
+          "delta_ev": -60.35
         },
         {
           "action": "HUMAN_ESCALATION",
-          "p": 0.2893,
+          "p": 0.3021,
           "delta_ev": -130.0
         },
         {
           "action": "MEDIUM_DISCOUNT",
           "p": 0.3343,
-          "delta_ev": -178.71
+          "delta_ev": -220.69
         },
         {
           "action": "DO_NOTHING",
-          "p": 0.2893,
+          "p": 0.3021,
           "delta_ev": 0.0
         }
       ],
@@ -1157,47 +1132,47 @@
       "candidates": [
         {
           "action": "IMMEDIATE_RETRY",
-          "p": 0.5181,
-          "delta_ev": 35.81
+          "p": 0.4708,
+          "delta_ev": 9.42
         },
         {
           "action": "DELAYED_RETRY",
-          "p": 0.428,
-          "delta_ev": -1.0
+          "p": 0.4593,
+          "delta_ev": 4.72
         },
         {
           "action": "PAYMENT_METHOD_SWITCH",
-          "p": 0.428,
+          "p": 0.4453,
           "delta_ev": -2.0
         },
         {
           "action": "PAYMENT_LINK",
-          "p": 0.428,
+          "p": 0.4453,
           "delta_ev": -3.0
         },
         {
           "action": "FREE_SHIPPING",
-          "p": 0.5181,
-          "delta_ev": -44.19
+          "p": 0.4899,
+          "delta_ev": -58.48
         },
         {
           "action": "SMALL_DISCOUNT",
-          "p": 0.3885,
-          "delta_ev": -60.27
+          "p": 0.3791,
+          "delta_ev": -70.18
         },
         {
           "action": "MEDIUM_DISCOUNT",
-          "p": 0.3885,
-          "delta_ev": -102.41
+          "p": 0.3939,
+          "delta_ev": -108.44
         },
         {
           "action": "HUMAN_ESCALATION",
-          "p": 0.428,
+          "p": 0.4453,
           "delta_ev": -130.0
         },
         {
           "action": "DO_NOTHING",
-          "p": 0.428,
+          "p": 0.4453,
           "delta_ev": 0.0
         }
       ],
@@ -1215,47 +1190,47 @@
       "candidates": [
         {
           "action": "FREE_SHIPPING",
-          "p": 0.6336,
-          "delta_ev": 39.78
+          "p": 0.604,
+          "delta_ev": 22.36
         },
         {
           "action": "DELAYED_RETRY",
-          "p": 0.5181,
-          "delta_ev": 33.84
+          "p": 0.5043,
+          "delta_ev": 20.75
         },
         {
           "action": "IMMEDIATE_RETRY",
-          "p": 0.428,
-          "delta_ev": -1.0
+          "p": 0.454,
+          "delta_ev": 1.32
         },
         {
           "action": "PAYMENT_METHOD_SWITCH",
-          "p": 0.428,
+          "p": 0.448,
           "delta_ev": -2.0
         },
         {
           "action": "PAYMENT_LINK",
-          "p": 0.428,
+          "p": 0.448,
           "delta_ev": -3.0
         },
         {
           "action": "SMALL_DISCOUNT",
-          "p": 0.428,
-          "delta_ev": -34.51
+          "p": 0.4373,
+          "delta_ev": -39.35
         },
         {
           "action": "MEDIUM_DISCOUNT",
-          "p": 0.5181,
-          "delta_ev": -45.86
+          "p": 0.4706,
+          "delta_ev": -64.76
         },
         {
           "action": "HUMAN_ESCALATION",
-          "p": 0.428,
+          "p": 0.448,
           "delta_ev": -130.0
         },
         {
           "action": "DO_NOTHING",
-          "p": 0.428,
+          "p": 0.448,
           "delta_ev": 0.0
         }
       ],

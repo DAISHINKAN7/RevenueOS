@@ -2,7 +2,8 @@ SEED ?= 42
 PY   ?= python3
 
 .PHONY: help install data validate test test-fast clean gate phase2 api \
-        features train evaluate model-gate clean-models
+        features train evaluate audit model-gate clean-models \
+        seed backend-gate razorpay-gate api-dev
 
 help:
 	@echo "RevenueOS"
@@ -20,7 +21,14 @@ help:
 	@echo "  make features    build train/val/test feature matrices + provenance"
 	@echo "  make train       train baselines + XGBoost, calibrate, FREEZE model"
 	@echo "  make evaluate    oracle eval + OPE + ablations + figures + report"
-	@echo "  make model-gate  features -> train -> evaluate -> tests"
+	@echo "  make audit       final economic audit + model-family decomposition"
+	@echo "  make model-gate  features -> train -> evaluate -> audit -> tests"
+	@echo ""
+	@echo "  --- Phase 5/6 (backend + payments) ---"
+	@echo "  make seed           seed demo opportunities from held-out TEST cases"
+	@echo "  make backend-gate   seed + backend tests + backend gate report"
+	@echo "  make razorpay-gate  razorpay tests + razorpay gate report"
+	@echo "  make api            run the API on :8000"
 	@echo "  make data-small         quick 4k-session dataset for iteration"
 
 install:
@@ -59,17 +67,32 @@ evaluate:
 
 # Phase 3/4 gate. Deliberately does NOT regenerate simulator data: the
 # simulator is frozen at 1.1.0 and re-rolling it would invalidate the freeze.
-model-gate: features train evaluate test-fast
+audit:
+	$(PY) -m ml.evaluation.audit
+
+model-gate: features train evaluate audit test-fast
 	@echo ""
-	@echo "Model gate complete. Read evaluation/results/model_report.md."
+	@echo "Model gate complete. Read evaluation/results/final_model_audit.md."
 
 clean-models:
 	rm -f ml/artifacts/*.pkl ml/artifacts/model_metadata.json
 	rm -f data/processed/*.parquet
 	rm -f evaluation/results/*.json evaluation/results/*.csv evaluation/results/model_report.md
 
+seed:
+	$(PY) -m backend.app.seed
+
+backend-gate: seed
+	$(PY) -m scripts.gates backend
+
+live-demo:
+	@set -a && . ./.env && set +a && $(PY) -m scripts.razorpay_smoke_test
+
+razorpay-gate:
+	$(PY) -m scripts.gates razorpay
+
 api:
-	$(PY) -m uvicorn backend.app.main:app --reload --port 8000
+	$(PY) -m uvicorn backend.app.api:app --reload --port 8000
 
 clean:
 	rm -f data/generated/*.parquet data/generated/manifest.json

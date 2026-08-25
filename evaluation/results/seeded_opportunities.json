@@ -1,0 +1,37 @@
+[
+  {
+    "scenario": "demo1_free_shipping_beats_discount",
+    "opportunity_id": "OPP-DEMO1-ec52f6",
+    "cart_value": 4869.0,
+    "type": "CHECKOUT_ABANDONMENT",
+    "execution_mode": "RAZORPAY_TEST"
+  },
+  {
+    "scenario": "demo2_do_nothing",
+    "opportunity_id": "OPP-DEMO2-2de9f1",
+    "cart_value": 469.0,
+    "type": "CHECKOUT_ABANDONMENT",
+    "execution_mode": "SIMULATOR"
+  },
+  {
+    "scenario": "demo3_payment_failure_recovery",
+    "opportunity_id": "OPP-DEMO3-3395e5",
+    "cart_value": 2939.0,
+    "type": "PAYMENT_FAILURE",
+    "execution_mode": "RAZORPAY_TEST"
+  },
+  {
+    "scenario": "demo4_high_value_approval",
+    "opportunity_id": "OPP-DEMO4-9a823e",
+    "cart_value": 55116.0,
+    "type": "PAYMENT_FAILURE",
+    "execution_mode": "SIMULATOR"
+  },
+  {
+    "scenario": "demo5_policy_rejection",
+    "opportunity_id": "OPP-DEMO5-c3ca93",
+    "cart_value": 19418.0,
+    "type": "CHECKOUT_ABANDONMENT",
+    "execution_mode": "SIMULATOR"
+  }
+]

@@ -1,0 +1,15 @@
+Metric,Final Value
+TEST ROC-AUC,0.5965
+TEST PR-AUC,0.4703
+TEST Brier,0.2278
+TEST ECE,0.0125
+RevenueOS Oracle Value / Opportunity,INR 853.15
+RevenueOS DR Value / Opportunity,INR 827.94
+DR vs Oracle Relative Error,2.96%
+RevenueOS vs DO_NOTHING,INR +91.90
+RevenueOS vs Flat 10%,INR +280.09
+Oracle Incremental Value Captured,60.6%
+Conversion/Economics Action Divergence,40.5%
+DO_NOTHING Selection Rate,34.5%
+Mean Regret,INR 59.71
+P95 Regret,INR 296.53

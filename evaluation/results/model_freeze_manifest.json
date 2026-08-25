@@ -1,6 +1,7 @@
 {
+  "pipeline_version": "1.1.0",
   "model_hash": "dcbdeaa11e1f49df",
-  "calibration_method": "isotonic",
+  "calibration_method": "none",
   "hyperparameters": {
     "n_estimators": 250,
     "max_depth": 3,
@@ -11,50 +12,69 @@
     "reg_lambda": 10.0,
     "reg_alpha": 0.5
   },
-  "validation_metrics": {
+  "base_model_training_period": [
+    "2025-06-01 00:21:00",
+    "2025-10-04 19:35:00"
+  ],
+  "calibration_period": [
+    "2025-10-04 19:35:00",
+    "2025-10-17 21:04:00"
+  ],
+  "model_selection_period": [
+    "2025-10-17 21:05:00",
+    "2025-10-31 21:19:00"
+  ],
+  "calibration_rows": 2720,
+  "model_selection_rows": 2720,
+  "selection_metrics": {
     "global_mean": {
       "roc_auc": 0.5,
-      "pr_auc": 0.3645220588235294,
-      "brier": 0.23168828787013102,
-      "log_loss": 0.6560671374816961,
-      "ece": 0.006523834420512409
+      "pr_auc": 0.37830882352941175,
+      "brier": 0.23524400772553433,
+      "log_loss": 0.6633428617746593,
+      "ece": 0.007262930285369951
     },
     "segment_lookup": {
-      "roc_auc": 0.5732988428836315,
-      "pr_auc": 0.417342584782641,
-      "brier": 0.22888224604671806,
-      "log_loss": 0.6499909275048228,
-      "ece": 0.026001902166947317
+      "roc_auc": 0.573437147098427,
+      "pr_auc": 0.43567411257113264,
+      "brier": 0.23191184615715327,
+      "log_loss": 0.6562425706897117,
+      "ece": 0.025827385810758132
     },
     "logistic_regression": {
-      "roc_auc": 0.6012316725723759,
-      "pr_auc": 0.4638909425227543,
-      "brier": 0.22416943357284855,
-      "log_loss": 0.6398408444290545,
-      "ece": 0.010212796058782307
+      "roc_auc": 0.6098501240489438,
+      "pr_auc": 0.4908147095836242,
+      "brier": 0.22592884458489806,
+      "log_loss": 0.6433469792760873,
+      "ece": 0.015087361684418883
     },
     "xgboost_raw": {
-      "roc_auc": 0.616047001187852,
-      "pr_auc": 0.47991494217891484,
-      "brier": 0.2219657513543228,
-      "log_loss": 0.635123310201272,
-      "ece": 0.013354141769163753
+      "roc_auc": 0.6292019891508178,
+      "pr_auc": 0.5116855639457569,
+      "brier": 0.2230647215541304,
+      "log_loss": 0.6372575400496041,
+      "ece": 0.02543105097378002
     },
     "xgboost_platt": {
-      "roc_auc": 0.616047001187852,
-      "pr_auc": 0.4799152609347651,
-      "brier": 0.22195371452550702,
-      "log_loss": 0.6351290691436489,
-      "ece": 0.01181955846464809
+      "roc_auc": 0.6292019891508178,
+      "pr_auc": 0.5116855639457569,
+      "brier": 0.22482725060439815,
+      "log_loss": 0.6410267127382652,
+      "ece": 0.03733407656169113
     },
     "xgboost_isotonic": {
-      "roc_auc": 0.6209282371374503,
-      "pr_auc": 0.47270992750988383,
-      "brier": 0.2203814954142147,
-      "log_loss": 0.6312552279278448,
-      "ece": 7.237167045477133e-09
+      "roc_auc": 0.627101461518966,
+      "pr_auc": 0.4930032199962141,
+      "brier": 0.2236571031330797,
+      "log_loss": 0.6382381585992455,
+      "ece": 0.028342889831047807
     }
   },
-  "frozen_at": "2026-08-24T13:48:06.054546+00:00",
-  "note": "Frozen before any TEST or oracle access. Oracle evaluation occurs strictly after this manifest is written."
+  "optimistic_same_set_reference": {
+    "xgboost_isotonic_same_set_ece": 1.0397942619973315e-08
+  },
+  "frozen_at": "2026-08-24T18:16:53.289779+00:00",
+  "calibration_protocol": "TRAIN fits base models; CALIBRATION (first 50% of the validation timeline) fits Platt/isotonic; MODEL_SELECTION (second 50%) chooses among raw/Platt/isotonic. No candidate is scored on rows that fitted it. TEST is reporting-only.",
+  "protocol_correction_note": "The initial model gate exposed an optimistic calibration-selection procedure because isotonic calibration was evaluated on its fitting partition. The pipeline was corrected by separating calibration fitting from model selection before finalizing the model.",
+  "note": "Frozen before any TEST or oracle access."
 }

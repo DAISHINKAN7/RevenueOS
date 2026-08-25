@@ -290,3 +290,54 @@ def test_reward_on_success_nets_the_incentive():
     })
     r = OPE.realised_reward(base)
     assert r[0] == pytest.approx(1285.0 - 500.0 - 2.0)
+
+
+# ------------------------------------------------- calibration protocol (v1.1.0)
+FREEZE = Path("evaluation/results/model_freeze_manifest.json")
+
+
+@pytest.mark.skipif(not FREEZE.exists(), reason="train the model first")
+def test_calibration_and_selection_periods_are_disjoint():
+    """No candidate may be scored on the rows that fitted it."""
+    import json
+    f = json.loads(FREEZE.read_text())
+    cal_end = pd.Timestamp(f["calibration_period"][1])
+    sel_start = pd.Timestamp(f["model_selection_period"][0])
+    assert cal_end <= sel_start, "CALIBRATION overlaps MODEL_SELECTION"
+
+
+@pytest.mark.skipif(not FREEZE.exists(), reason="train the model first")
+def test_partitions_are_chronologically_ordered():
+    import json
+    f = json.loads(FREEZE.read_text())
+    train_end = pd.Timestamp(f["base_model_training_period"][1])
+    cal_start = pd.Timestamp(f["calibration_period"][0])
+    assert train_end <= cal_start
+
+
+@pytest.mark.skipif(not FREEZE.exists(), reason="train the model first")
+def test_selection_metrics_are_not_degenerate():
+    """A perfect 0.0000 ECE is the signature of same-set evaluation."""
+    import json
+    f = json.loads(FREEZE.read_text())
+    for name, m in f["selection_metrics"].items():
+        if name.startswith("xgboost"):
+            assert m["ece"] > 0.0, f"{name} ECE is exactly 0 — scored on its fitting rows?"
+
+
+@pytest.mark.skipif(not FREEZE.exists(), reason="train the model first")
+def test_protocol_correction_is_documented():
+    import json
+    f = json.loads(FREEZE.read_text())
+    assert "protocol_correction_note" in f
+    # The old procedure produced an essentially-zero ECE; that is the bug signature.
+    assert f["optimistic_same_set_reference"]["xgboost_isotonic_same_set_ece"] < 1e-6
+
+
+@pytest.mark.skipif(not FREEZE.exists(), reason="train the model first")
+def test_test_period_not_used_for_selection():
+    """Selection partitions must end before the TEST period starts."""
+    import json
+    f = json.loads(FREEZE.read_text())
+    prov = json.loads(Path("evaluation/results/data_provenance.json").read_text())
+    assert pd.Timestamp(f["model_selection_period"][1]) <= pd.Timestamp(prov["test_start"])
