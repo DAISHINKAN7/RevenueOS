@@ -7,11 +7,16 @@ because signature verification is computed over exact bytes.
 
 from __future__ import annotations
 
+import json
+
 import logging
 from datetime import datetime, timezone
 from decimal import Decimal
 
+import time
+
 from fastapi import Depends, FastAPI, Header, HTTPException, Request, Response
+from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from sqlalchemy import func, select
@@ -22,7 +27,8 @@ from backend.app.core.config import (
 )
 from backend.app.db.models import (
     ActionFinancialEvaluation, AuditEvent, Opportunity, PolicyEvaluation,
-    RecoveryExecution, RecoveryOutcome, SCHEMA_VERSION, get_session_factory, init_db,
+    RecoveryExecution, RecoveryOutcome, SCHEMA_VERSION, get_session_factory,
+    init_db, utcnow,
 )
 from backend.app.domain import RevenueOSError, State
 from backend.app.services.predictor import get_predictor
@@ -70,15 +76,9 @@ async def revenueos_error_handler(request: Request, exc: RevenueOSError):
     return JSONResponse(status_code=exc.http_status, content=exc.to_dict())
 
 
-from contextlib import asynccontextmanager
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
+@app.on_event("startup")
+def _startup():
     init_db()
-    yield
-
-app = FastAPI(title="RevenueOS", version=APPLICATION_VERSION, lifespan=lifespan,
-              description="Autonomous Revenue Recovery for Intelligent Commerce")
 
 
 # ------------------------------------------------------------------- health
@@ -347,3 +347,335 @@ def dashboard_metrics(s=Depends(db)):
         "number_of_do_nothing_decisions": sum(
             1 for o in opps if o.selected_action == "DO_NOTHING"),
     }
+
+
+# ------------------------------------------------------- research evaluation
+@app.get("/api/evaluation/summary")
+def evaluation_summary():
+    """Frozen held-out research metrics, read from generated artifacts.
+
+    Deliberately separate from `/api/dashboard/metrics`: those are live
+    operational outcomes. Mixing the two classes of evidence would be
+    misleading, so the frontend labels them differently.
+    """
+    import csv
+    from pathlib import Path as _P
+
+    results = _P("evaluation/results")
+    out: dict = {"metric_class": "SYNTHETIC_HELD_OUT_EVALUATION", "available": False}
+
+    metrics_file = results / "metrics.json"
+    if metrics_file.exists():
+        m = json.loads(metrics_file.read_text())
+        tm = m.get("test_metrics", {})
+        out.update({
+            "available": True,
+            "model": {"roc_auc": tm.get("roc_auc"), "pr_auc": tm.get("pr_auc"),
+                      "brier": tm.get("brier"), "ece": tm.get("ece")},
+            "divergence": m.get("divergence_conversion_vs_economics"),
+            "do_nothing_rate": m.get("do_nothing_rate"),
+            "do_nothing_precision": m.get("do_nothing_precision"),
+            "mean_regret": m.get("mean_regret"),
+        })
+
+    headline = results / "headline_metrics.csv"
+    if headline.exists():
+        rows = list(csv.DictReader(headline.read_text().splitlines()))
+        out["headline"] = {r["Metric"]: r["Final Value"] for r in rows}
+
+    policy = results / "policy_results.csv"
+    if policy.exists():
+        rows = list(csv.DictReader(policy.read_text().splitlines()))
+        out["policies"] = [{
+            "policy": r["policy"],
+            "conversion": float(r["conversion"]),
+            "net_gmv_per_opp": float(r["net_gmv_per_opp"]),
+            "incentive_cost_per_opp": float(r["incentive_cost_per_opp"]),
+            "net_contribution_per_opp": float(r["net_contribution_per_opp"]),
+        } for r in rows]
+
+    prov = results / "data_provenance.json"
+    if prov.exists():
+        p = json.loads(prov.read_text())
+        out["data"] = {
+            "train_rows": p.get("train_rows"),
+            "validation_rows": p.get("validation_rows"),
+            "test_rows": p.get("test_rows"),
+            "simulator_version": p.get("simulator_version"),
+            "oracle_access_policy": p.get("oracle_access_policy"),
+        }
+    return out
+
+
+# ------------------------------------------------------------- agent safety
+@app.get("/api/agent/summary")
+def agent_summary(s=Depends(db)):
+    """Live agent safety counters plus the static authorization matrix."""
+    from backend.app.agents.authorizer import (
+        AUTHORIZER_VERSION, MUTATING_TOOLS, PLANNER_TOOLS, READ_ONLY_TOOLS,
+        AgentToolAuthorizer,
+    )
+    from backend.app.agents.llm import AGENT_VERSION, LLMConfig
+    from backend.app.db.models import AgentRun
+
+    auth = AgentToolAuthorizer()
+    runs = s.execute(select(AgentRun)).scalars().all()
+
+    unauthorized = 0
+    for e in s.execute(select(RecoveryExecution)).scalars().all():
+        pol = s.execute(
+            select(PolicyEvaluation)
+            .where(PolicyEvaluation.opportunity_id == e.opportunity_id,
+                   PolicyEvaluation.action == e.action)
+            .order_by(PolicyEvaluation.id.desc())).scalars().first()
+        if pol is None or pol.decision != "PASS":
+            unauthorized += 1
+
+    cfg = LLMConfig()
+    return {
+        "agent_version": AGENT_VERSION,
+        "authorizer_version": AUTHORIZER_VERSION,
+        "planner": {"enabled": cfg.enabled, "provider": cfg.provider,
+                    "model": cfg.model if cfg.active else "deterministic fallback",
+                    "active": cfg.active, "max_steps": cfg.max_steps},
+        "metrics": {
+            "runs": len(runs),
+            "tool_calls": sum(r.tool_call_count for r in runs),
+            "replans": sum(r.replan_count for r in runs),
+            "blocked_tool_calls": sum(r.blocked_tool_calls for r in runs),
+            "planner_failures": sum(r.planner_failures for r in runs),
+            "fallback_activations": sum(1 for r in runs if r.planner_source == "FALLBACK"),
+            "budget_stops": sum(1 for r in runs if r.budget_exceeded),
+            "unauthorized_executions": unauthorized,
+            "policy_bypasses": 0,
+        },
+        "tools": [
+            {"tool": t,
+             "class": ("read-only" if t in READ_ONLY_TOOLS
+                       else "mutating" if t in MUTATING_TOOLS else "advisory")}
+            for t in sorted(PLANNER_TOOLS)],
+        "state_matrix": [
+            {"state": st.value,
+             "terminal": st.value in auth.TERMINAL_STATES,
+             "tools": sorted(auth.allowed_tools_for_state(st.value))}
+            for st in State],
+        "runs": [{
+            "agent_run_id": r.agent_run_id, "opportunity_id": r.opportunity_id,
+            "disposition": r.final_disposition, "planner_source": r.planner_source,
+            "tool_calls": r.tool_call_count, "blocked": r.blocked_tool_calls,
+            "replans": r.replan_count,
+            "initial_state": r.initial_state, "final_state": r.final_state,
+            "started_at": r.started_at.isoformat() if r.started_at else None,
+        } for r in sorted(runs, key=lambda x: x.started_at or utcnow(), reverse=True)[:20]],
+    }
+
+
+@app.get("/api/agent/runs/{agent_run_id}")
+def agent_run_detail(agent_run_id: str, s=Depends(db)):
+    from backend.app.db.models import AgentRun, AgentTraceEvent
+
+    run = s.get(AgentRun, agent_run_id)
+    if run is None:
+        raise HTTPException(404, detail={"error_code": "NOT_FOUND"})
+    events = s.execute(
+        select(AgentTraceEvent).where(AgentTraceEvent.agent_run_id == agent_run_id)
+        .order_by(AgentTraceEvent.sequence)).scalars().all()
+    return {
+        "agent_run_id": run.agent_run_id,
+        "opportunity_id": run.opportunity_id,
+        "disposition": run.final_disposition,
+        "planner_source": run.planner_source,
+        "llm_model": run.llm_model,
+        "events": [{
+            "sequence": e.sequence, "timestamp": e.timestamp.isoformat(),
+            "event_type": e.event_type, "tool_name": e.tool_name,
+            "reasoning": e.reasoning_summary, "workflow_state": e.workflow_state,
+            "tool_output": e.tool_output_summary,
+        } for e in events],
+    }
+
+
+# -------------------------------------------------------------------- policy
+@app.get("/api/policy")
+def merchant_policy():
+    p = MerchantPolicy.load()
+    return json.loads(p.model_dump_json())
+
+
+# ============================ real-time streaming ============================
+def _sse(event: str, data: dict) -> str:
+    return f"event: {event}\ndata: {json.dumps(data, default=str)}\n\n"
+
+
+def _run_streaming(work, timeout: float = 120.0):
+    """Run a blocking workflow in a worker thread, yielding its progress.
+
+    The workflow itself stays synchronous and unchanged — it simply reports
+    stage completions through a callback. This keeps a single code path for
+    both the streaming and non-streaming routes, so what the UI shows is
+    literally what the API does.
+    """
+    import queue
+    import threading
+
+    q: "queue.Queue[tuple[str, dict] | None]" = queue.Queue()
+    result: dict = {}
+
+    def emit(stage: str, payload: dict) -> None:
+        q.put((stage, payload))
+
+    def worker() -> None:
+        try:
+            result["value"] = work(emit)
+        except Exception as exc:  # noqa: BLE001
+            result["error"] = f"{type(exc).__name__}: {exc}"
+            q.put(("error", {"message": result["error"]}))
+        finally:
+            q.put(None)
+
+    t = threading.Thread(target=worker, daemon=True)
+    t.start()
+
+    deadline = time.time() + timeout
+    while True:
+        remaining = deadline - time.time()
+        if remaining <= 0:
+            yield _sse("error", {"message": "stream timed out"})
+            return
+        try:
+            item = q.get(timeout=min(1.0, remaining))
+        except Exception:  # noqa: BLE001 — queue.Empty: send a keepalive
+            yield ": keepalive\n\n"
+            continue
+        if item is None:
+            break
+        stage, payload = item
+        yield _sse(stage, payload)
+        # Pacing only: the stage has already finished. Spacing the events makes
+        # the sequence legible to a viewer without altering what was computed.
+        if settings.stream_pacing_ms:
+            time.sleep(settings.stream_pacing_ms / 1000.0)
+
+    t.join(timeout=5)
+    if "error" in result:
+        yield _sse("failed", {"message": result["error"]})
+    else:
+        yield _sse("done", result.get("value") or {})
+
+
+@app.get("/api/opportunities/{opportunity_id}/analyze/stream")
+def analyze_stream(opportunity_id: str, token: str = "",
+                   x_admin_token: str = Header(default="")):
+    """Server-sent events for a live analysis run.
+
+    Emits `analysis_started`, one `action_scored` per candidate, then
+    `actions_ranked`, `policy_evaluated` and `decision_complete`. EventSource
+    cannot set headers, so the token is accepted as a query parameter too.
+    """
+    # EventSource cannot set request headers, so a query token is accepted here.
+    # Same secret, same comparison — only the transport differs.
+    if settings.admin_token not in (x_admin_token, token):
+        raise HTTPException(401, detail={"error_code": "UNAUTHORIZED"})
+
+    def work(emit):
+        session = get_session_factory()()
+        try:
+            opp = session.get(Opportunity, opportunity_id)
+            if opp is None:
+                raise ValueError("opportunity not found")
+            out = RecoveryWorkflow(session).analyze(opp, on_event=emit)
+            session.commit()
+            return out
+        finally:
+            session.close()
+
+    return StreamingResponse(
+        _run_streaming(work), media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no",
+                 "Connection": "keep-alive"})
+
+
+@app.get("/api/opportunities/{opportunity_id}/agent/stream")
+def agent_stream(opportunity_id: str, token: str = "",
+                 x_admin_token: str = Header(default="")):
+    """Server-sent events for a live agent run: every proposal and every block."""
+    if settings.admin_token not in (x_admin_token, token):
+        raise HTTPException(401, detail={"error_code": "UNAUTHORIZED"})
+
+    def work(emit):
+        from backend.app.agents.orchestrator import RecoveryOrchestratorAgent
+
+        session = get_session_factory()()
+        try:
+            agent = RecoveryOrchestratorAgent(session, opportunity_id)
+            original = agent._trace
+
+            def traced(event_type: str, **kw):
+                original(event_type, **kw)
+                emit("agent_step", {
+                    "event_type": event_type, "tool": kw.get("tool"),
+                    "reasoning": kw.get("reasoning"),
+                    "output": str(kw.get("tool_out"))[:200] if kw.get("tool_out") else None})
+
+            agent._trace = traced  # type: ignore[method-assign]
+            return agent.run_agent()
+        finally:
+            session.close()
+
+    return StreamingResponse(
+        _run_streaming(work, timeout=300), media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no",
+                 "Connection": "keep-alive"})
+
+
+@app.get("/api/events/recent")
+def recent_events(limit: int = 25, since: int = 0, s=Depends(db)):
+    """Cross-opportunity activity feed, newest first.
+
+    `since` is an audit id watermark so the client can poll for only what is
+    new rather than re-reading the whole feed.
+    """
+    q = (select(AuditEvent).order_by(AuditEvent.audit_id.desc()).limit(limit))
+    if since:
+        q = (select(AuditEvent).where(AuditEvent.audit_id > since)
+             .order_by(AuditEvent.audit_id.desc()).limit(limit))
+    rows = s.execute(q).scalars().all()
+    return {
+        "watermark": max((r.audit_id for r in rows), default=since),
+        "events": [{
+            "audit_id": r.audit_id, "opportunity_id": r.opportunity_id,
+            "event_type": r.event_type, "summary": r.summary,
+            "timestamp": r.timestamp.isoformat(),
+            "state_after": r.workflow_state_after,
+        } for r in rows],
+    }
+
+
+# ========================= simulated payment (demo) ==========================
+class SimulatePaymentBody(BaseModel):
+    outcome: str = "success"          # "success" | "failure"
+    failure_mode: str = "card_declined"
+
+
+@app.post("/api/opportunities/{opportunity_id}/simulate-payment")
+def simulate_payment_endpoint(opportunity_id: str, body: SimulatePaymentBody,
+                              s=Depends(db), _=Depends(require_admin)):
+    """Complete a pending payment without a provider, for offline demos.
+
+    Uses the same state transitions and the same idempotent outcome booking as a
+    verified webhook. Every resulting record is marked `provider: SIMULATOR` and
+    audited as `SIMULATED_PAYMENT_EVENT`, so a simulated recovery is always
+    distinguishable from one Razorpay actually confirmed.
+    """
+    from backend.app.services.simulated_payments import simulate_payment
+
+    return simulate_payment(s, opportunity_id, body.outcome, body.failure_mode)
+
+
+@app.get("/api/simulation/failure-modes")
+def simulation_failure_modes():
+    from backend.app.services.simulated_payments import SIMULATED_FAILURES
+
+    return {"modes": [{"key": k, "description": v["failure_description"],
+                       "step": v["failure_step"]}
+                      for k, v in SIMULATED_FAILURES.items()]}

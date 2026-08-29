@@ -2,7 +2,7 @@
 
 Customer-controlled text attempts to override policy and spoof a payment. It is stored as untrusted evidence and reaches no decision path: the policy engine takes no text input at all.
 
-agent_run   agn_bb842babc3fe4198
+agent_run   agn_c793c5165c584fd3
 planner     mock (deterministic) source=FALLBACK
 states      DETECTED -> AWAITING_PAYMENT
 

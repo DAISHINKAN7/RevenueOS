@@ -73,7 +73,7 @@
   "optimistic_same_set_reference": {
     "xgboost_isotonic_same_set_ece": 1.0397942619973315e-08
   },
-  "frozen_at": "2026-08-24T18:16:53.289779+00:00",
+  "frozen_at": "2026-08-27T13:46:59.814386+00:00",
   "calibration_protocol": "TRAIN fits base models; CALIBRATION (first 50% of the validation timeline) fits Platt/isotonic; MODEL_SELECTION (second 50%) chooses among raw/Platt/isotonic. No candidate is scored on rows that fitted it. TEST is reporting-only.",
   "protocol_correction_note": "The initial model gate exposed an optimistic calibration-selection procedure because isotonic calibration was evaluated on its fitting partition. The pipeline was corrected by separating calibration fitting from model selection before finalizing the model.",
   "note": "Frozen before any TEST or oracle access."

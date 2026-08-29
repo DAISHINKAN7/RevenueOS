@@ -2,7 +2,7 @@
 
 The language model is unavailable. The deterministic fallback router takes over and the workflow proceeds to a safe disposition, demonstrating that the agent layer is an enhancement rather than a dependency.
 
-agent_run   agn_7ceb2a043d414ac6
+agent_run   agn_8e19ce6ffa4e42df
 planner     broken (deterministic) source=FALLBACK
 states      DETECTED -> AWAITING_PAYMENT
 

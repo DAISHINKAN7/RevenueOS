@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+
+html, body { background: #08090c; color: #e6e9ef; }
+
+/* Hierarchy comes from spacing, surface contrast and type scale — not shadow. */
+.surface { @apply bg-ink-900 border border-ink-700 rounded-xl; }
+.surface-raised { @apply bg-ink-850 border border-ink-700 rounded-xl; }
+.hairline { @apply border-ink-700; }
+
+.label { @apply text-[11px] uppercase tracking-[0.08em] text-muted-dim font-medium; }
+.metric { @apply text-metric font-semibold tabular-nums; }
+.mono { @apply font-mono text-[12px] tracking-tight; }
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #2a303c; border-radius: 6px; border: 3px solid #08090c; }
+
+*:focus-visible { outline: 2px solid #3ba9d4; outline-offset: 2px; border-radius: 4px; }

@@ -2,7 +2,7 @@
 
 Attempt 1 executes and the provider reports a payment-layer failure. The agent re-observes, the context is refreshed with the new evidence, the failure is normalized, and a fresh bounded attempt is planned.
 
-agent_run   agn_65203cb7b3014c76
+agent_run   agn_67310740e8ba4a3a
 planner     mock (deterministic) source=FALLBACK
 states      DETECTED -> AWAITING_PAYMENT
 
@@ -31,7 +31,7 @@ blocked tool calls 0
 replans            1
 planner failures   0
 
-agent_run   agn_58c86b3a76be4755
+agent_run   agn_a19f90ae25b44fb9
 planner     mock (deterministic) source=FALLBACK
 states      PAYMENT_FAILED_RECOVERABLE -> AWAITING_PAYMENT
 

@@ -2,7 +2,7 @@
 
 The planner demands execution while the opportunity is still in DETECTED. The authorization layer refuses the call before it reaches any backend service, and the agent replans onto a permitted step.
 
-agent_run   agn_6831c4b3c1de4c7e
+agent_run   agn_f20144762f0b4f66
 planner     mock (deterministic) source=FALLBACK
 states      DETECTED -> AWAITING_PAYMENT
 

@@ -69,6 +69,13 @@ class Settings(BaseModel):
     razorpay_client: str = Field(default_factory=lambda: os.getenv("RAZORPAY_CLIENT", "mock"))
     razorpay_timeout_seconds: float = 10.0
 
+    # Presentation pacing for the live SSE stream, in milliseconds between
+    # stages. The work is real and already complete when each event fires; this
+    # only spaces the events out so a viewer can follow them. Zero in tests and
+    # CI, so it never affects correctness or timing-sensitive assertions.
+    stream_pacing_ms: int = Field(
+        default_factory=lambda: int(os.getenv("STREAM_PACING_MS", "0")))
+
     merchant_display_name: str = "NovaCart"
     currency: str = "INR"
 

@@ -2,7 +2,7 @@
 
 A high-value opportunity trips the merchant approval threshold. The agent observes AWAITING_APPROVAL and waits; it has no tool that can grant approval to itself.
 
-agent_run   agn_968a1948b0784f80
+agent_run   agn_2a29f4a49afb4b46
 planner     mock (deterministic) source=FALLBACK
 states      DETECTED -> AWAITING_APPROVAL
 

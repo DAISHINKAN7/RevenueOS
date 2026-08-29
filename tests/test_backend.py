@@ -851,3 +851,103 @@ def test_source_parses_under_python_311():
         except SyntaxError as exc:
             failures.append(f"{path}:{exc.lineno} {exc.msg}")
     assert failures == [], "syntax not valid on Python 3.11:\n" + "\n".join(failures)
+
+
+# ------------------------------------------------------ simulated payments
+@needs_model
+@needs_data
+def test_simulated_success_recovers_and_books_once(session):
+    """The offline path must use the same booking guarantee as a webhook."""
+    from backend.app.services.simulated_payments import simulate_payment
+
+    o = make_opportunity(session)
+    o.state = State.AWAITING_PAYMENT.value
+    o.selected_action = "FREE_SHIPPING"
+    session.add(M.RecoveryExecution(
+        execution_id="exe_sim1", opportunity_id=o.id, attempt_number=1,
+        action="FREE_SHIPPING", idempotency_key="k_sim1",
+        execution_provider="SIMULATOR", status="SUBMITTED",
+        amount=Decimal("4869.00")))
+    session.commit()
+
+    r = simulate_payment(session, o.id, "success")
+    assert r["status"] == "recovered" and r["simulated"] is True
+    session.expire_all()
+    assert session.get(M.Opportunity, o.id).state == State.RECOVERED.value
+    assert session.query(M.RecoveryOutcome).filter_by(opportunity_id=o.id).count() == 1
+
+    # Repeating must not double-count, exactly as with a duplicate webhook.
+    again = simulate_payment(session, o.id, "success")
+    assert again["status"] == "already_recovered"
+    assert session.query(M.RecoveryOutcome).filter_by(opportunity_id=o.id).count() == 1
+
+
+@needs_model
+@needs_data
+def test_simulated_failure_is_not_terminal(session):
+    from backend.app.services.simulated_payments import simulate_payment
+
+    o = make_opportunity(session)
+    o.state = State.AWAITING_PAYMENT.value
+    o.selected_action = "FREE_SHIPPING"
+    session.add(M.RecoveryExecution(
+        execution_id="exe_sim2", opportunity_id=o.id, attempt_number=1,
+        action="FREE_SHIPPING", idempotency_key="k_sim2",
+        execution_provider="SIMULATOR", status="SUBMITTED"))
+    session.commit()
+
+    r = simulate_payment(session, o.id, "failure", "card_declined")
+    assert r["state"] == State.PAYMENT_FAILED_RECOVERABLE.value
+    assert r["normalized_reason"] == "CARD_DECLINED"
+    assert session.query(M.PaymentFailureRecord).filter_by(opportunity_id=o.id).count() == 1
+
+
+@needs_model
+@needs_data
+def test_simulated_events_are_marked_as_simulated(session):
+    """Provenance must be recoverable from the audit trail alone."""
+    from backend.app.services.simulated_payments import simulate_payment
+
+    o = make_opportunity(session)
+    o.state = State.AWAITING_PAYMENT.value
+    o.selected_action = "FREE_SHIPPING"
+    session.add(M.RecoveryExecution(
+        execution_id="exe_sim3", opportunity_id=o.id, attempt_number=1,
+        action="FREE_SHIPPING", idempotency_key="k_sim3",
+        execution_provider="SIMULATOR", status="SUBMITTED", amount=Decimal("100")))
+    session.commit()
+    simulate_payment(session, o.id, "success")
+
+    events = session.query(M.AuditEvent).filter_by(opportunity_id=o.id).all()
+    marker = [e for e in events if e.event_type == "SIMULATED_PAYMENT_EVENT"]
+    assert marker, "no simulated-payment marker in the audit trail"
+    assert marker[0].structured_payload.get("provider") == "SIMULATOR"
+    confirmed = [e for e in events if e.event_type == "RECOVERY_CONFIRMED"]
+    assert any(e.structured_payload.get("verified_by_provider") is False
+               for e in confirmed)
+
+
+@needs_model
+@needs_data
+def test_simulation_refused_when_no_payment_pending(session):
+    from backend.app.services.simulated_payments import SimulationError, simulate_payment
+
+    o = make_opportunity(session)   # DETECTED, nothing executed
+    with pytest.raises(SimulationError):
+        simulate_payment(session, o.id, "success")
+
+
+@needs_model
+@needs_data
+def test_unknown_failure_mode_refused(session):
+    from backend.app.services.simulated_payments import SimulationError, simulate_payment
+
+    o = make_opportunity(session)
+    o.state = State.AWAITING_PAYMENT.value
+    session.add(M.RecoveryExecution(
+        execution_id="exe_sim4", opportunity_id=o.id, attempt_number=1,
+        action="FREE_SHIPPING", idempotency_key="k_sim4",
+        execution_provider="SIMULATOR", status="SUBMITTED"))
+    session.commit()
+    with pytest.raises(SimulationError):
+        simulate_payment(session, o.id, "failure", "not_a_real_mode")

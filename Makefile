@@ -4,7 +4,7 @@ PY   ?= python3
 .PHONY: help install data validate test test-fast clean gate phase2 api \
         features train evaluate audit model-gate clean-models \
         seed backend-gate razorpay-gate live-demo retry-demo \
-        adaptive-retry-gate agent-gate agent-run agent-check demo-reset agent-traces planner-compare
+        adaptive-retry-gate agent-gate agent-run agent-check demo-reset agent-traces planner-compare frontend frontend-gate api-demo demo-offline
 
 help:
 	@echo "RevenueOS"
@@ -41,6 +41,12 @@ help:
 	@echo "  make demo-reset           drop and reseed demo opportunities"
 	@echo "  make agent-traces         generate the six agent safety traces"
 	@echo "  make planner-compare      A/B planner quality across providers"
+	@echo ""
+	@echo "  --- Phase 8 (frontend) ---"
+	@echo "  make frontend        run the Next.js dev server on :3000"
+	@echo "  make frontend-gate   typecheck + production build + report"
+	@echo "  make api-demo        API with live-stream pacing enabled (for demos)"
+	@echo "  make demo-offline    run every scenario end to end, no tunnel needed"
 	@echo "  make data-small         quick 4k-session dataset for iteration"
 
 install:
@@ -105,6 +111,12 @@ razorpay-gate:
 adaptive-retry-gate:
 	$(PY) -m scripts.gates adaptive
 
+frontend:
+	cd frontend && npm run dev
+
+frontend-gate:
+	./scripts/frontend_gate.sh
+
 planner-compare:
 	$(PY) -m scripts.planner_compare
 
@@ -136,6 +148,14 @@ retry-demo:
 
 api:
 	$(PY) -m uvicorn backend.app.api:app --reload --port 8000
+
+# Same server, with SSE stages spaced out so the live decision is watchable.
+# Drives all five scenarios to completion using simulated payment confirmation.
+demo-offline:
+	$(PY) -m scripts.demo_offline 0.6
+
+api-demo:
+	STREAM_PACING_MS=350 $(PY) -m uvicorn backend.app.api:app --port 8000
 
 clean:
 	rm -f data/generated/*.parquet data/generated/manifest.json

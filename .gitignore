@@ -5,6 +5,7 @@ venv/
 .env
 .pytest_cache/
 .ipynb_checkpoints/
+.DS_Store
 
 # Generated data + artifacts (reproducible from seed)
 data/generated/*

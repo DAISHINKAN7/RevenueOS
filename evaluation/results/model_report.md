@@ -32,7 +32,7 @@ Model `dcbdeaa11e1f49df` · calibration `none` · simulator `1.1.0` · seed `42`
 | Test hash | `603a48f175ace88c` |
 | Oracle hash | `c81fa26e0f9c92a1` |
 | Oracle access policy | `evaluation_only` |
-| Model frozen at | 2026-08-24T18:16:53.289779+00:00 |
+| Model frozen at | 2026-08-27T13:46:59.814386+00:00 |
 | Leakage audit | PASS (no forbidden columns in feature matrix) |
 
 The model was frozen before any TEST or oracle read. Calibration was fitted on

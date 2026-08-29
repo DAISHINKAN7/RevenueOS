@@ -1,6 +1,6 @@
 # RevenueOS — Agent Safety Gate Report
 
-Generated 2026-08-25T14:53:15.804779+00:00
+Generated 2026-08-27T13:59:05.074596+00:00
 
 Agent `recovery-orchestrator-1.0.0` · authorizer `agent-tool-authorizer-1.0.0` · adaptive rules `adaptive-recovery-rules-1.0.0`
 

@@ -18,6 +18,7 @@ from __future__ import annotations
 import hashlib
 import logging
 import uuid
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from decimal import Decimal, ROUND_HALF_UP
@@ -345,7 +346,22 @@ class RecoveryWorkflow:
         return True
 
     # ---------------------------------------------------------------- analyze
-    def analyze(self, opp: Opportunity) -> dict:
+    def analyze(self, opp: Opportunity, on_event: "Callable[[str, dict], None] | None" = None) -> dict:
+        """Run the decision pipeline.
+
+        `on_event(stage, payload)` is invoked as each stage completes so a
+        caller can stream progress. It is purely observational: the callback
+        cannot influence scoring, economics or policy, and an exception raised
+        inside it is swallowed rather than allowed to affect a financial path.
+        """
+        def emit(stage: str, payload: dict | None = None) -> None:
+            if on_event is None:
+                return
+            try:
+                on_event(stage, payload or {})
+            except Exception:  # noqa: BLE001
+                log.warning("progress_callback_failed", exc_info=False)
+
         # A stranded mid-execution state is reconciled first; otherwise the
         # legal-transition check below would reject an otherwise valid retry.
         self.reconcile_stuck_execution(opp)
@@ -381,9 +397,19 @@ class RecoveryWorkflow:
         retry = build_retry_context(self.s, opp)
         actions = filter_eligible(eligible_actions(ctx), retry)
         econ_base = self._econ(ctx)
+        emit("analysis_started", {
+            "attempt": attempt, "eligible_actions": [a.value for a in actions],
+            "opportunity_type": ctx.get("opportunity_type"),
+            "revenue_at_risk": float(opp.revenue_at_risk)})
 
         # --- score ---------------------------------------------------------
-        preds = self.predictor.score_candidate_actions(ctx, [a.value for a in actions])
+        preds = []
+        for _a in actions:
+            _p = self.predictor.score_action(ctx, _a.value)
+            preds.append(_p)
+            emit("action_scored", {
+                "action": _p.action, "probability": _p.probability,
+                "valid": _p.valid})
         for p in preds:
             self.s.add(ActionPrediction(
                 opportunity_id=opp.id, attempt_number=attempt, action=p.action,
@@ -460,6 +486,7 @@ class RecoveryWorkflow:
                 expected_cancellation_loss=money(v.expected_cancellation_loss)))
 
         candidates.sort(key=lambda c: (-c.incremental_expected_value, c.action))
+        emit("actions_ranked", {"ranking": [c.as_dict() for c in candidates]})
         for rank, c in enumerate(candidates, start=1):
             self.s.add(ActionFinancialEvaluation(
                 opportunity_id=opp.id, attempt_number=attempt, action=c.action,
@@ -538,6 +565,12 @@ class RecoveryWorkflow:
                     best, decision = alt, alt_dec
                     break
 
+        emit("policy_evaluated", {
+            "action": best.action, "decision": decision.status.value,
+            "reason_code": decision.reason_code,
+            "maximum_authorized_downside": float(decision.maximum_authorized_downside),
+            "rules": [r.as_dict() for r in decision.triggered_rules]})
+
         pe = PolicyEvaluation(
             opportunity_id=opp.id, attempt_number=attempt, action=best.action,
             policy_version=decision.policy_version, decision=decision.status.value,
@@ -570,6 +603,10 @@ class RecoveryWorkflow:
         else:
             transition(self.s, opp, State.STOPPED, audit, "WORKFLOW_STOPPED",
                        f"stopped by {decision.reason_code}", decision.as_dict())
+
+        emit("decision_complete", {
+            "selected_action": best.action, "state": opp.state,
+            "decision": decision.status.value})
 
         return {
             "opportunity_id": opp.id,

@@ -2,7 +2,7 @@
 
 Detect, diagnose, score, policy-gate, execute, then wait for the external payment. Every tool call is proposed, authorized against the current state, then executed.
 
-agent_run   agn_645bf76e82014f18
+agent_run   agn_e0a9829aa97c430a
 planner     mock (deterministic) source=FALLBACK
 states      DETECTED -> AWAITING_PAYMENT
 
