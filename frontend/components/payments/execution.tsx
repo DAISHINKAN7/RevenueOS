@@ -102,6 +102,59 @@ export function RetryComparison({ executions, failureReason }: {
 }
 
 /**
+ * Chooses how the next execution runs. Offline is the default so the whole
+ * demo works with no tunnel and no credentials; live creates a real Test Mode
+ * order. Locked once an execution exists, so the record of how money moved
+ * cannot be rewritten after the fact.
+ */
+function ModeSelector({ opportunityId, mode, onChange }: {
+  opportunityId: string; mode: string; onChange: () => void;
+}) {
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function set(next: "SIMULATOR" | "RAZORPAY_TEST") {
+    if (next === mode) return;
+    setBusy(true); setError(null);
+    try {
+      const { api } = await import("@/lib/api");
+      await api.setExecutionMode(opportunityId, next);
+      onChange();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Could not change mode");
+    } finally { setBusy(false); }
+  }
+
+  const options = [
+    { key: "SIMULATOR" as const, label: "Offline",
+      hint: "Completes locally · no tunnel needed" },
+    { key: "RAZORPAY_TEST" as const, label: "Razorpay Test Mode",
+      hint: "Real Test Mode order · needs a webhook tunnel" },
+  ];
+
+  return (
+    <div className="mb-4 border-b border-ink-700 pb-4">
+      <div className="label mb-2">Execution mode</div>
+      <div className="flex flex-wrap gap-2">
+        {options.map((o) => (
+          <button key={o.key} onClick={() => set(o.key)} disabled={busy}
+            className={`flex-1 rounded-md border px-3 py-2 text-left transition-colors
+              disabled:opacity-50 ${
+                mode === o.key
+                  ? "border-accent/40 bg-accent-soft"
+                  : "border-ink-600 hover:bg-ink-800"}`}>
+            <div className={`text-[12px] font-medium ${
+              mode === o.key ? "text-accent" : "text-[#e6e9ef]"}`}>{o.label}</div>
+            <div className="mt-0.5 text-[11px] text-muted-dim">{o.hint}</div>
+          </button>
+        ))}
+      </div>
+      {error && <p className="mt-2 text-[11px] text-neg">{error}</p>}
+    </div>
+  );
+}
+
+/**
  * Offline demo control. Drives the same reconciliation path a webhook uses, but
  * every record it produces is marked as simulated — the UI says so, and so does
  * the audit trail. It exists because a verified webhook needs a public tunnel,
@@ -177,6 +230,8 @@ export function ExecutionPanel({ detail, onRefresh }: {
     try {
       const { api } = await import("@/lib/api");
       const res = await api.execute(opportunity.opportunity_id);
+      // Offline executions never return a checkout payload, so the Razorpay
+      // modal is never opened and the simulated panel takes over instead.
       if (res.checkout?.razorpay_order_id) {
         await launchCheckout(res.checkout);
         setSubmitted(true);
@@ -208,6 +263,8 @@ export function ExecutionPanel({ detail, onRefresh }: {
     <Card title="Execution and payment" actions={<TestModeBadge />}>
       {canExecute && (
         <div className="mb-4 rounded-lg border border-ink-700 bg-ink-850 p-4">
+          <ModeSelector opportunityId={opportunity.opportunity_id}
+            mode={opportunity.execution_mode} onChange={onRefresh} />
           <div className="label mb-2.5">Confirm before executing</div>
           <dl className="grid grid-cols-2 gap-x-6 gap-y-2 text-[12px] sm:grid-cols-4">
             <div><dt className="text-muted-dim">Action</dt>

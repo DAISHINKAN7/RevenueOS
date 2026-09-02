@@ -679,3 +679,52 @@ def simulation_failure_modes():
     return {"modes": [{"key": k, "description": v["failure_description"],
                        "step": v["failure_step"]}
                       for k, v in SIMULATED_FAILURES.items()]}
+
+
+# ---------------------------------------------------- execution mode switch
+class ExecutionModeBody(BaseModel):
+    mode: str          # "SIMULATOR" | "RAZORPAY_TEST"
+
+
+@app.post("/api/opportunities/{opportunity_id}/execution-mode")
+def set_execution_mode(opportunity_id: str, body: ExecutionModeBody,
+                       s=Depends(db), _=Depends(require_admin)):
+    """Choose how the next execution is carried out.
+
+    SIMULATOR completes locally and needs no tunnel; RAZORPAY_TEST creates a
+    real Test Mode order. The mode is locked once an execution exists for the
+    current attempt, so a demo cannot retroactively change how money moved.
+    """
+    from backend.app.services.workflow import AuditRecorder
+
+    if body.mode not in ("SIMULATOR", "RAZORPAY_TEST"):
+        raise HTTPException(400, detail={"error_code": "INVALID_EXECUTION_MODE"})
+
+    o = s.get(Opportunity, opportunity_id)
+    if o is None:
+        raise HTTPException(404, detail={"error_code": "NOT_FOUND"})
+
+    existing = s.execute(
+        select(RecoveryExecution).where(
+            RecoveryExecution.opportunity_id == o.id,
+            RecoveryExecution.attempt_number == o.current_attempt)
+    ).scalars().first()
+    if existing is not None:
+        raise HTTPException(409, detail={
+            "error_code": "EXECUTION_ALREADY_CREATED",
+            "message": "mode cannot change after an execution exists for this attempt"})
+
+    if body.mode == "RAZORPAY_TEST" and not settings.razorpay_configured:
+        raise HTTPException(409, detail={
+            "error_code": "RAZORPAY_NOT_CONFIGURED",
+            "message": "Razorpay Test Mode credentials are not configured"})
+
+    previous = o.execution_mode
+    o.execution_mode = body.mode
+    AuditRecorder(s, o).record(
+        "EXECUTION_MODE_CHANGED",
+        f"execution mode set to {body.mode}",
+        {"previous": previous, "mode": body.mode})
+    s.commit()
+    return {"opportunity_id": o.id, "execution_mode": o.execution_mode,
+            "razorpay_available": settings.razorpay_configured}

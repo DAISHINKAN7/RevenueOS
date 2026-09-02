@@ -86,6 +86,11 @@ export const api = {
       };
     }>(`/api/opportunities/${id}/execute`, { method: "POST" }),
 
+  setExecutionMode: (id: string, mode: "SIMULATOR" | "RAZORPAY_TEST") =>
+    request<{ opportunity_id: string; execution_mode: string; razorpay_available: boolean }>(
+      `/api/opportunities/${id}/execution-mode`,
+      { method: "POST", body: JSON.stringify({ mode }) }),
+
   /** Offline demo only. Clearly distinguished from a verified provider event. */
   simulatePayment: (id: string, outcome: "success" | "failure",
                     failureMode = "card_declined") =>

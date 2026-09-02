@@ -201,6 +201,12 @@ def pick_cases(test: pd.DataFrame) -> list[tuple[str, pd.Series, str]]:
     return cases
 
 
+# Every scenario seeds in SIMULATOR mode so the whole demo runs with no tunnel
+# and no credentials. Switch an individual opportunity to RAZORPAY_TEST from the
+# UI (or the execution-mode endpoint) when a live payment is wanted.
+DEFAULT_EXECUTION_MODE = "SIMULATOR"
+
+
 def seed(reset: bool = True) -> list[dict]:
     init_db(drop=reset)
     test = pd.read_parquet(PROC / "test_features.parquet")
@@ -217,7 +223,7 @@ def seed(reset: bool = True) -> list[dict]:
             detected_at=utcnow() - timedelta(minutes=float(row.get("minutes_since_event", 10))),
             state=State.DETECTED.value,
             workflow_version=WORKFLOW_VERSION,
-            execution_mode=mode,
+            execution_mode=DEFAULT_EXECUTION_MODE,
             revenue_at_risk=round(float(row["cart_value"]), 2),
             contribution_margin_at_risk=round(float(row["base_contribution_margin"]), 2),
             current_attempt=1,
@@ -235,7 +241,9 @@ def seed(reset: bool = True) -> list[dict]:
             state_after=State.DETECTED.value)
         created.append({"scenario": label, "opportunity_id": opp.id,
                         "cart_value": float(row["cart_value"]),
-                        "type": opp.opportunity_type, "execution_mode": mode})
+                        "type": opp.opportunity_type,
+                        "execution_mode": DEFAULT_EXECUTION_MODE,
+                        "razorpay_capable": mode == "RAZORPAY_TEST"})
 
     session.commit()
     session.close()
