@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/assets/hero.svg" alt="RevenueOS — Autonomous Revenue Recovery for Intelligent Commerce" width="100%">
+<img src="assets/hero.svg" alt="RevenueOS — Autonomous Revenue Recovery for Intelligent Commerce" width="100%">
 
 <br/><br/>
 
@@ -36,7 +36,7 @@
 
 </div>
 
-<img src="docs/assets/decision.svg" alt="Decision receipt: the highest-converting action has negative incremental value" width="100%">
+<img src="assets/decision.svg" alt="Decision receipt: the highest-converting action has negative incremental value" width="100%">
 
 The highest-converting action has **negative incremental value**. Every
 conversion-optimising recovery product on the market fires it anyway.
@@ -54,7 +54,7 @@ divergence is the product.
 
 </div>
 
-<img src="docs/assets/architecture.svg" alt="RevenueOS system architecture" width="100%">
+<img src="assets/architecture.svg" alt="RevenueOS system architecture" width="100%">
 
 <br/>
 
@@ -82,7 +82,7 @@ divergence is the product.
 
 </div>
 
-<img src="docs/assets/authority.svg" alt="Authority matrix" width="100%">
+<img src="assets/authority.svg" alt="Authority matrix" width="100%">
 
 <details>
 <summary><b>Why prompt injection structurally cannot work here</b></summary>
@@ -159,7 +159,7 @@ EV(a) = P(recovery | context, a)
 </td></tr>
 </table>
 
-<img src="docs/assets/economics.svg" alt="Flat 10 percent converts better and earns less than doing nothing" width="100%">
+<img src="assets/economics.svg" alt="Flat 10 percent converts better and earns less than doing nothing" width="100%">
 
 ---
 
@@ -335,7 +335,7 @@ development, which is how the deterministic fallback planner earned its existenc
 
 ### Adaptive retry
 
-<img src="docs/assets/retry.svg" alt="Adaptive retry: new evidence reclassifies the blocker and the decision changes" width="100%">
+<img src="assets/retry.svg" alt="Adaptive retry: new evidence reclassifies the blocker and the decision changes" width="100%">
 
 ---
 
