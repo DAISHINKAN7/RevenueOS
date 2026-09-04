@@ -1,37 +1,42 @@
 [
   {
     "scenario": "demo1_free_shipping_beats_discount",
-    "opportunity_id": "OPP-DEMO1-b7ec04",
+    "opportunity_id": "OPP-DEMO1-b5daf0",
     "cart_value": 4869.0,
     "type": "CHECKOUT_ABANDONMENT",
-    "execution_mode": "RAZORPAY_TEST"
+    "execution_mode": "SIMULATOR",
+    "razorpay_capable": true
   },
   {
     "scenario": "demo2_do_nothing",
-    "opportunity_id": "OPP-DEMO2-97308e",
+    "opportunity_id": "OPP-DEMO2-3eedad",
     "cart_value": 469.0,
     "type": "CHECKOUT_ABANDONMENT",
-    "execution_mode": "SIMULATOR"
+    "execution_mode": "SIMULATOR",
+    "razorpay_capable": false
   },
   {
     "scenario": "demo3_payment_failure_recovery",
-    "opportunity_id": "OPP-DEMO3-3623c6",
+    "opportunity_id": "OPP-DEMO3-1f6089",
     "cart_value": 2939.0,
     "type": "PAYMENT_FAILURE",
-    "execution_mode": "RAZORPAY_TEST"
+    "execution_mode": "SIMULATOR",
+    "razorpay_capable": true
   },
   {
     "scenario": "demo4_high_value_approval",
-    "opportunity_id": "OPP-DEMO4-df3883",
+    "opportunity_id": "OPP-DEMO4-5ca319",
     "cart_value": 55116.0,
     "type": "PAYMENT_FAILURE",
-    "execution_mode": "SIMULATOR"
+    "execution_mode": "SIMULATOR",
+    "razorpay_capable": false
   },
   {
     "scenario": "demo5_policy_rejection",
-    "opportunity_id": "OPP-DEMO5-0e798b",
+    "opportunity_id": "OPP-DEMO5-728ea9",
     "cart_value": 19418.0,
     "type": "CHECKOUT_ABANDONMENT",
-    "execution_mode": "SIMULATOR"
+    "execution_mode": "SIMULATOR",
+    "razorpay_capable": false
   }
 ]

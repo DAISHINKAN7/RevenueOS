@@ -1,0 +1,175 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" width="1200" height="720" role="img" aria-label="RevenueOS system architecture: a chain of narrowing authority" xmlns:c2pa="http://c2pa.org/manifest"><metadata><c2pa:manifest>AAAWgmp1bWIAAAAeanVtZGMycGEAEQAQgAAAqgA4m3EDYzJwYQAAABZcanVtYgAAAEdqdW1kYzJtYQARABCAAACqADibcQN1cm46YzJwYTowNjNlZGZmNC02YjcwLTQ4ZGYtOGUzMi1kZTRjYzVmNWVmMDMAAAADl2p1bWIAAAApanVtZGMyYXMAEQAQgAAAqgA4m3EDYzJwYS5hc3NlcnRpb25zAAAAALxqdW1iAAAARGp1bWRjYm9yABEAEIAAAKoAOJtxE2MycGEuaW5ncmVkaWVudC52MwAAAAAYYzJzaAi2M1rBa9cM2zvWbswMhH8AAABwY2JvcqNpZGM6Zm9ybWF0bWltYWdlL3N2Zyt4bWxqaW5zdGFuY2VJRHgseG1wOmlpZDoxNzJmYWYyNy1jODdmLTRmYWYtYjk1ZS0yMzM0ZTEyMTkzZmZscmVsYXRpb25zaGlwaHBhcmVudE9mAAAB4mp1bWIAAABBanVtZGNib3IAEQAQgAAAqgA4m3ETYzJwYS5hY3Rpb25zLnYyAAAAABhjMnNoefoyxj/StzSqmfluI7wc+AAAAZljYm9yomdhY3Rpb25zgqJmYWN0aW9ua2MycGEub3BlbmVkanBhcmFtZXRlcnOha2luZ3JlZGllbnRzgaJjdXJseC1zZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmluZ3JlZGllbnQudjNkaGFzaFgg8+G51Y40+d0IE5N3XOZy92DHiKaaGUE9jt6iJFYJdN+kZmFjdGlvbngdY29tLmFudGhyb3BpYy5jbGF1ZGUucHJvdmlkZWRqcGFyYW1ldGVyc6F4H2NvbS5hbnRocm9waWMub3JpZ2luLWNvbmZpZGVuY2VndW5rbm93bmtkZXNjcmlwdGlvbnhmQ2xhdWRlIHByb3ZpZGVkIHRoaXMgZmlsZSBhdCB0aGUgcmVxdWVzdCBvZiBhIHVzZXIgYW5kIG1heSBoYXZlIGNyZWF0ZWQgb3IgbW9kaWZpZWQgdGhlIGZpbGUgY29udGVudHMubXNvZnR3YXJlQWdlbnShZG5hbWVmQ2xhdWRlcmFsbEFjdGlvbnNJbmNsdWRlZPUAAADIanVtYgAAAEBqdW1kY2JvcgARABCAAACqADibcRNjMnBhLmhhc2guZGF0YQAAAAAYYzJzaO3kPad8Rvsgoe/5mj/eH1MAAACAY2JvcqVjYWxnZnNoYTI1NmNwYWRNAAAAAAAAAAAAAAAAAGRoYXNoWCDlD/x2ca/lkZnsBj2bEYwKc9zsMaSOE95WBTNkvbB3PGRuYW1lbmp1bWJmIG1hbmlmZXN0amV4Y2x1c2lvbnOBomVzdGFydBjuZmxlbmd0aBkeBAAAAj5qdW1iAAAAJ2p1bWRjMmNsABEAEIAAAKoAOJtxA2MycGEuY2xhaW0udjIAAAACD2Nib3KlY2FsZ2ZzaGEyNTZpc2lnbmF0dXJleE1zZWxmI2p1bWJmPS9jMnBhL3VybjpjMnBhOjA2M2VkZmY0LTZiNzAtNDhkZi04ZTMyLWRlNGNjNWY1ZWYwMy9jMnBhLnNpZ25hdHVyZWppbnN0YW5jZUlEeCx4bXA6aWlkOjkzNzQ3ZmVkLTEwYWQtNDJmYy1iNWMzLWNjMzMxZTRlMzYzYXJjcmVhdGVkX2Fzc2VydGlvbnODomN1cmx4LXNlbGYjanVtYmY9YzJwYS5hc3NlcnRpb25zL2MycGEuaW5ncmVkaWVudC52M2RoYXNoWCDz4bnVjjT53QgTk3dc5nL3YMeIppoZQT2O3qIkVgl036JjdXJseCpzZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmFjdGlvbnMudjJkaGFzaFggaa8z+cyWN465xxsNuZXs6DwU/n39yULnramJiNnQPz6iY3VybHgpc2VsZiNqdW1iZj1jMnBhLmFzc2VydGlvbnMvYzJwYS5oYXNoLmRhdGFkaGFzaFggjruCnxHnXI/acnJBtYNC/hKzSEChPr3dVzPHVvb1aJF0Y2xhaW1fZ2VuZXJhdG9yX2luZm+jZG5hbWVvQW50aHJvcGljIEZpbGVzZ3ZlcnNpb25lMS4wLjBrc3BlY1ZlcnNpb25lMi40LjAAABA4anVtYgAAAChqdW1kYzJjcwARABCAAACqADibcQNjMnBhLnNpZ25hdHVyZQAAABAIY2JvctKEWQISogEmGCFZAgowggIGMIIBjaADAgECAhRA5aAK7sI50L64g/oGQgU9Z1UTADAKBggqhkjOPQQDAzBJMRcwFQYDVQQKEw5BbnRocm9waWMsIFBCQzEuMCwGA1UEAxMlQW50aHJvcGljIENvbnRlbnQgQ3JlZGVudGlhbHMgUm9vdCBDQTAeFw0yNjA4MDcxODQzNTZaFw0yODA4MDYxOTQzNTZaMEQxFzAVBgNVBAoTDkFudGhyb3BpYywgUEJDMSkwJwYDVQQDEyBBbnRocm9waWMgQ2xhdWRlIENvbnRlbnQgU2lnbmluZzBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABJh6CmvLUBgFFNU0vUKlOVtE6djd17L5SuwX0LemFisBM3dkd/3cyjxFA3Qo5S46fX0/ihY0VZ7mfb9KF703t5OjWDBWMA4GA1UdDwEB/wQEAwIHgDAVBgNVHSUEDjAMBgorBgEEAYPoXgIBMAwGA1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAUzlHiBIFOZFsj+OPEz5o+nMHXXMIwCgYIKoZIzj0EAwMDZwAwZAIwMXMdFJ4BetLLVY7ORuE9noqbbAZOZn/aArXyTwFAZfKrPzxF2vPoJNf1+UCdg1XGAjBwX1zd9WGqYkqmL5SFqw1QySjr1zJfpJM9+1rdDwSPLMOPOjKuiXjoU/pUUeG9RwmhY3BhZFkNngAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPZYQCFGFddgcI8Q8B4oVJUlY+GwqwdrCmXvuKLOWTW00i0oBZpm1+Lpyq+43O6F/Lyvs12qyHJbH4CU450tXvqtQCo=</c2pa:manifest></metadata>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#4A5C7E"/>
+    </marker>
+    <marker id="arg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#34D399"/>
+    </marker>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#F87171"/>
+    </marker>
+    <marker id="ary" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#FBBF24"/>
+    </marker>
+    <pattern id="g2" width="34" height="34" patternUnits="userSpaceOnUse">
+      <path d="M34 0H0V34" fill="none" stroke="#182338" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="720" rx="14" fill="#0B1120"/>
+  <rect width="1200" height="720" rx="14" fill="url(#g2)"/>
+  <rect x="0.5" y="0.5" width="1199" height="719" rx="14" fill="none" stroke="#243352"/>
+
+  <text x="36" y="42" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="12" letter-spacing="2.6" fill="#6B7B99">SYSTEM ARCHITECTURE · A CHAIN OF NARROWING AUTHORITY</text>
+
+  <!-- ============ SIGNALS ============ -->
+  <g transform="translate(36,70)">
+    <rect width="228" height="150" rx="11" fill="#0E1626" stroke="#243352"/>
+    <text x="16" y="26" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10.5" letter-spacing="1.8" fill="#6B7B99">SIGNALS</text>
+    <g font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="12.5" fill="#B4C2D9">
+      <rect x="16" y="40" width="196" height="30" rx="7" fill="#131E33"/><text x="30" y="60">checkout abandonment</text>
+      <rect x="16" y="76" width="196" height="30" rx="7" fill="#131E33"/><text x="30" y="96">payment failure</text>
+      <rect x="16" y="112" width="196" height="30" rx="7" fill="#131E33"/><text x="30" y="132">Razorpay webhooks</text>
+    </g>
+  </g>
+
+  <!-- detect / diagnose / candidates -->
+  <g transform="translate(300,70)">
+    <rect width="248" height="150" rx="11" fill="#0E1626" stroke="#243352"/>
+    <text x="16" y="26" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10.5" letter-spacing="1.8" fill="#6B7B99">INGEST</text>
+    <g font-family="ui-monospace,SFMono-Regular,Menlo,monospace" fill="#E6EDF7">
+      <text x="16" y="58" font-size="13" font-weight="700">DETECT</text><text x="94" y="58" font-size="11.5" fill="#6B7B99">frozen context snapshot</text>
+      <text x="16" y="90" font-size="13" font-weight="700">DIAGNOSE</text><text x="106" y="90" font-size="11.5" fill="#6B7B99">→ blocker class</text>
+      <text x="16" y="122" font-size="13" font-weight="700">CANDIDATES</text><text x="124" y="122" font-size="11.5" fill="#6B7B99">closed action space</text>
+    </g>
+  </g>
+
+  <path d="M268 145 H296" stroke="#4A5C7E" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <!-- AGENT box top right -->
+  <g transform="translate(584,70)">
+    <rect width="580" height="150" rx="11" fill="#1A1608" stroke="#FBBF24" stroke-opacity="0.42"/>
+    <text x="16" y="26" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10.5" letter-spacing="1.8" fill="#B99524">AGENT LAYER · OPTIONAL · BOUNDED</text>
+    <g font-family="ui-monospace,SFMono-Regular,Menlo,monospace">
+      <rect x="16" y="42" width="168" height="90" rx="8" fill="#100E06" stroke="#3E3416"/>
+      <text x="30" y="66" font-size="12.5" fill="#F5E4B0" font-weight="700">LLM planner</text>
+      <text x="30" y="86" font-size="11" fill="#8A7B48">Groq · OpenRouter</text>
+      <text x="30" y="102" font-size="11" fill="#8A7B48">· Ollama</text>
+      <text x="30" y="122" font-size="11" fill="#8A7B48">picks next tool only</text>
+
+      <rect x="200" y="42" width="168" height="90" rx="8" fill="#100E06" stroke="#3E3416"/>
+      <text x="214" y="66" font-size="12.5" fill="#F5E4B0" font-weight="700">fallback planner</text>
+      <text x="214" y="86" font-size="11" fill="#8A7B48">deterministic</text>
+      <text x="214" y="106" font-size="11" fill="#8A7B48">system runs with</text>
+      <text x="214" y="122" font-size="11" fill="#8A7B48">zero LLM</text>
+
+      <rect x="384" y="42" width="180" height="90" rx="8" fill="#1E0E12" stroke="#F87171" stroke-opacity="0.45"/>
+      <text x="398" y="66" font-size="12.5" fill="#F6C7C7" font-weight="700">ToolAuthorizer</text>
+      <text x="398" y="86" font-size="11" fill="#A5707A">state → allowed tools</text>
+      <text x="398" y="106" font-size="11" fill="#A5707A">no tool accepts a</text>
+      <text x="398" y="122" font-size="11" fill="#A5707A">monetary argument</text>
+
+      <path d="M188 87 H196" stroke="#FBBF24" stroke-opacity="0.6" stroke-width="1.5"/>
+      <path d="M372 87 H380" stroke="#FBBF24" stroke-opacity="0.6" stroke-width="1.5" marker-end="url(#ary)"/>
+    </g>
+  </g>
+  <path d="M770 224 V252 H470 V228" stroke="#FBBF24" stroke-opacity="0.55" stroke-width="1.5" stroke-dasharray="5 4" fill="none" marker-end="url(#ary)"/>
+  <text x="786" y="248" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10.5" fill="#8A7B48">may only call permitted tools</text>
+
+  <!-- ============ THE CHAIN ============ -->
+  <!-- ML -->
+  <g transform="translate(36,286)">
+    <rect width="352" height="128" rx="11" fill="#0A1930" stroke="#3B82F6" stroke-opacity="0.5"/>
+    <text x="18" y="26" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10.5" letter-spacing="1.8" fill="#6E9AE0">① ML · PREDICTS</text>
+    <text x="18" y="56" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="14.5" fill="#DBEAFE" font-weight="700">RecoveryPredictor</text>
+    <text x="18" y="78" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="12" fill="#8FAFD9">XGBoost · action-conditioned</text>
+    <text x="18" y="98" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="12" fill="#8FAFD9">P(recovery | context, action)</text>
+    <line x1="18" y1="108" x2="334" y2="108" stroke="#1D3557"/>
+    <text x="18" y="122" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11" fill="#5B7BA8">cannot rank · price · decide · execute</text>
+  </g>
+
+  <!-- ECON -->
+  <g transform="translate(424,286)">
+    <rect width="352" height="128" rx="11" fill="#08221A" stroke="#34D399" stroke-opacity="0.5"/>
+    <text x="18" y="26" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10.5" letter-spacing="1.8" fill="#54B894">② ECONOMICS · RANKS</text>
+    <text x="18" y="56" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="14.5" fill="#D1FAE5" font-weight="700">FinancialEngine</text>
+    <text x="18" y="78" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="12" fill="#86C7AC">EV(a) · ΔEV(a) vs DO_NOTHING</text>
+    <text x="18" y="98" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="12" fill="#86C7AC">ranked on incremental value</text>
+    <line x1="18" y1="108" x2="334" y2="108" stroke="#1A4234"/>
+    <text x="18" y="122" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11" fill="#4E8770">sees no model · sees no free text</text>
+  </g>
+
+  <!-- POLICY -->
+  <g transform="translate(812,286)">
+    <rect width="352" height="128" rx="11" fill="#261015" stroke="#F87171" stroke-opacity="0.5"/>
+    <text x="18" y="26" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10.5" letter-spacing="1.8" fill="#D08A8A">③ POLICY · AUTHORIZES</text>
+    <text x="18" y="56" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="14.5" fill="#FEE2E2" font-weight="700">PolicyEngine</text>
+    <text x="18" y="78" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="12" fill="#D6A0A0">deterministic · per-rule record</text>
+    <text x="18" y="98" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="12" fill="#D6A0A0">input · threshold · reason</text>
+    <line x1="18" y1="108" x2="334" y2="108" stroke="#4A2027"/>
+    <text x="18" y="122" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11" fill="#A5707A">accepts no text parameter at all</text>
+  </g>
+
+  <path d="M392 350 H418" stroke="#4A5C7E" stroke-width="1.8" marker-end="url(#ar)"/>
+  <path d="M780 350 H806" stroke="#4A5C7E" stroke-width="1.8" marker-end="url(#ar)"/>
+  <path d="M212 226 V282" stroke="#4A5C7E" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <!-- three verdicts -->
+  <g transform="translate(812,438)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">
+    <rect width="112" height="30" rx="7" fill="#0F2A20" stroke="#34D399" stroke-opacity="0.55"/>
+    <text x="56" y="20" font-size="11.5" fill="#6EE7B7" text-anchor="middle">PASS</text>
+
+    <g transform="translate(122,0)">
+      <rect width="130" height="30" rx="7" fill="#241C06" stroke="#FBBF24" stroke-opacity="0.55"/>
+      <text x="65" y="20" font-size="11.5" fill="#FDE68A" text-anchor="middle">REQUIRE_APPROVAL</text>
+    </g>
+    <g transform="translate(262,0)">
+      <rect width="90" height="30" rx="7" fill="#261015" stroke="#F87171" stroke-opacity="0.55"/>
+      <text x="45" y="20" font-size="11.5" fill="#FCA5A5" text-anchor="middle">REJECT</text>
+    </g>
+  </g>
+  <path d="M988 418 V434" stroke="#4A5C7E" stroke-width="1.5"/>
+  <path d="M868 428 H1108" stroke="#4A5C7E" stroke-width="1.5"/>
+  <path d="M868 428 V434" stroke="#34D399" stroke-width="1.5" marker-end="url(#arg)"/>
+  <path d="M999 428 V434" stroke="#FBBF24" stroke-width="1.5" marker-end="url(#ary)"/>
+  <path d="M1119 428 V434" stroke="#F87171" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- EXECUTOR -->
+  <g transform="translate(36,506)">
+    <rect width="352" height="120" rx="11" fill="#0E1626" stroke="#243352"/>
+    <text x="18" y="26" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10.5" letter-spacing="1.8" fill="#6B7B99">④ EXECUTOR</text>
+    <text x="18" y="54" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="13" fill="#E6EDF7">idempotency key committed</text>
+    <text x="18" y="74" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="13" fill="#FBBF24" font-weight="700">BEFORE any external call</text>
+    <g font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11.5">
+      <rect x="18" y="86" width="150" height="24" rx="6" fill="#131E33"/><text x="32" y="102" fill="#93B4F5">Razorpay Test Mode</text>
+      <rect x="178" y="86" width="140" height="24" rx="6" fill="#131E33"/><text x="192" y="102" fill="#8899B3">Simulator</text>
+    </g>
+  </g>
+
+  <!-- VERIFY -->
+  <g transform="translate(424,506)">
+    <rect width="352" height="120" rx="11" fill="#170E2E" stroke="#A78BFA" stroke-opacity="0.5"/>
+    <text x="18" y="26" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10.5" letter-spacing="1.8" fill="#A08BD0">⑤ WEBHOOKS · VERIFY</text>
+    <text x="18" y="54" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="14.5" fill="#EDE4FE" font-weight="700">WebhookReconciler</text>
+    <text x="18" y="76" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="12" fill="#B4A0DC">HMAC-SHA256 over raw bytes</text>
+    <text x="18" y="94" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="12" fill="#B4A0DC">event-id dedup · semantic ordering</text>
+    <text x="18" y="112" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11" fill="#7E68A8">the browser callback is never trusted</text>
+  </g>
+
+  <!-- RECORD -->
+  <g transform="translate(812,506)">
+    <rect width="352" height="120" rx="11" fill="#0E1626" stroke="#243352"/>
+    <text x="18" y="26" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10.5" letter-spacing="1.8" fill="#6B7B99">⑥ AUDIT · RECORDS</text>
+    <text x="18" y="54" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="14.5" fill="#E6EDF7" font-weight="700">audit_events</text>
+    <text x="18" y="76" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="12" fill="#8899B3">append-only · sequenced · UNIQUE</text>
+    <text x="18" y="94" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="12" fill="#8899B3">actor · state before / after</text>
+    <text x="18" y="112" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11" fill="#5D6B85">model + policy version in force at the time</text>
+  </g>
+
+  <path d="M868 468 V492 H240 V502" stroke="#34D399" stroke-opacity="0.7" stroke-width="1.6" fill="none" marker-end="url(#arg)"/>
+  <path d="M392 566 H418" stroke="#4A5C7E" stroke-width="1.8" marker-end="url(#ar)"/>
+  <path d="M780 566 H806" stroke="#4A5C7E" stroke-width="1.8" marker-end="url(#ar)"/>
+
+  <text x="600" y="678" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="12" fill="#6B7B99" text-anchor="middle">each stage can only reduce what the next is allowed to do · nothing downstream widens what came before</text>
+</svg>
