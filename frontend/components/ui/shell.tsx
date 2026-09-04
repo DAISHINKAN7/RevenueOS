@@ -4,7 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
-  Activity, ClipboardList, LayoutDashboard, ScrollText, Settings, ShieldCheck,
+  Activity, ClipboardList, Handshake, LayoutDashboard, ScrollText, Settings,
+  ShieldCheck,
 } from "lucide-react";
 import { api } from "@/lib/api";
 import type { HealthStatus } from "@/lib/types";
@@ -14,6 +15,7 @@ const NAV = [
   { href: "/opportunities", label: "Opportunities", icon: ClipboardList },
   { href: "/evaluation", label: "Evaluation", icon: Activity },
   { href: "/agent", label: "Agent", icon: ShieldCheck },
+  { href: "/commerce", label: "Agentic Commerce", icon: Handshake },
   { href: "/audit", label: "Audit", icon: ScrollText },
   { href: "/settings", label: "Settings", icon: Settings },
 ];

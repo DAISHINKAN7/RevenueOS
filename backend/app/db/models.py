@@ -327,7 +327,14 @@ def reset_sqlite_files(url: str | None = None) -> None:
             f.unlink()
 
 
+# Importing the negotiation tables here registers them on Base.metadata
+# so init_db() creates them with no migration step.
+def _register_commerce_models() -> None:
+    from backend.app.db import commerce_models  # noqa: F401
+
+
 def init_db(drop: bool = False) -> None:
+    _register_commerce_models()
     eng = get_engine()
     if drop:
         try:

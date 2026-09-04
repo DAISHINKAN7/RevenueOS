@@ -728,3 +728,9 @@ def set_execution_mode(opportunity_id: str, body: ExecutionModeBody,
     s.commit()
     return {"opportunity_id": o.id, "execution_mode": o.execution_mode,
             "razorpay_available": settings.razorpay_configured}
+
+# ------------------------------------------------- agentic commerce
+# Track 01. Additive: no existing route changes behaviour.
+from backend.app.api_commerce import router as agent_commerce_router  # noqa: E402
+
+app.include_router(agent_commerce_router)

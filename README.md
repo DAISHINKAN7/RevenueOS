@@ -1,192 +1,1313 @@
-# RevenueOS
+<div align="center">
 
-**Autonomous Revenue Recovery for Intelligent Commerce**
+<img src="docs/assets/hero.svg" alt="RevenueOS — Autonomous Revenue Recovery for Intelligent Commerce" width="100%">
 
-RevenueOS detects where ecommerce revenue is slipping away, diagnoses why,
-estimates which recovery intervention creates the greatest **incremental
-contribution margin**, enforces merchant financial policy, executes through
-Razorpay-compatible workflows, and verifies whether the money was recovered.
+<br/><br/>
 
-> Most recovery systems ask whether a transaction *can* be recovered.
-> RevenueOS asks what caused the loss, which intervention creates incremental
-> economic value, whether the agent is authorized to take it, and whether the
-> money was actually recovered.
+[![Track](https://img.shields.io/badge/Track_03-AI_Revenue_Recovery-6366F1?style=for-the-badge&labelColor=0B1120)](#)
+[![Track01](https://img.shields.io/badge/Track_01-Agentic_Commerce-A78BFA?style=for-the-badge&labelColor=0B1120)](#agentic-commerce)
+[![Razorpay](https://img.shields.io/badge/Razorpay-Test_Mode-0C2451?style=for-the-badge&logo=razorpay&logoColor=white&labelColor=0B1120)](#)
+[![Tests](https://img.shields.io/badge/tests-353_passing-34D399?style=for-the-badge&labelColor=0B1120)](#)
 
-**Status: Phases 1–2 complete** — financial engine and synthetic behavioural
-environment, both tested and reproducible.
+![Python](https://img.shields.io/badge/Python_3.11-1E293B?style=flat-square&logo=python&logoColor=6E9AE0)
+![FastAPI](https://img.shields.io/badge/FastAPI-1E293B?style=flat-square&logo=fastapi&logoColor=34D399)
+![XGBoost](https://img.shields.io/badge/XGBoost-1E293B?style=flat-square)
+![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-1E293B?style=flat-square)
+![Next.js](https://img.shields.io/badge/Next.js_15-1E293B?style=flat-square&logo=nextdotjs&logoColor=white)
+![React](https://img.shields.io/badge/React_19-1E293B?style=flat-square&logo=react&logoColor=61DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-1E293B?style=flat-square&logo=typescript&logoColor=3178C6)
+
+**[Live demo](#)&nbsp; · &nbsp;[Video](#)&nbsp; · &nbsp;[Architecture](#architecture)&nbsp; · &nbsp;[Agentic commerce](#agentic-commerce)&nbsp; · &nbsp;[Evaluation](#evaluation)&nbsp; · &nbsp;[Run it](#running-it)&nbsp; · &nbsp;[Demo script](#five-minutes)**
+
+</div>
 
 ---
 
-## Quick start
+> Most recovery systems ask whether a transaction **can** be recovered.
+>
+> RevenueOS asks what caused the loss, which intervention creates the most
+> **incremental contribution margin**, whether the agent is **authorized** to
+> take it, and whether the money **actually arrived**.
 
-```bash
-pip install -r requirements.txt
-make gate
+---
+
+<div align="center">
+
+## The thirty-second version
+
+</div>
+
+<img src="docs/assets/decision.svg" alt="Decision receipt: the highest-converting action has negative incremental value" width="100%">
+
+The highest-converting action has **negative incremental value**. Every
+conversion-optimising recovery product on the market fires it anyway.
+
+Conversion and contribution disagree on **41.0%** of opportunities. That
+divergence is the product.
+
+---
+
+<div align="center">
+
+<a name="architecture"></a>
+
+## Architecture
+
+</div>
+
+<img src="docs/assets/architecture.svg" alt="RevenueOS system architecture" width="100%">
+
+<br/>
+
+<table>
+<tr><th align="left">Stage</th><th align="left">Component</th><th align="left">Emits</th><th align="left">Cannot</th></tr>
+<tr><td><b>predicts</b></td><td><code>RecoveryPredictor</code></td><td>P(recovery │ action)</td><td>rank · price · decide · execute</td></tr>
+<tr><td><b>ranks</b></td><td><code>FinancialEngine</code></td><td>EV, ΔEV</td><td>see a model · see free text</td></tr>
+<tr><td><b>authorizes</b></td><td><code>PolicyEngine</code></td><td>PASS / REJECT / APPROVAL</td><td>accept a text argument <i>at all</i></td></tr>
+<tr><td><b>executes</b></td><td><code>PaymentProvider</code></td><td>order / simulated event</td><td>choose an action or amount</td></tr>
+<tr><td><b>verifies</b></td><td><code>WebhookReconciler</code></td><td>verified state change</td><td>trust a browser callback</td></tr>
+<tr><td><b>records</b></td><td><code>AuditRepository</code></td><td>sequenced events</td><td>be mutated or deleted</td></tr>
+</table>
+
+> [!NOTE]
+> The LLM sits **outside** this chain. It may propose which tool runs next and
+> write the merchant-facing explanation. It may not touch money.
+
+---
+
+<div align="center">
+
+## Authority model
+
+*The picture to put on screen when someone asks "what stops the LLM from giving a 50% discount?"*
+
+</div>
+
+<img src="docs/assets/authority.svg" alt="Authority matrix" width="100%">
+
+<details>
+<summary><b>Why prompt injection structurally cannot work here</b></summary>
+
+<br/>
+
+A customer note demanding a 50% discount changes nothing:
+
+**①** **No 50% discount exists.** The action space is closed and enumerated in
+`ml/actions.py`. No code path constructs an action from a string.
+
+**②** **`PolicyEngine.evaluate()` accepts no text parameter.** There is no
+channel through which text could reach it. A test asserts the *function
+signature itself*, so the property cannot regress silently.
+
+**③** **No agent tool accepts a monetary argument.** An unknown tool name is
+treated as a hallucination, not an instruction.
+
+The defence is structural, not a filter.
+
+```
+DO_NOTHING          FREE_SHIPPING          SMALL_DISCOUNT
+MEDIUM_DISCOUNT     PAYMENT_METHOD_SWITCH  IMMEDIATE_RETRY
+DELAYED_RETRY       PAYMENT_LINK           MEMBERSHIP_OFFER
+HUMAN_ESCALATION
 ```
 
-`make gate` generates the dataset, runs the validation report, and runs the test
-suite. Takes about 15 seconds end to end.
+Ten actions, each with fixed cost, conditional incentive cost, and eligibility
+predicates. Retry actions are structurally ineligible for abandonment.
 
-| Command | What it does |
-|---|---|
-| `make data` | Generate the dataset (`SEED=42` by default) |
-| `make data-small` | Fast 4k-session dataset for iteration |
-| `make validate` | Data validation report → `evaluation/results/` |
-| `make test` | Full test suite (58 tests) |
-| `make gate` | All three — run after any simulator change |
-| `make api` | FastAPI dev server on :8000 |
-| `make data SEED=7` | Regenerate under a different seed |
+</details>
 
 ---
 
-## The key insight
+<div align="center">
 
-Recovered revenue is not recovered profit. A blanket discount reliably increases
-conversions **and** can destroy contribution margin.
+## The economics
 
-That is not a hypothetical here — it is measurable in the generated data.
-Comparing the conversion-maximising action against the ΔEV-maximising action
-across 1,500 sampled opportunities:
+</div>
 
-| Action | Conversion-max | Economics-max |
-|---|---:|---:|
-| MEDIUM_DISCOUNT (10%) | **65.7%** | 24.1% |
-| FREE_SHIPPING | 21.9% | 33.1% |
-| HUMAN_ESCALATION | 9.9% | 29.4% |
-| SMALL_DISCOUNT | 0.0% | 4.3% |
-
-**The two objectives disagree on 48.4% of opportunities.**
-
----
-
-## Financial objective
-
-```
+```python
 EV(a) = P(recovery | context, a)
-        * ( base_contribution_margin
-            - incentive_cost_if_recovered(a)
-            - expected_return_loss(a)
-            - expected_cancellation_loss(a) )
-        - fixed_action_cost(a)
+        × ( base_contribution_margin
+          − incentive_cost_if_recovered(a)     # conditional — a discount costs
+          − expected_return_loss(a)            # nothing if they don't convert
+          − expected_cancellation_loss(a) )
+        − fixed_action_cost(a)                 # unconditional
 
-ΔEV(a) = EV(a) - EV(DO_NOTHING)
+ΔEV(a) = EV(a) − EV(DO_NOTHING)                # ranked on this, not EV
 ```
 
-Three properties, each enforced by unit tests:
+<table>
+<tr><td width="50%" valign="top">
 
-1. **Incentive costs are conditional** — a discount costs nothing if the
-   customer does not convert. Fixed costs (messaging, API, agent time) are not.
-2. **No double counting** — an incentive is subtracted exactly once, and
-   reported GMV is net of discount.
-3. **Ranking is incremental** — by ΔEV against `DO_NOTHING`, never raw EV. If no
-   action has ΔEV > 0, the system does nothing. Restraint is the default.
+**Four invariants · 28 unit tests**
+
+`①`&nbsp; incentive cost is conditional on recovery
+`②`&nbsp; an incentive is subtracted exactly once
+`③`&nbsp; reported GMV is net of discount
+`④`&nbsp; no positive ΔEV → `DO_NOTHING` is *selected*
+
+</td><td width="50%" valign="top">
+
+**Where the objectives split**
+
+| conversion-max | economics-max | |
+|:---|:---|---:|
+| `MEDIUM_DISCOUNT` 32.1% | `FREE_SHIPPING` | 32.8% |
+| | `DO_NOTHING` | 26.0% |
+| | `DELAYED_RETRY` | 15.9% |
+| | `SMALL_DISCOUNT` | 13.1% |
+| | `MEDIUM_DISCOUNT` | 2.2% |
+
+</td></tr>
+</table>
+
+<img src="docs/assets/economics.svg" alt="Flat 10 percent converts better and earns less than doing nothing" width="100%">
+
+---
+
+<div align="center">
+
+## The ML layer
+
+</div>
+
+<table>
+<tr><td width="56%" valign="top">
+
+**What is modelled**
+
+`P(recovery | context, action)` — action-conditioned, scored
+independently for every eligible action. Not a single
+"will this recover" score.
+
+**Selected: XGBoost, no post-hoc calibration.**
+
+Isotonic *appeared* best until the selection protocol was
+corrected — it had been scored on its own fitting
+partition. Under the corrected protocol, raw XGBoost has
+lower ECE. Documented, not quietly patched.
+
+</td><td width="44%" valign="top">
+
+```
+TEST ROC-AUC     ~0.60   ← modest BY DESIGN
+TEST Brier        ————   ← primary metric
+TEST ECE          ————   ← what decisions need
+calibration       none   ← isotonic rejected,
+                           reason recorded
+
+⚠ ROC-AUC > 0.85 triggers a DEFECT
+  warning, not a celebration.
+```
+
+</td></tr>
+</table>
+
+### Why low AUC is *correct* here
+
+Decisions are expected-value comparisons, so what matters is probability
+**magnitude**, not ranking. A model that ranks perfectly but is miscalibrated
+produces wrong ΔEV and therefore wrong actions.
+
+The simulator deliberately injects shared logit noise plus **hidden mechanisms
+the feature set cannot observe** — bank outage windows, sale periods, courier
+disruption, payday effects. High AUC would mean the environment is too easy or
+something leaked.
+
+The headline ML figure is not AUC. It is **predicted vs true ΔP(recovery) per action**.
+
+<details>
+<summary><b>An honest finding we chose to publish</b></summary>
+
+<br/>
+
+The audit surfaced that a **segment lookup table beats XGBoost economically** —
+₹866.85 vs ₹857.05 per opportunity. The ML contribution to the economic result
+is slightly **negative**.
+
+It is in the model card rather than buried, which makes the claim precise:
+
+> A *modest* response model combined with a **correct incremental-economics
+> layer** and a **deterministic policy gate** beats both naive discounting and
+> conversion-maximisation — and off-policy evidence independently confirms it.
+
+The economics layer is doing the work. Saying so is stronger than pretending
+otherwise.
+
+</details>
+
+<details>
+<summary><b>Leakage discipline</b></summary>
+
+<br/>
+
+```
+TRAIN  ≤ train_end  <  VAL  ≤ validation_end  <  TEST
+```
+
+- Model **frozen** — manifest + content hashes — before any TEST or oracle read
+- Calibration fitted on **VALIDATION only**
+- Automated leakage audit asserts no forbidden columns reach the feature matrix
+- Historical response-rate features degraded into noisy finite counts
+
+</details>
 
 ---
 
-## Data strategy
+<div align="center">
 
-Public transaction datasets do not contain counterfactual recovery outcomes —
-they record what customers did, never what they would have done under a
-different intervention. Three layers with separated roles:
+## The policy gate
 
-| Layer | Source | Role |
-|---|---|---|
-| A | UCI Online Retail II | Order-value shape + activity concentration **only** |
-| B | RevenueOS simulator | Training, validation, held-out test, oracle |
-| C | Razorpay Test Mode | Integration proof only |
+*Deterministic. No model. No LLM. No text input.*
 
-Full detail and limitations: [`docs/data-card.md`](docs/data-card.md).
+</div>
 
-### Propensity logging and exploration
+```json
+{
+  "max_autonomous_discount_percent":         7,
+  "max_autonomous_discount_amount":        300,
+  "max_free_shipping_cost":                150,
+  "minimum_contribution_margin_percent":    15,
+  "max_recovery_attempts":                   2,
+  "minimum_action_confidence":            0.65,
+  "high_value_order_threshold":          10000,
+  "human_approval_required_above_discount": 250
+}
+```
 
-Every logged intervention stores the exact `P(action | context)` under which it
-was chosen, and 25% of opportunities are assigned a **randomised** action over
-the eligible set. This is what makes off-policy evaluation valid: without it,
-"high-LTV customers got free shipping and converted" is confounded, not causal.
+Every rule is evaluated and **recorded individually** with its input, threshold
+and verdict. Every `PASS` carries an explicit **maximum authorized downside** —
+the worst case in rupees for that single opportunity.
 
-Held-out fold: 2,905 opportunities, 708 exploration rows, Kish ESS **1,145**,
-max importance weight **51**.
-
-### Not too easy on purpose
-
-The response surface carries shared logit noise plus hidden environmental
-mechanisms with no corresponding features — bank outages, competitor flash
-sales, courier disruptions, payday effects. If a trained model later reaches
-test ROC-AUC above ~0.85, that is a simulator defect, not a success.
+> [!IMPORTANT]
+> **Demonstrated live · `DEMO4` · ₹55,116 cart**
+> ΔEV is **+₹235.90** — positive economics — and the gate returns
+> `REQUIRE_APPROVAL` because the order exceeds the high-value threshold.
+> **Executions created: zero.**
+> *Good economics are not sufficient authority.*
 
 ---
+
+<div align="center">
+
+## State machine
+
+</div>
+
+```mermaid
+%%{init: {'theme':'base','themeVariables':{
+  'primaryColor':'#101A2E','primaryTextColor':'#E6EDF7','primaryBorderColor':'#3A4C6E',
+  'lineColor':'#4A5C7E','fontFamily':'ui-monospace, SFMono-Regular, Menlo, monospace','fontSize':'12px'}}}%%
+stateDiagram-v2
+    [*] --> DETECTED
+    DETECTED --> ANALYZING
+    ANALYZING --> AUTHORIZED: policy PASS
+    ANALYZING --> AWAITING_APPROVAL: REQUIRE_APPROVAL
+    ANALYZING --> STOPPED_BY_POLICY: REJECT
+    ANALYZING --> STOPPED_NO_POSITIVE_EV: DO_NOTHING
+    AWAITING_APPROVAL --> AUTHORIZED: approved
+    AWAITING_APPROVAL --> STOPPED_BY_HUMAN: rejected
+    AUTHORIZED --> EXECUTION_PENDING
+    EXECUTION_PENDING --> AWAITING_PAYMENT
+    EXECUTION_PENDING --> EXECUTION_FAILED
+    AWAITING_PAYMENT --> RECOVERED: verified capture
+    AWAITING_PAYMENT --> PAYMENT_FAILED_RECOVERABLE: payment.failed
+    PAYMENT_FAILED_RECOVERABLE --> ANALYZING: attempts remaining
+    PAYMENT_FAILED_RECOVERABLE --> NOT_RECOVERED: exhausted
+    EXECUTION_FAILED --> ANALYZING
+    RECOVERED --> [*]
+    NOT_RECOVERED --> [*]
+    STOPPED_BY_POLICY --> [*]
+    STOPPED_BY_HUMAN --> [*]
+    STOPPED_NO_POSITIVE_EV --> [*]
+
+    note right of RECOVERED
+        ABSORBING. a late payment.failed
+        is recorded as AUDIT_CORRECTION
+        and ignored for state.
+    end note
+```
+
+`①` **`RECOVERED` is absorbing.** Razorpay does not guarantee webhook ordering,
+so reconciliation is semantic, not arrival-ordered.
+`②` **A failed payment is never terminal** — the same journey may still be captured.
+`③` **Illegal transitions raise.** `EXECUTION_PENDING → ANALYZING` throws
+`InvalidStateTransition`. Not a bug — it caught a real orchestrator crash during
+development, which is how the deterministic fallback planner earned its existence.
+
+### Adaptive retry
+
+<img src="docs/assets/retry.svg" alt="Adaptive retry: new evidence reclassifies the blocker and the decision changes" width="100%">
+
+---
+
+<div align="center">
+
+## The agent layer
+
+*There is an LLM. It does exactly one thing.*
+
+</div>
+
+<table>
+<tr><td width="58%" valign="top">
+
+It **cannot** set an amount, a discount, a probability, a
+policy outcome, or a payment state. **No tool accepts a
+monetary argument.**
+
+It is **optional**. `AGENT_LLM_ENABLED=false` and the
+deterministic planner drives the identical workflow. The
+system is fully functional with **zero language model** —
+the LLM is an ergonomic layer, not a load-bearing one.
+
+`request_execution` is reachable from exactly **one** state.
+Terminal states expose read-only tools only.
+
+</td><td width="42%" valign="top">
+
+**Measured, on `/agent`**
+
+| | |
+|:---|---:|
+| unauthorized executions | **0** |
+| policy bypasses | **0** |
+| blocked tool calls | **non-zero** |
+
+The third row matters as much as the
+first two. *A gate that never blocks
+anything is decorative.*
+
+</td></tr>
+</table>
+
+---
+
+<div align="center">
+
+## Razorpay integration
+
+*Test Mode only — the client refuses to construct with a non-`rzp_test_*` key.*
+
+</div>
+
+```mermaid
+%%{init: {'theme':'base','themeVariables':{
+  'fontFamily':'ui-monospace, SFMono-Regular, Menlo, monospace','fontSize':'13px',
+  'actorBkg':'#101A2E','actorBorder':'#3A4C6E','actorTextColor':'#E6EDF7',
+  'signalColor':'#7C8BAA','signalTextColor':'#B4C2D9',
+  'noteBkgColor':'#1A1608','noteBorderColor':'#B99524','noteTextColor':'#FDE68A',
+  'labelBoxBkgColor':'#101A2E'}}}%%
+sequenceDiagram
+    autonumber
+    participant U as Customer
+    participant API as RevenueOS
+    participant M as Predictor
+    participant F as Economics
+    participant P as Policy
+    participant R as Razorpay
+
+    API->>M: score all eligible actions
+    M-->>API: P(recovery | action), per action
+    API->>F: EV and ΔEV vs DO_NOTHING
+    F-->>API: ranked candidates
+    API->>P: evaluate best candidate
+    P-->>API: PASS + max authorized downside
+    Note over API: idempotency key committed<br/>BEFORE any external call
+    API->>R: create Test Mode order (paise)
+    R-->>U: checkout
+    U->>R: pays
+    R->>API: webhook · payment.captured
+    Note over API: HMAC-SHA256 over RAW bytes<br/>constant-time compare
+    API->>API: RECOVERED · outcome row written ONCE
+```
+
+### The five things that make this payments engineering, not an API call
+
+<table>
+<tr><td width="3%" valign="top"><b>①</b></td><td>
+
+**Signature is computed over raw bytes.** The body is read before any JSON
+parsing. A test asserts that *re-serialising the payload invalidates the
+signature*. Constant-time comparison. Invalid → `400`, no inbox row, no state change.
+
+</td></tr>
+<tr><td valign="top"><b>②</b></td><td>
+
+**The browser callback is never trusted.** Standard Checkout returns its own
+signature (`HMAC` over `order_id|payment_id`), verified separately — but success
+UI alone never marks recovery. The UI literally reads
+*"payment submitted — awaiting verified webhook."*
+
+</td></tr>
+<tr><td valign="top"><b>③</b></td><td>
+
+**Deduplication is event-id based**, not timestamp-window based, enforced by
+`UNIQUE(provider, event_id)`.
+
+</td></tr>
+<tr><td valign="top"><b>④</b></td><td>
+
+**Acknowledge fast, process after.** Razorpay requires 2xx within 5s and retries
+with backoff for 24h. Handler: verify → persist → commit → **return**. Processing
+happens after that commit, so slow work never blocks the ack.
+
+</td></tr>
+<tr><td valign="top"><b>⑤</b></td><td>
+
+**Correlation is explicit, never guessed.** Order: `notes.execution_id` →
+`order_id` → `payment_id`. No match produces `UNMATCHED_WEBHOOK` rather than a
+guess. `notes` carries IDs only — no customer data.
+
+</td></tr>
+</table>
+
+Amounts are in paise (₹5,000 → `500000`), derived **server-side** from cart minus
+*approved* discount. A client-supplied amount is never authoritative.
+
+<details>
+<summary><b>Duplicate webhook · replay guard</b></summary>
+
+<br/>
+
+```mermaid
+%%{init: {'theme':'base','themeVariables':{
+  'fontFamily':'ui-monospace, SFMono-Regular, Menlo, monospace','fontSize':'13px',
+  'actorBkg':'#101A2E','actorBorder':'#3A4C6E','actorTextColor':'#E6EDF7',
+  'signalColor':'#7C8BAA','signalTextColor':'#B4C2D9'}}}%%
+sequenceDiagram
+    participant R as Razorpay
+    participant API as RevenueOS
+    R->>API: evt_1 (payment.captured)
+    API->>API: insert inbox row → process → RECOVERED
+    R->>API: evt_1 AGAIN (provider retry)
+    API->>API: UNIQUE(provider, event_id) conflict
+    API-->>R: 200 duplicate · no state change
+```
+
+</details>
+
+<details>
+<summary><b>Offline mode — how demos work without a tunnel</b></summary>
+
+<br/>
+
+A `SimulatorPaymentProvider` drives the **same** state transitions, the **same**
+idempotent outcome booking, the **same** audit machinery.
+
+It never forges a Razorpay payload or fabricates a signature. Every event is
+stamped `provider: SIMULATOR` with a distinct `SIMULATED_PAYMENT_EVENT` audit
+type, so a simulated recovery can always be told apart from a verified one — in
+the trail, in the API, and in the UI badge.
+
+</details>
+
+---
+
+<div align="center">
+
+## Data model
+
+</div>
+
+```
+   opportunities ─┬─ action_predictions             one row per candidate action
+                  ├─ action_financial_evaluations   EV · ΔEV · cost · downside
+                  ├─ policy_evaluations ── policy_rule_evaluations
+                  ├─ recovery_executions            idempotency key · provider refs
+                  ├─ recovery_outcomes              net GMV · realized contribution
+                  ├─ payment_failures               normalized taxonomy
+                  └─ audit_events                   append-only · sequenced
+
+   webhook_inbox    raw hash · signature validity · processing status
+   agent_runs ───── agent_trace_events              planner reasoning · tool calls
+   negotiation_sessions ── negotiation_turns        offer · ruling · rule ledger
+```
+
+**The constraints are the argument:**
+
+| Constraint | Makes impossible |
+|:---|:---|
+| `recovery_executions.idempotency_key` **UNIQUE** | duplicate orders from an API retry |
+| `webhook_inbox (provider, event_id)` **UNIQUE** | reprocessing a redelivered webhook |
+| `audit_events (opportunity_id, sequence_number)` **UNIQUE** | gaps or reordering in the trail |
+| `recovery_outcomes.opportunity_id` **PRIMARY KEY** | **double-counting recovered revenue** |
+
+> [!IMPORTANT]
+> That last one is the important one. Double-counting recovered money isn't
+> prevented by careful code — it is **structurally impossible**. One opportunity,
+> exactly one outcome row.
+
+Every audit event records actor, state before, state after, and the **model
+version and policy version in force at the time**, so a historical decision can
+be reconstructed against the rules that actually applied to it.
+
+---
+
+<div align="center">
+
+<a name="evaluation"></a>
 
 ## Evaluation
 
-Three independent streams, because relying on any one would mislead:
+*Three independent streams. Where they disagree, the disagreement is reported.*
 
-- **A — Observed** held-out outcomes under the logged policy. Factual floor.
-- **B — Off-policy** (headline): IPS / SNIPS / **Doubly Robust**, computed from
-  logged outcomes and recorded propensities *without querying the simulator's
-  counterfactuals*. Reward is net contribution in rupees, not binary recovery.
-- **C — Synthetic oracle**: exact counterfactual regret, always labelled as
-  such, never presented as production causal lift.
+</div>
 
-Calibration — Brier, ECE, reliability diagram, and predicted-vs-true ΔP per
-action — is the primary ML metric. AUC is reported but is not the success
-criterion, because decisions depend on probability magnitude, not ranking.
+<table>
+<tr>
+<th width="33%" align="left">A · factual floor</th>
+<th width="34%" align="left">B · headline</th>
+<th width="33%" align="left">C · labelled synthetic</th>
+</tr>
+<tr valign="top">
+<td>
 
-Methodology: [`docs/evaluation.md`](docs/evaluation.md).
+Observed held-out outcomes under the logged policy.
+
+*No counterfactual claims.*
+
+</td>
+<td>
+
+Off-policy evaluation — IPS · SNIPS · **Doubly Robust**.
+
+*Logged data only. No simulator.*
+
+</td>
+<td>
+
+Simulator oracle — exact counterfactual regret.
+
+*Never called causal lift.*
+
+</td>
+</tr>
+</table>
+
+**DR agrees with the oracle to within a few percent**, from two independent paths.
+
+### Stream B is the one that matters
+
+Because the logging policy is **stochastic with stored propensities**
+`P(action | context)`, the RevenueOS policy can be valued from logged data
+alone — no simulator involvement. This breaks the circularity of *"model trained
+on my own generator, evaluated by my own generator."*
+
+Reward is **net contribution in rupees**, not binary recovery:
+
+```
+r  =  recovered_contribution  −  incentive_cost_realised  −  fixed_action_cost
+```
+
+A binary reward would silently reintroduce the conversion-maximising objective
+the entire project argues against.
+
+<table>
+<tr><td width="50%" valign="top">
+
+**Mandatory diagnostics**
+*an OPE point estimate without them is not interpretable*
+
+| | |
+|:---|---:|
+| Kish effective sample size | **2,127** |
+| max importance weight | reported |
+| clipped-weight fraction | reported |
+| propensity overlap histogram | reported |
+| min per-action held-out support | **72** |
+
+</td><td width="50%" valign="top">
+
+**Baselines**
+
+| | |
+|:---|:---|
+| **A** | `DO_NOTHING` everywhere |
+| **B** | flat 10% discount everywhere |
+| **C** | rules — abandonment → 5% off, bank timeout → immediate retry |
+| **★** | RevenueOS — ML + ΔEV + policy gate |
+
+</td></tr>
+</table>
+
+Reported per strategy: net recovered GMV (net of discount) · incentive cost ·
+net contribution · recovery rate · DR policy value · policy violations.
+All headline metrics carry **1,000-sample bootstrap 95% CIs**.
+
+> [!NOTE]
+> **Baseline B is expected to win on recovery rate and lose on net contribution.**
+> That contrast is the demonstration, not an inconvenience.
+
+### Scientific integrity rule
+
+```
+If RevenueOS fails to beat a baseline under any stream, report it and explain
+the mechanism. Do not adjust the seed, split, threshold or simulator
+assumptions until the result improves.
+```
+
+Applied at least twice: the **isotonic calibration reversal** and the
+**segment-lookup-beats-XGBoost** finding. Both are in the model card.
+
+### Research ≠ live
+
+`evaluation/results/` holds frozen research evaluation on held-out TEST data.
+`/api/dashboard/metrics` reports only live and seeded execution outcomes and
+labels itself `LIVE_OPERATIONAL`. Two classes of evidence, separately labelled
+in the UI, **never summed**.
 
 ---
+
+<div align="center">
+
+## Frontend
+
+`Next.js 15` · `React 19` · `TypeScript strict` · `Tailwind`
+
+</div>
+
+| Route | |
+|:---|:---|
+| `/` | live operational overview |
+| `/opportunities` | queue |
+| **`/opportunities/[id]`** | **decision detail — the centrepiece** |
+| `/evaluation` | frozen research evidence, labelled synthetic |
+| `/agent` | agent safety metrics · state-to-tool matrix |
+| **`/commerce`** | **AI-buyer negotiation — bounded counter-offers, live rule ledger** |
+| `/audit` | append-only trail, filterable |
+| `/settings` | merchant policy · versions |
+
+**Two design rules doing real work:**
+
+`①` **Probability is never coloured.** Only economic value carries semantic
+colour. Colouring probability would make a high-converting, negative-ΔEV action
+*read as good* — the exact error the product exists to prevent.
+
+`②` **Polling is limited to states an external party can change.** No busy-loop
+on terminal states.
+
+<details>
+<summary><b>What's on the decision detail page</b></summary>
+
+<br/>
+
+Header with revenue at risk, state, attempt number and Test Mode badge ·
+workflow stepper including the failure branch · selected action with ΔEV,
+probability, cost and max downside · **conversion-versus-economics side by
+side** · candidate table with chart toggle and an explicit zero line ·
+why-this-action and why-not-alternatives · policy panel with per-rule input,
+threshold and reason · approval gate showing reasoning *before* the buttons ·
+execution confirmation and Razorpay checkout · retry comparison across attempts ·
+categorised audit timeline with a detail drawer.
+
+</details>
+
+---
+
+<div align="center">
+
+<a name="agentic-commerce"></a>
+
+## Agentic commerce
+
+*Track 01, built on the Track 03 engine. Route: `/commerce`*
+
+</div>
+
+> The same merchant economics and policy layer that decides whether a discount is
+> worth giving decides what price an AI buyer may be quoted.
+
+An AI buyer states constraints in natural language, searches the catalog and
+requests a price. The merchant returns its **reserve price** — the lowest price at
+which every merchant policy still holds — with the binding constraint named.
+
+```
+buyer asks  ₹4,100   on a ₹5,019 SKU        (18.3% off)
+merchant    COUNTER ₹4,769                   margin 34.2% · contribution ₹1,631
+
+  PASS   RULE_AC_MARGIN_FLOOR               23.90 / 15     ← passes
+  FAIL   RULE_AC_DISCOUNT_PERCENT_CEILING   18.31 / 7      ← binds
+  FAIL   RULE_AC_DISCOUNT_AMOUNT_CEILING   919.00 / 300
+```
+
+The reserve is solved in closed form from COGS, fulfilment cost, return rate and
+the merchant policy file. Ask twice, get the same number — there is no
+conversational drift because there is no conversation in the arithmetic.
+
+<table>
+<tr><td width="3%" valign="top"><b>①</b></td><td>
+
+**`evaluate_offer()` accepts no text parameter.** A buyer agent's prose has no
+channel into pricing. A test asserts the *function signature*, so it cannot
+regress silently. Same structural defence as `PolicyEngine.evaluate()`.
+
+</td></tr>
+<tr><td valign="top"><b>②</b></td><td>
+
+**COGS never crosses the API boundary.** `PublicProduct` and `ProductEconomics`
+are separate objects. A buyer that could read cost of goods would compute the
+reserve exactly and the negotiation would be theatre.
+
+</td></tr>
+<tr><td valign="top"><b>③</b></td><td>
+
+**Two reserves.** `reserve_hard` is the lowest lawful price; `reserve_autonomous`
+is raised so the discount also stays under the human-approval threshold — that is
+what gets quoted, so a counter the buyer accepts is always immediately executable.
+A request landing *between* them is a genuine `REQUIRE_APPROVAL`.
+
+</td></tr>
+<tr><td valign="top"><b>④</b></td><td>
+
+**The buyer's decision is arithmetic too.** It accepts iff the total fits the
+budget it declared at the start. The model writes the sentence; it does not choose
+the answer.
+
+</td></tr>
+</table>
+
+### The bridge — where Track 01 becomes Track 03
+
+`POST /api/agent-commerce/checkout` is deliberately thin. It duplicates **no**
+payment code and adds **no** Razorpay surface. An agreed negotiation becomes an
+ordinary `Opportunity` in `DETECTED`, carrying the negotiated revenue and
+contribution — and from there every existing path applies:
+
+```
+negotiate ₹4,769  →  Opportunity  →  analyse  →  AUTHORIZED · DELAYED_RETRY
+                                  →  payment fails (card declined)
+                                  →  re-analyse · blocker reclassified
+                                  →  PAYMENT_METHOD_SWITCH  →  RECOVERED
+                                     ₹4,769 GMV · ₹1,629 contribution
+```
+
+That is the whole thesis in one continuous run: an AI buyer negotiates, the policy
+engine bounds the counter-offer to protect margin, the payment fails, and the same
+recovery loop takes over — constrained by the margin the negotiation already spent.
+
+<details>
+<summary><b>Endpoints</b></summary>
+
+<br/>
+
+| | |
+|:---|:---|
+| `GET /api/catalog` | machine-readable catalog · no COGS |
+| `GET /api/catalog/{id}` | single product |
+| `POST /api/agent-commerce/search` | structured constraints → matches |
+| `POST /api/agent-commerce/session` | natural language → validated constraints |
+| `POST /api/agent-commerce/offer` | requested price → `ACCEPT` / `COUNTER` / `REJECT` / `REQUIRE_APPROVAL` |
+| `POST /api/agent-commerce/respond` | buyer agent reacts to the ruling |
+| `POST /api/agent-commerce/checkout` | agreement → `Opportunity` |
+| `GET /api/agent-commerce/session/{id}` | full negotiation transcript |
+| `POST /api/agent-commerce/demo/run` | scripted end-to-end run |
+
+Negotiations persist to `negotiation_sessions` / `negotiation_turns`, and the
+resulting opportunity's first audit event records the session, list price, agreed
+price, surviving margin and round count. **The negotiation is *in* the audit
+history, not beside it.**
+
+</details>
+
+<details>
+<summary><b>What the negotiation is not</b></summary>
+
+<br/>
+
+- **Not free-form haggling.** Three rounds, hard-capped.
+- **Not a price a model chose.** Deterministic; no LLM on the pricing path.
+- **Not evaluated.** The buyer agent is our own, so *"the buyer accepted"* proves
+  the price was lawful and within a declared budget — **not that it was optimal.**
+  The bounds are verified; the pricing strategy is not.
+- **No inventory reservation.** Two concurrent negotiations for the last unit can
+  both reach `AGREED`. Correct for a demo, wrong for production — a row-level hold
+  is the first thing to add.
+
+</details>
+
+---
+
+<div align="center">
 
 ## Repository
 
+</div>
+
 ```
 ml/
-  actions.py            closed action space + cost semantics
-  financial_engine.py   canonical EV / ΔEV        <- 28 unit tests
-  config.py             every tunable constant + seed
-  simulation/
-    environment.py      hidden windows (outages, sales, courier, payday)
-    products.py         60 SKUs, weight/zone shipping
-    customers.py        observable frame vs latent frame
-    sessions.py         sessions -> checkouts -> payments
-    behavior.py         P(recovery | context, action) for ALL actions
-    logging_policy.py   stochastic policy + stored propensities
-    generate.py         `python -m ml.simulation.generate`
-  validation/report.py  the Phase 2 review gate
-  features/ models/ calibration/ off_policy/ evaluation/   <- Phase 3+
-backend/app/            FastAPI (health live; routers Phase 6)
-frontend/               Phase 7
-docs/                   product-spec, data-card, simulator, evaluation
-tests/                  58 tests
+├── actions.py               closed action space + cost semantics
+├── financial_engine.py      canonical EV / ΔEV                ← 28 unit tests
+├── config.py                every tunable constant + master seed
+├── simulation/
+│   ├── environment.py       hidden windows: outages · sales · courier · payday
+│   ├── products.py          60 SKUs · weight/zone shipping
+│   ├── customers.py         observable frame vs latent frame
+│   ├── sessions.py          sessions → checkouts → payments
+│   ├── behavior.py          P(recovery | context, action) for ALL actions
+│   ├── logging_policy.py    stochastic policy + stored propensities
+│   └── generate.py          python -m ml.simulation.generate
+├── features/build.py        time-aware aggregates · leakage-audited
+├── models/train.py          XGBoost · segment baseline · calibration candidates
+├── evaluation/
+│   ├── scoring.py           candidate scoring + policy constructors
+│   ├── oracle_eval.py       stream C — counterfactual regret
+│   ├── ope.py               stream B — IPS / SNIPS / DR + diagnostics
+│   ├── run_all.py           full pipeline → model_report.md
+│   └── audit.py             → final_model_audit.md
+└── validation/report.py     simulator review gate
+
+backend/app/
+├── api.py                   FastAPI · admin auth · raw-body webhook endpoint
+├── api_commerce.py          catalog · offer protocol · checkout bridge
+├── domain.py                State · transitions · typed exceptions
+├── core/config.py           settings · MerchantPolicy · version constants
+├── db/models.py             SQLAlchemy schema + integrity constraints
+├── db/commerce_models.py    negotiation sessions + turns
+├── services/
+│   ├── predictor.py         RecoveryPredictor wrapper
+│   ├── workflow.py          state machine · AuditRecorder · executors
+│   ├── policy.py            deterministic PolicyEngine
+│   ├── razorpay.py          client · signature verification · reconciler
+│   ├── catalog.py           machine-readable catalog over the 60 SKUs
+│   ├── negotiation.py       deterministic reserve price          ← no text input
+│   ├── simulated_payments.py   offline provider, labelled SIMULATOR
+│   ├── failure_taxonomy.py  provider codes → blocker classes
+│   └── adaptive.py          context refresh for retry attempts
+├── agents/
+│   ├── orchestrator.py      RecoveryOrchestratorAgent + trace
+│   ├── authorizer.py        state → allowed tools · fallback planner
+│   ├── tools.py             bounded surface · no monetary arguments
+│   ├── llm.py               OpenAI-compatible provider adapter
+│   └── buyer.py             AI buyer — validated parse · arithmetic decisions
+└── seed.py                  5 demo opportunities
+
+frontend/                    Next.js 15 app router
+scripts/                     gates.py · run_agent.py · agent_check.py
+docs/                        product-spec · architecture · simulator · data-card
+                             evaluation · razorpay-integration · demo-script
+evaluation/results/          frozen reports · freeze manifest · provenance hashes
+tests/                       353 tests
 ```
 
 ---
 
-## Reproducibility
+<div align="center">
 
-One seed controls everything. `manifest.json` persists the seed, simulator
-version, logging-policy version, config, record counts, hidden environment
-windows and dataset period. Same seed → identical parquet output.
+<a name="running-it"></a>
+
+## Running it
+
+*From a clean clone to a working demo. Roughly 5 minutes of commands, ~3 of which is training.*
+
+</div>
+
+### Prerequisites
+
+| | |
+|:---|:---|
+| Python | **3.11+** |
+| Node | **18+** (20 recommended) |
+| Disk | ~500 MB for generated data and model artifacts |
+| Network | only for `pip` / `npm` install. The demo itself runs fully offline. |
+
+Nothing else is required. **No Razorpay account, no API key and no LLM are needed
+to run the full demo** — those are optional upgrades covered further down.
 
 ---
 
-## Limitations
+### Step 1 · Environment
 
-- Synthetic behaviour may not reflect production merchants; response surfaces
-  are modelled assumptions, not measured effects.
-- Public retail data calibrates only order-value shape and activity
-  concentration — nothing about intervention response.
-- Off-policy estimates depend on overlap; ESS and max weight are reported
-  alongside every estimate.
-- Held-out support for `DELAYED_RETRY` is thin (~19 rows); its per-action
-  estimate is unreliable and flagged as such.
-- `HUMAN_ESCALATION` is currently selected more often than a real merchant would
-  tolerate — its fixed cost needs raising. Recorded in `docs/simulator.md`
-  rather than silently patched.
-- No real personal or financial data is used anywhere.
+```bash
+git clone https://github.com/DAISHINKAN7/RevenueOS.git
+cd RevenueOS
+
+python3 -m venv venv
+source venv/bin/activate            # Windows: venv\Scripts\activate
+
+pip install -r requirements.txt
+```
+
+### Step 2 · Backend `.env`
+
+Create `.env` in the repository root. **Every value below has a working default —
+this file is optional for the offline demo**, but creating it makes the settings
+explicit and is required for Razorpay or the LLM.
+
+```bash
+cat > .env <<'EOF'
+# ---------- core ----------
+DATABASE_URL=sqlite:///data/revenueos.db
+ADMIN_TOKEN=dev-admin-token           # must match NEXT_PUBLIC_ADMIN_TOKEN
+FRONTEND_URL=http://localhost:3000
+
+# ---------- payments ----------
+# Leave RAZORPAY_CLIENT=mock for the offline demo. See "Live Razorpay Test Mode".
+RAZORPAY_CLIENT=mock                  # mock | test
+RAZORPAY_MODE=test                    # live mode is refused by the client
+RAZORPAY_KEY_ID=
+RAZORPAY_KEY_SECRET=
+RAZORPAY_WEBHOOK_SECRET=
+
+# ---------- agent LLM (optional) ----------
+# With this off, a deterministic planner drives the identical workflow
+# and the AI buyer falls back to rule-based parsing. Every test still passes.
+AGENT_LLM_ENABLED=false
+AGENT_LLM_PROVIDER=mock               # groq | openrouter | ollama | mock
+AGENT_LLM_BASE_URL=https://api.groq.com/openai/v1
+AGENT_LLM_API_KEY=
+AGENT_LLM_MODEL=llama-3.3-70b-versatile
+AGENT_LLM_TIMEOUT=20
+AGENT_MAX_STEPS=12
+
+# ---------- demo ergonomics ----------
+STREAM_PACING_MS=0                    # 350 makes live decisions watchable on video
+EOF
+```
+
+> [!IMPORTANT]
+> `ADMIN_TOKEN` must equal `NEXT_PUBLIC_ADMIN_TOKEN` in the frontend env, or every
+> write from the UI returns `401`. This is the single most common setup mistake.
+
+### Step 3 · Generate the synthetic dataset
+
+```bash
+make data                             # seed=42 · ~60s
+```
+
+Writes `data/generated/`: 60 products, customers with a hidden latent frame,
+120k sessions, 70k checkouts, 44k payment attempts, 36k opportunities, plus the
+logging-policy propensities and the oracle. Fully reproducible from the seed;
+`make data SEED=7` re-rolls it, `make data-small` produces a 4k-session set for
+iteration.
+
+The **catalog used by agentic commerce is this same product set** — there is no
+separate demo catalog, which is why catalog economics and recovery economics are
+by construction the same numbers.
+
+```bash
+make validate                         # simulator review gate → evaluation/results/
+```
+
+Read `evaluation/results/data_validation_report.md` before trusting anything
+downstream. Section 10 is the leakage audit.
+
+### Step 4 · Features and model
+
+```bash
+make features                         # time-aware aggregates, leakage-audited
+make train                            # XGBoost + baselines + calibration selection
+```
+
+Freezes `ml/artifacts/` (model, calibrator, feature schema, metadata) with a
+content-hash manifest. **The API fails closed without these** — a missing artifact
+raises `ModelVersionMismatch` rather than guessing, so run this before starting
+the backend.
+
+```bash
+make evaluate                         # streams A/B/C → evaluation/results/model_report.md
+make audit                            # → final_model_audit.md
+```
+
+Or the whole chain in one: `make model-gate` (features → train → evaluate → audit → tests).
+
+### Step 5 · Database and demo data
+
+```bash
+make demo-reset                       # drops the DB, creates schema, seeds 5 opportunities
+```
+
+This creates every table — including the negotiation tables — and seeds the five
+demo scenarios in `SIMULATOR` mode so nothing needs a tunnel.
+
+> [!WARNING]
+> Run `make demo-reset` **before** you start a negotiation, never during a recording.
+> Negotiation sessions live in the same database as opportunities, so a reset wipes
+> a negotiation in progress.
+
+### Step 6 · Frontend env
+
+```bash
+cd frontend
+npm install
+
+cat > .env.local <<'EOF'
+NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
+NEXT_PUBLIC_ADMIN_TOKEN=dev-admin-token
+EOF
+cd ..
+```
+
+`NEXT_PUBLIC_ADMIN_TOKEN` must match `ADMIN_TOKEN` from Step 2.
+
+### Step 7 · Run it — two terminals
+
+```bash
+# terminal 1
+source venv/bin/activate
+make api                              # FastAPI  → http://localhost:8000
+#   or: make api-demo                 # STREAM_PACING_MS=350, watchable decisions
+
+# terminal 2
+make frontend                         # Next.js  → http://localhost:3000
+```
+
+Open **http://localhost:3000**.
+
+| Go here | To see |
+|:---|:---|
+| `/opportunities` | five seeded scenarios — open `DEMO1` and press **Run live analysis** |
+| `/commerce` | the AI buyer — negotiate, then **Continue to checkout** |
+| `/evaluation` | frozen held-out research evidence |
+| `/agent` | agent safety metrics |
+| `/audit` | the append-only trail |
+
+### The whole thing, copy-paste
+
+```bash
+python3 -m venv venv && source venv/bin/activate
+pip install -r requirements.txt
+make data && make validate
+make features && make train && make evaluate
+make demo-reset
+( cd frontend && npm install )
+# then: `make api` in one terminal, `make frontend` in another
+```
 
 ---
 
-## Next: Phase 3
+<details>
+<summary><b>Verify the install — run the gates</b></summary>
 
-Feature engineering with time-aware historical aggregates, then
-`P(recovery | context, action)` via XGBoost, isotonic calibration on the
-validation fold only, and the predicted-vs-true ΔP figure.
+<br/>
+
+```bash
+make test                  # full suite — 353 tests
+make gate                  # data + validation + tests
+make model-gate            # features + train + evaluate + audit + tests
+make frontend-gate         # typecheck + production build
+python -m scripts.gates    # backend / razorpay / agent gate reports
+```
+
+Health check:
+
+```bash
+curl localhost:8000/health
+# → model_version, policy_version, razorpay_mode, razorpay_configured
+```
+
+</details>
+
+<details>
+<summary><b>Live Razorpay Test Mode (optional)</b></summary>
+
+<br/>
+
+The demo is fully functional without this. To run a real Test Mode payment:
+
+**1 · Credentials.** From Razorpay Dashboard → Settings → API Keys, in **Test Mode**:
+
+```bash
+RAZORPAY_CLIENT=test                  # ← the line people forget; 'mock' never calls Razorpay
+RAZORPAY_MODE=test
+RAZORPAY_KEY_ID=rzp_test_xxxxxxxxxxxx
+RAZORPAY_KEY_SECRET=your_test_secret
+RAZORPAY_WEBHOOK_SECRET=a_secret_you_choose
+```
+
+The client **refuses to construct** unless `RAZORPAY_MODE=test` and the key starts
+with `rzp_test`. Live keys are rejected by design. **Restart the API after editing `.env`.**
+
+**2 · Expose the webhook endpoint.**
+
+```bash
+cloudflared tunnel --url http://localhost:8000
+```
+
+**3 · Register it.** Dashboard → Developers → Webhooks → `https://<host>/api/webhooks/razorpay`,
+secret matching `RAZORPAY_WEBHOOK_SECRET`, events `payment.captured`,
+`payment.failed`, `order.paid`.
+
+Quick-tunnel hostnames rotate on every restart, so re-register each time. A stale
+URL leaves the opportunity at *awaiting verified webhook* forever — which is
+correct behaviour, and looks like a hang.
+
+**4 · Use it.** On an authorized opportunity, switch **Execution mode** to
+*Razorpay Test Mode* **before** pressing Execute — the mode locks once an
+execution exists for the attempt, so a demo cannot retroactively change how money
+moved. Pay with **Netbanking**; test cards trip the international-card rejection.
+
+The UI will read *"payment submitted — awaiting verified webhook"* until a
+signature-verified server-side event arrives. That is deliberate: the browser
+callback is never trusted to declare a recovery.
+
+</details>
+
+<details>
+<summary><b>Enabling the LLM (optional)</b></summary>
+
+<br/>
+
+```bash
+AGENT_LLM_ENABLED=true
+AGENT_LLM_PROVIDER=groq
+AGENT_LLM_BASE_URL=https://api.groq.com/openai/v1
+AGENT_LLM_API_KEY=gsk_...
+AGENT_LLM_MODEL=llama-3.3-70b-versatile
+```
+
+This affects two things, neither load-bearing: the recovery planner's choice of
+next tool, and the AI buyer's constraint parsing and phrasing. With it off, a
+deterministic planner and a rule-based parser do the same work — the UI badges
+read `rule parse` / `TEMPLATE` instead of `LLM parse` / `LLM`, and every test
+still passes. That is how CI runs.
+
+**Use an instruct-tuned 70B-class model.** `llama3.2:3b` locally echoes the probe
+instead of answering and stalls in loops. It never produces an unauthorized
+execution — safety is structural, not a property of model quality — but it is
+useless as a planner. Verify before demoing:
+
+```bash
+make agent-check            # provider healthcheck in the real message shape
+make planner-compare        # 3B vs hosted 70B vs no model at all
+```
+
+</details>
+
+<details>
+<summary><b>Troubleshooting</b></summary>
+
+<br/>
+
+| Symptom | Cause |
+|:---|:---|
+| `ModelVersionMismatch: missing artifact` | run `make features && make train` |
+| `CATALOG_UNAVAILABLE` on `/api/catalog` | run `make data` — the catalog is the generated product set |
+| Every UI write returns `401` | `ADMIN_TOKEN` ≠ `NEXT_PUBLIC_ADMIN_TOKEN` |
+| `baseline_unavailable` on analyse | model artifacts missing or stale — retrain |
+| `RAZORPAY_NOT_CONFIGURED` on mode switch | key/secret unset, or `RAZORPAY_CLIENT` still `mock` |
+| `EXECUTION_ALREADY_CREATED` | mode is locked once an execution exists for the attempt — by design |
+| Stuck at *awaiting verified webhook* | tunnel down or webhook URL stale — re-register |
+| Negotiation session vanished | `make demo-reset` was run mid-flow; it drops the whole DB |
+
+Reset to a known-good state at any time:
+
+```bash
+make demo-reset          # clean DB + seeds, ~3 seconds
+make demo-offline        # every scenario in the terminal, no UI, no network
+```
+
+</details>
+
+---
+
+<div align="center">
+
+<a name="five-minutes"></a>
+
+## Five minutes
+
+*Five demo opportunities are seeded so the system is compelling with zero LLM calls and no network.*
+
+</div>
+
+| | Seed | Cart | Demonstrates |
+|:--|:---|---:|:---|
+| **①** | `DEMO1` | ₹4,869 | free shipping beats the higher-converting discount |
+| **②** | `DEMO3` | ₹2,939 | payment failure → adaptive retry → recovery |
+| **③** | `DEMO4` | ₹55,116 | positive ΔEV **still** requires human approval |
+| **④** | `DEMO2` | ₹469 | intelligent restraint — `DO_NOTHING` selected |
+| **⑤** | `DEMO5` | ₹19,418 | policy rejection |
+| **⑥** | `/commerce` | live | AI buyer negotiates → bounded counter → checkout → failure → recovery |
+
+```
+0:00   DEMO1 · THE THESIS
+       candidate table. MEDIUM_DISCOUNT has the highest recovery probability
+       and a NEGATIVE ΔEV. FREE_SHIPPING wins.
+       ▸ "Most recovery systems would fire the discount."
+
+1:00   EXECUTE
+       confirmation shows action, amount, max downside. Recovered, with the
+       provider badge visible.
+
+1:40   DEMO3 · ADAPTIVE RETRY                        ← strongest technical beat
+       fail it on card-declined. State = payment failed · RECOVERABLE, not lost.
+       re-analyse: blocker reclassified, retry actions become eligible, the
+       decision CHANGES. two distinct idempotency keys.
+
+2:40   DEMO4 · AUTHORITY
+       ΔEV +₹235.90. gate says REQUIRE_APPROVAL. executions: zero.
+
+3:10   DEMO2 · RESTRAINT
+       no positive-ΔEV action exists, so it declines to spend.
+       ▸ "Most recovery systems cannot express this."
+
+3:40   /agent
+       0 unauthorized executions · 0 policy bypasses · non-zero blocked calls.
+       the injection card.
+
+4:15   /evaluation
+       the flat-discount row. converts better, earns less.
+
+4:45   /audit
+       expand any event: actor, before/after state, model and policy version
+       in force at the time.
+```
+
+Full narration → [`docs/demo-script.md`](docs/demo-script.md)
+
+---
+
+<div align="center">
+
+## What is *not* built
+
+</div>
+
+Uplift modelling · contextual bandits · what-if policy simulation ·
+membership-offer optimisation · cross-sell.
+
+<details>
+<summary><b>Limitations, stated plainly</b></summary>
+
+<br/>
+
+- **Synthetic environment throughout.** This is *policy evaluation under a
+  documented behavioural model*, not measured real-world causal uplift. Public
+  retail data calibrates order-value shape and activity concentration only —
+  nothing about intervention response.
+- **ML contribution is small.** A segment lookup table beats XGBoost on
+  economics. The economics layer and the policy gate carry the result.
+- **Off-policy estimates depend on overlap.** ESS and max importance weight are
+  reported alongside every estimate; thin per-action support is flagged, not
+  suppressed.
+- **SQLite by default.** The UNIQUE-constraint behaviour idempotency relies on is
+  portable, but the concurrency test should be re-run against PostgreSQL before
+  real deployment.
+- **The negotiation is not evaluated.** Bounds are verified by tests; the pricing
+  strategy is not, because the buyer agent is our own. And there is no inventory
+  reservation — two concurrent negotiations for the last unit can both agree.
+- **Human approval is a demo operator token**, not real RBAC.
+- **Webhook processing runs inline** after the acknowledgement commit rather than
+  in a worker. Adequate at demo scale, not production volume.
+- **No real personal or financial data** is used anywhere. Test Mode only.
+
+</details>
+
+---
+
+<div align="center">
+
+<br/>
+
+**A modest response model, a correct incremental-economics layer, and a
+deterministic policy gate beat both naive discounting and
+conversion-maximisation — and off-policy evidence, computed without the
+simulator, independently confirms it.**
+
+<br/>
+
+`ML predicts` · `economics ranks` · `policy authorizes` · `Razorpay executes` · `webhooks verify` · `audit records`
+
+<br/>
+
+</div>
